@@ -5,6 +5,9 @@
 	import Login from '../components/Login.svelte';
 	import '../app.css';
 
+	// make this an SPA (for now)
+	export const ssr = false;
+
 	// check authentication initally
 	checkAuth();
 
