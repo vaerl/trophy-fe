@@ -2,14 +2,7 @@
 	// copied from here: https://github.com/GeekyAnts/svelte-admin-dashboard/blob/master/src/components/Charts/DoughnutChart.svelte
 	import { onMount } from 'svelte';
 	// this has to be done like this: https://stackoverflow.com/questions/71030372/does-not-provide-an-export-named-tooltip-even-though-i-can-output-tooltip
-	import {
-		BarController,
-		BarElement,
-		Chart,
-		Tooltip,
-		Legend,
-		LinearScale
-	} from 'chart.js/dist/chart.esm';
+	import Chart, { BarController, BarElement, Legend, LinearScale, Tooltip } from 'chart.js/auto';
 	import { credentialFetch } from '../../lib/util';
 	import type { Game, Team } from '$lib/model';
 	import { goto } from '$app/navigation';
@@ -23,9 +16,7 @@
 	let barChart: Chart;
 
 	function createBar() {
-		var ctx = document.getElementById('bar' + name);
-
-		barChart = new Chart(ctx, {
+		barChart = new Chart(document.getElementById('bar' + name)! as HTMLCanvasElement, {
 			type: 'bar',
 			data: {
 				labels: [],
@@ -34,7 +25,7 @@
 			options: {
 				onClick: (_event, elements, chart) => {
 					const element = elements[0]; // use the first one
-					const gameName = chart.data.labels[element.index];
+					const gameName = chart.data.labels![element.index];
 					games.forEach((game) => {
 						if (game.name == gameName) {
 							goto(`./games/${game.id}`);

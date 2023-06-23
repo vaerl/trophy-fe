@@ -1,30 +1,27 @@
 <script lang="ts">
 	// copied from here: https://github.com/GeekyAnts/svelte-admin-dashboard/blob/master/src/components/Charts/DoughnutChart.svelte
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	// this has to be done like this: https://stackoverflow.com/questions/71030372/does-not-provide-an-export-named-tooltip-even-though-i-can-output-tooltip
-	import {
+	import { goto } from '$app/navigation';
+	import Chart, {
 		ArcElement,
 		CategoryScale,
-		Chart,
 		DoughnutController,
-		Tooltip,
-		Legend
-	} from 'chart.js/dist/chart.esm';
-	import { goto } from '$app/navigation';
+		Legend,
+		Tooltip
+	} from 'chart.js/auto';
 
 	export let name: string;
 	export let link: string;
 	export let done: number;
 	export let open: number;
 	let total = open + done;
-	let chart: Chart;
+	let chart;
 
 	Chart.register(DoughnutController, ArcElement, Tooltip, Legend, CategoryScale);
 
 	function createDoughnut() {
-		var ctx = document.getElementById('doughnut-chart' + name);
-
-		chart = new Chart(ctx, {
+		chart = new Chart(document.getElementById('doughnut-chart' + name)! as HTMLCanvasElement, {
 			type: 'doughnut',
 			data: {
 				labels: ['Fertig', 'Offen'],
