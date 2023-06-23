@@ -11,5 +11,4 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build
 
-EXPOSE 3000
-CMD HOST=127.0.0.1 PORT=3000 node -r dotenv/config build
+CMD HOST=0.0.0.0 PORT=3000 node -r dotenv/config build
