@@ -5,10 +5,7 @@
 	import Login from '../components/Login.svelte';
 	import '../app.css';
 
-	// make this an SPA (for now)
-	export const ssr = false;
-
-	// check authentication initally
+	// check authentication initially
 	checkAuth();
 
 	// TODO exclude URLs?
