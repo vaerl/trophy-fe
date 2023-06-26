@@ -20,7 +20,7 @@
 	let currentOutcome: Outcome = null;
 
 	function loadData() {
-		games.get('games');
+		store.get(type);
 		outcomes.get(`outcomes/${type}s/${id}`);
 	}
 
