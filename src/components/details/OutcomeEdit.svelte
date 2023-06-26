@@ -12,7 +12,9 @@
 			game_id: o.game_id,
 			team_id: o.team_id,
 			data: String(o.data),
-			point_value: o.point_value
+			point_value: o.point_value,
+			game_trophy_id: o.game_trophy_id,
+			team_trophy_id: o.team_trophy_id
 		});
 		modalOpen = false;
 		messageStore.set(new Message(MessageType.Info, 'Ergebnis wurde erfolgreich angelegt.'));
