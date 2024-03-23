@@ -12,6 +12,7 @@
 	beforeNavigate(() => {
 		checkAuth();
 	});
+	// TODO there must be a better way
 </script>
 
 {#if $loginStore}

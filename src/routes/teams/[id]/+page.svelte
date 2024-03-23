@@ -1,12 +1,7 @@
 <script lang="ts">
-	import Details from '../../../components/details/Details.svelte';
+	export let data;
 </script>
 
-<!-- TODO fix this - the outcomes don't show up -->
-<Details
-	columns={[
-		{ id: 'trophy_id', name: 'Trophy-ID' },
-		{ id: 'gender', name: 'Geschlecht' }
-	]}
-	type="team"
-/>
+<div class="flex flex-row justify-center w-full mt-6">
+	<h1 class="text-5xl font-extrabold underline">{data.team.name}</h1>
+</div>
