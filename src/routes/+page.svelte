@@ -112,7 +112,7 @@
 	<a class="btn btn-circle btn-ghost absolute right-16" href="users"> <UserIcon /> </a>
 	<a class="btn btn-circle btn-ghost absolute right-2" href="logs"> <Info /> </a>
 	<div class="tooltip tooltip-right absolute left-2" data-tip="Ausloggen">
-		<button class="btn btn-circle btn-ghost" on:click={logout}> <Logout /> </button>
+		<button class="btn btn-circle btn-ghost" type="button" on:click={logout}> <Logout /> </button>
 	</div>
 </div>
 
@@ -128,16 +128,16 @@
 			done={$finishedGames.length}
 			link="/games"
 		/>
-		<div class="absolute right-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
+		<button class="absolute right-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
 			<RightArrow size={20} />
-		</div>
+		</button>
 	</div>
 {:else}
 	<div class="flex flex-row justify-evenly h-96">
 		<BarChart games={$games} name="Fertige Teams" totalTeamsAmount={$teams.length} />
-		<div class="absolute left-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
+		<button class="absolute left-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
 			<LeftArrow size={20} />
-		</div>
+		</button>
 	</div>
 {/if}
 
