@@ -2,19 +2,22 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8" />
-	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-	<meta name="viewport" content="width=device-width" />
-	%sveltekit.head%
+  <meta charset="utf-8" />
+  <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+  <meta name="viewport" content="width=device-width" />
+  %sveltekit.head%
 </head>
 
 <body data-sveltekit-preload-data="hover">
-	<div style="display: contents">%sveltekit.body%</div>
+  <div style="display: contents">%sveltekit.body%</div>
 </body>
 
 </html>
-
+<!-- TODO fix all compiler-errors and -warnings -->
 <!-- TODO there may be issues with ad-blockers blocking the loading of specific app-parts! -->
+<!-- TODO stop always loading all teams/games, just react to websocket-messages -->
+<!-- TODO support toggle for light-mode -> introduce settings? -->
+
 <!-- TODO when deployed in docker, this error happens: file:///app/build/shims.js:19639
       Error.captureStackTrace(err, this);
             ^

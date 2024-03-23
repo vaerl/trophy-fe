@@ -19,6 +19,7 @@
 	let modalOpen = false;
 	let currentOutcome: Outcome = null;
 
+	// TODO this sometimes does not get the data, investigate!
 	function loadData() {
 		store.get(type);
 		outcomes.get(`outcomes/${type}s/${id}`);
@@ -55,7 +56,10 @@
 {#if $outcomesLoading || $gamesLoading}
 	<Loader />
 {:else}
-	<!-- TODO add sorting, TODO check overflow-scrolling -->
+	<!-- TODO add sorting-->
+	<!-- TODO have initial sorting -->
+	<!-- TODO maybe add overflow-scrolling - I like having all outcomes searchable on one page though -->
+	<!-- TODO add search -->
 	<div class="flex flex-col">
 		<h3 class="font-extrabold text-3xl text-{color}">
 			{getLength($outcomes)}

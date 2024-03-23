@@ -35,6 +35,7 @@ export function localizeGender(gender: TeamGender): string {
 	}
 }
 
+// TODO adjust return-type
 export function getNameById(items: Data[], id: number): Data {
 	let res = items.find((i) => i.id == id);
 	return res == undefined ? { name: 'Could not find element.', id: -1 } : res;

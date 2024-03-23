@@ -89,6 +89,8 @@
 		}
 	}
 
+	// TODO fix sorting by status
+	// TODO fix initial sorting
 	$: sort = (column: string) => {
 		if (sortBy.col == column) {
 			sortBy.ascending = !sortBy.ascending;
