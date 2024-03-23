@@ -1,47 +1,19 @@
 <script lang="ts">
 	import { checkAuth, logout } from '../lib/auth';
-	import {
-		finishedGames,
-		finishedTeams,
-		games,
-		messageStore,
-		pendingGames,
-		pendingTeams,
-		previousMessageStore,
-		teams
-	} from '../lib/stores';
-	import Loader from '../components/Loader.svelte';
+	import { messageStore, previousMessageStore } from '../lib/stores';
 	import PieChart from '../components/charts/PieChart.svelte';
-	import BarChart from '../components/charts/BarChart.svelte';
 	import RightArrow from '../components/icons/RightArrow.svelte';
-	import LeftArrow from '../components/icons/LeftArrow.svelte';
 	import { MessageType, type Message } from '$lib/model';
 	import { onDestroy } from 'svelte';
 	import UserIcon from '../components/icons/UserIcon.svelte';
 	import Info from '../components/icons/Info.svelte';
 	import Logout from '../components/icons/Logout.svelte';
 
-	enum Content {
-		PieChart,
-		BarChart
-	}
-
 	export let data;
 	// check if everything's done but also if there actually are things that should be done
 	let done = data.pendingGames == 0 && data.pendingTeams == 0 && data.games > 0 && data.teams > 0;
-	console.log(data);
-
-	let content = Content.PieChart;
 
 	checkAuth();
-
-	function switchContent() {
-		if (content == Content.PieChart) {
-			content = Content.BarChart;
-		} else {
-			content = Content.PieChart;
-		}
-	}
 
 	// message-toasts
 	let showToast: boolean = false;
@@ -97,24 +69,13 @@
 	</div>
 </div>
 
-<!-- TODO link to bar-chart -->
-
-{#if content == Content.PieChart}
-	<div class="flex flex-row justify-evenly h-96">
-		<PieChart name="Teams" open={data.pendingGames} done={data.finishedTeams} link="/teams" />
-		<PieChart name="Spiele" open={data.pendingGames} done={data.finishedGames} link="/games" />
-		<button class="absolute right-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
-			<RightArrow size={20} />
-		</button>
-	</div>
-{:else}
-	<div class="flex flex-row justify-evenly h-96">
-		<BarChart games={$games} name="Fertige Teams" totalTeamsAmount={$teams.length} />
-		<button class="absolute left-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
-			<LeftArrow size={20} />
-		</button>
-	</div>
-{/if}
+<div class="flex flex-row justify-evenly h-96">
+	<PieChart name="Teams" open={data.pendingGames} done={data.finishedTeams} link="/teams" />
+	<PieChart name="Spiele" open={data.pendingGames} done={data.finishedGames} link="/games" />
+	<a class="absolute right-10 top-1/2 cursor-pointer" href="/bar">
+		<RightArrow size={20} />
+	</a>
+</div>
 
 {#if showToast}
 	<div class="w-full absolute bottom-4 right-4 flex justify-end">
