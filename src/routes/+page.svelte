@@ -26,33 +26,14 @@
 		BarChart
 	}
 
+	export let data;
+	// check if everything's done but also if there actually are things that should be done
+	let done = data.pendingGames == 0 && data.pendingTeams == 0 && data.games > 0 && data.teams > 0;
+	console.log(data);
+
 	let content = Content.PieChart;
 
 	checkAuth();
-
-	$: gamesLoading = games.loading;
-	$: teamsLoading = teams.loading;
-
-	$: pendingTeamsLoading = pendingTeams.loading;
-	$: finishedTeamsLoading = finishedTeams.loading;
-
-	$: pendingGamesLoading = pendingGames.loading;
-	$: finishedGamesLoading = finishedGames.loading;
-
-	$: done =
-		$pendingTeams.length == 0 &&
-		$pendingGames.length == 0 &&
-		$finishedTeams.length > 0 &&
-		$finishedGames.length > 0;
-
-	teams.get('teams');
-	games.get('games');
-
-	pendingTeams.get('teams/pending');
-	finishedTeams.get('teams/finished');
-
-	pendingGames.get('games/pending');
-	finishedGames.get('games/finished');
 
 	function switchContent() {
 		if (content == Content.PieChart) {
@@ -116,18 +97,12 @@
 	</div>
 </div>
 
-<!-- TODO there has to be a better way to do this! Maybe an array? -->
-{#if $teamsLoading || $gamesLoading || $pendingTeamsLoading || $finishedTeamsLoading || $pendingGamesLoading || $finishedGamesLoading}
-	<Loader />
-{:else if content == Content.PieChart}
+<!-- TODO link to bar-chart -->
+
+{#if content == Content.PieChart}
 	<div class="flex flex-row justify-evenly h-96">
-		<PieChart name="Teams" open={$pendingTeams.length} done={$finishedTeams.length} link="/teams" />
-		<PieChart
-			name="Spiele"
-			open={$pendingGames.length}
-			done={$finishedGames.length}
-			link="/games"
-		/>
+		<PieChart name="Teams" open={data.pendingGames} done={data.finishedTeams} link="/teams" />
+		<PieChart name="Spiele" open={data.pendingGames} done={data.finishedGames} link="/games" />
 		<button class="absolute right-10 top-1/2 cursor-pointer" on:click={() => switchContent()}>
 			<RightArrow size={20} />
 		</button>
