@@ -1,22 +1,15 @@
 <script>
-	import { beforeNavigate } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { checkAuth } from '$lib/auth';
-	import { loginStore } from '$lib/stores';
-	import Login from '../components/Login.svelte';
 	import '../app.css';
+	import { onMount } from 'svelte';
 
-	// check authentication initially
-	checkAuth();
-
-	// TODO exclude URLs?
-	beforeNavigate(() => {
-		checkAuth();
+	onMount(async () => {
+		let isAuthenticated = await checkAuth();
+		if (!isAuthenticated) {
+			goto('/login');
+		}
 	});
-	// TODO there must be a better way
 </script>
 
-{#if $loginStore}
-	<slot />
-{:else}
-	<Login />
-{/if}
+<slot />
