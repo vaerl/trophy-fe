@@ -3,6 +3,8 @@
 	import Table from '../../components/table/Table.svelte';
 	import Breadcrumbs from '../../components/Breadcrumbs.svelte';
 
+	export let data;
+
 	let columns = [
 		{ id: 'trophy_id', name: 'Trophy-ID' },
 		{ id: 'name', name: 'Name' },
@@ -15,6 +17,7 @@
 
 	$: teamsLoading = teams.loading;
 	$: pendingTeamsLoading = pendingTeams.loading;
+	// TODO simplify this
 </script>
 
 <Breadcrumbs current="Teams" paths={[]} />
