@@ -16,7 +16,7 @@
 <div class="text-sm breadcrumbs ml-3">
 	<ul>
 		<li>
-			<a href="/">Home</a>
+			<a href="/charts/pie">Übersicht</a>
 		</li>
 		{#each paths as path}
 			<li>
