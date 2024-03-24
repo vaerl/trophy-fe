@@ -41,6 +41,8 @@
 	});
 
 	onDestroy(unsub);
+	// TODO maybe move actions to top-level layout?
+	// TODO add 404-page
 </script>
 
 <div class="flex flex-row w-full pb-20 pt-8 justify-center">
