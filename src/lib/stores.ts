@@ -3,8 +3,6 @@ import { Message, MessageType, type History, type User } from './model';
 import type { Game, Outcome, Team } from './model';
 import { HttpStore } from './httpStore';
 
-export const loginStore = writable<boolean>();
-
 export const previousMessageStore = writable<Message>(
 	new Message(MessageType.Info, 'Initial value')
 );
