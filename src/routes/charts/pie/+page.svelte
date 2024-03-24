@@ -18,7 +18,7 @@
 {/if}
 
 <div class="flex flex-row justify-evenly h-96">
-	<PieChart name="Teams" open={data.pendingGames} done={data.finishedTeams} link="/teams" />
+	<PieChart name="Teams" open={data.pendingTeams} done={data.finishedTeams} link="/teams" />
 	<PieChart name="Spiele" open={data.pendingGames} done={data.finishedGames} link="/games" />
 	<a class="absolute right-10 top-1/2 cursor-pointer" href="/charts/bar">
 		<RightArrow size={20} />
