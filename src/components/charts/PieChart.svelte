@@ -42,14 +42,14 @@
 	}
 </script>
 
-<a href={link}>
+<a href={link} class="cursor-pointer">
 	{#if total == 0}
 		<h1 class="text-lg font-bold text-center cursor-pointer">
 			Momentan sind keine <br />
 			{name} angelegt.
 		</h1>
 	{:else}
-		<div class="relative cursor-pointer">
+		<div class="relative">
 			<h4 class="text-3xl text-center pb-4 font-bold">{name}</h4>
 			<canvas id={'doughnut-chart' + name} />
 			<div class="absolute top-1/2 w-full">
@@ -59,5 +59,5 @@
 				<p class="text-center w-full stat-desc">{name} insgesamt</p>
 			</div>
 		</div>
-	{/if}</a
->
+	{/if}
+</a>
