@@ -41,8 +41,8 @@
 	// TODO add 404-page
 </script>
 
-<div class="flex flex-row w-full pb-20 pt-8 justify-center">
-	<h1 class="text-5xl font-extrabold">Übersicht</h1>
+<div class="flex flex-row w-full pt-6 justify-center">
+	<h1 class="text-6xl font-extrabold">Übersicht</h1>
 </div>
 
 <slot />
