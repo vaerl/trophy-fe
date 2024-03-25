@@ -2,10 +2,6 @@
 	import { Message, MessageType } from '$lib/model';
 	import { messageStore, previousMessageStore } from '$lib/stores';
 	import { onDestroy } from 'svelte';
-	import UserIcon from '../../components/icons/UserIcon.svelte';
-	import Info from '../../components/icons/Info.svelte';
-	import { logout } from '$lib/auth';
-	import Logout from '../../components/icons/Logout.svelte';
 
 	// message-toasts
 	let showToast: boolean = false;
@@ -46,16 +42,7 @@
 </script>
 
 <div class="flex flex-row w-full pb-20 pt-8 justify-center">
-	<div>
-		<h1 class="text-5xl font-extrabold">Übersicht</h1>
-	</div>
-	<div class="absolute right-2">
-		<a class="btn btn-circle btn-ghost" href="/users"> <UserIcon /> </a>
-		<a class="btn btn-circle btn-ghost" href="/logs"> <Info /> </a>
-		<button class="btn btn-circle btn-ghost" on:click={logout}>
-			<Logout></Logout>
-		</button>
-	</div>
+	<h1 class="text-5xl font-extrabold">Übersicht</h1>
 </div>
 
 <slot />
