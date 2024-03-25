@@ -17,3 +17,13 @@ input[type='number']::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+@layer utilities {
+  /* utility for centering vertically*/
+  .absolute-center-x {
+    @apply absolute;
+    @apply top-1/2;
+    @apply transform;
+    @apply -translate-y-1/2;
+  }
+}
