@@ -1,4 +1,4 @@
-import type { Game, Team } from '$lib/model';
+import type { Team } from '$lib/model';
 
 export async function load({ fetch, params }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
