@@ -44,7 +44,7 @@
 
 <a href={link} class="cursor-pointer">
 	{#if total == 0}
-		<h1 class="text-lg font-bold text-center cursor-pointer">
+		<h1 class="text-lg font-bold text-center">
 			Momentan sind keine <br />
 			{name} angelegt.
 		</h1>
