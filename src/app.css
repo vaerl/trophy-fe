@@ -20,10 +20,17 @@ input[type='number'] {
 
 @layer utilities {
   /* utility for centering vertically*/
-  .absolute-center-x {
+  .absolute-center-y {
     @apply absolute;
     @apply top-1/2;
     @apply transform;
     @apply -translate-y-1/2;
+  }
+
+  .absolute-center-x {
+    @apply absolute;
+    @apply left-1/2;
+    @apply transform;
+    @apply -translate-x-1/2;
   }
 }

@@ -19,13 +19,13 @@
 	<button class="btn btn-success mt-6" on:click={startEval}>Trophy auswerten</button>
 {/if}
 
-<div class="absolute-center-x w-full">
+<div class="absolute-center-y w-full">
 	<div class="flex flex-row justify-evenly">
 		<PieChart name="Teams" open={data.pendingTeams} done={data.finishedTeams} link="/teams" />
 		<PieChart name="Spiele" open={data.pendingGames} done={data.finishedGames} link="/games" />
 	</div>
 </div>
-<a class="absolute-center-x right-10 cursor-pointer" href="/charts/bar">
+<a class="absolute-center-y right-10 cursor-pointer" href="/charts/bar">
 	<RightArrow size={20} />
 </a>
 
