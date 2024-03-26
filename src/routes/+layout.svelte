@@ -8,6 +8,7 @@
 	import Logout from '../components/icons/Logout.svelte';
 	import UserIcon from '../components/icons/UserIcon.svelte';
 	import { page } from '$app/stores';
+	import LeftArrow from '../components/icons/LeftArrow.svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
@@ -19,8 +20,12 @@
 
 <!-- only show bar if we're not at /login -->
 {#if $page.route.id !== '/login'}
-	<div class="absolute left-2 pt-6 pl-4">
-		<ThemeSwitch></ThemeSwitch>
+	<div class="absolute left-2 pt-6 pl-4 flex flex-row">
+		<ThemeSwitch />
+		<!-- only show back-arrow if we're not at charts -->
+		{#if !$page.route.id?.startsWith('/charts')}
+			<a class="ml-6" href=".."><LeftArrow /></a>
+		{/if}
 	</div>
 
 	<div class="absolute right-2 pt-6 pr-4 flex">
