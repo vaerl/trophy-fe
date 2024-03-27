@@ -1,13 +1,16 @@
 import { writable } from 'svelte/store';
 import type { Subscriber, Unsubscriber, Updater, Writable } from 'svelte/store';
-import { Message, MessageType } from './model';
+import { MessageType, type Message } from './model';
 import { credentialFetch } from './util';
 
 export class HttpStore<T> implements Writable<T> {
 	private store: Writable<T>;
 	public loading = writable<boolean>(false);
 
-	constructor(initial: T, private message: Writable<Message>) {
+	constructor(
+		initial: T,
+		private message: Writable<Message>
+	) {
 		this.store = writable<T>(initial);
 	}
 
@@ -49,13 +52,10 @@ export class HttpStore<T> implements Writable<T> {
 			this.store.set(json);
 		} else {
 			// response failed, set error and loading
-			this.message.set(
-				new Message(
-					MessageType.Error,
-					`Encountered error while fetching: ${json.errors});
-			}`
-				)
-			);
+			this.message.set({
+				type: MessageType.Error,
+				message: `Encountered error while fetching: ${json.errors}`
+			});
 		}
 		this.loading.set(false);
 	}

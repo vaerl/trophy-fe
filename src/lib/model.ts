@@ -3,9 +3,14 @@ export interface Data {
 	name: string;
 }
 
-export interface Team extends Data {
+export interface CreateTeam {
+	name: string;
 	trophy_id: number;
 	gender: TeamGender;
+}
+
+export interface Team extends CreateTeam {
+	id: number;
 	points: number;
 }
 
@@ -34,17 +39,11 @@ export enum GameKind {
 	Time = 'time'
 }
 
-export class Message {
-	public timestamp: Date;
-
-	constructor(public type: MessageType, public message: string) {
-		this.timestamp = new Date();
-	}
-
-	public isAfter(message: Message): boolean {
-		return this.timestamp > message.timestamp;
-	}
+export interface Message {
+	type: MessageType;
+	message: String;
 }
+
 // these correspond to DaisyUI's alert-classes so we can re-use them to color the alerts.
 export enum MessageType {
 	Error = 'error',
