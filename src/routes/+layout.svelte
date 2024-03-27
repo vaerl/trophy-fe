@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { checkAuth, logout } from '$lib/auth';
 	import '../app.css';
@@ -9,6 +9,9 @@
 	import UserIcon from '../components/icons/UserIcon.svelte';
 	import { page } from '$app/stores';
 	import LeftArrow from '../components/icons/LeftArrow.svelte';
+	import { messageStore } from '$lib/stores';
+	import { onDestroy } from 'svelte';
+	import type { Message } from '$lib/model';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
@@ -16,6 +19,18 @@
 			goto('/login');
 		}
 	});
+
+	let toast: Message | undefined = undefined;
+	const unsub = messageStore.subscribe((message) => {
+		// Ignore the initial state of 'undefined' - I mainly still have this subscription
+		// because of the setTimeout-function. Otherwise, we could simply use messageStore directly.
+		if (message) {
+			toast = message;
+			setTimeout(() => (toast = undefined), 30000);
+		}
+	});
+
+	onDestroy(unsub);
 </script>
 
 <!-- this div makes sure that children respect parent's boundaries when using height: 100%-->
@@ -43,3 +58,16 @@
 
 	<slot />
 </div>
+
+{#if toast}
+	<div class="absolute bottom-4 right-4 flex justify-end">
+		<div class={`alert alert-${toast.type}`} role="alert">
+			<div class="flex-1">
+				<label class="mx-3" for="toast">{toast.message}</label>
+			</div>
+			<div class="flex-none">
+				<button class="btn btn-sm btn-ghost mr-2" on:click={() => (toast = undefined)}>Ok</button>
+			</div>
+		</div>
+	</div>
+{/if}
