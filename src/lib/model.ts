@@ -45,11 +45,12 @@ export class Message {
 		return this.timestamp > message.timestamp;
 	}
 }
+// these correspond to DaisyUI's alert-classes so we can re-use them to color the alerts.
 export enum MessageType {
 	Error = 'error',
 	Info = 'info',
-	Update = 'update',
-	Initial = 'initial'
+	Warn = 'warn',
+	Success = 'success'
 }
 
 export enum UserRole {
