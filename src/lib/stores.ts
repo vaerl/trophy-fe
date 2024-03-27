@@ -3,10 +3,7 @@ import { Message, MessageType, type History, type User } from './model';
 import type { Game, Outcome, Team } from './model';
 import { HttpStore } from './httpStore';
 
-export const previousMessageStore = writable<Message>(
-	new Message(MessageType.Info, 'Initial value')
-);
-export const messageStore = writable<Message>(new Message(MessageType.Info, 'Initial value'));
+export const messageStore = writable<Message>();
 
 // NOTE: I have to pass stores in the constructor - otherwise there will be a circular dependency!
 // TEAM
