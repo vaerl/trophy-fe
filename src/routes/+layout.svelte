@@ -3,7 +3,6 @@
 	import { checkAuth, logout } from '$lib/auth';
 	import '../app.css';
 	import { onMount } from 'svelte';
-	import ThemeSwitch from '../components/ThemeSwitch.svelte';
 	import Info from '../components/icons/Info.svelte';
 	import Logout from '../components/icons/Logout.svelte';
 	import UserIcon from '../components/icons/UserIcon.svelte';
@@ -40,10 +39,9 @@
 	{#if $page.route.id !== '/login'}
 		<div class="flex flex-row justify-between py-6 px-4 w-full">
 			<div class="flex flex-row">
-				<ThemeSwitch />
 				<!-- only show back-arrow if we're not at charts -->
 				{#if !$page.route.id?.startsWith('/charts')}
-					<button class="ml-6" on:click={() => history.back()}><LeftArrow /></button>
+					<button on:click={() => history.back()}><LeftArrow /></button>
 				{/if}
 			</div>
 
