@@ -11,8 +11,6 @@
 		console.info('Starting evaluation.');
 		window.open(import.meta.env.VITE_BACKEND_URL + '/eval', '_blank')?.focus();
 	}
-
-	// TODO use a instead of linking and load in +page.ts
 </script>
 
 {#if done}

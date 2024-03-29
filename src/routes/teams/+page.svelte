@@ -6,6 +6,8 @@
 	export let data;
 	const handler = new DataHandler(data.teams, { rowsPerPage: 10 });
 	const rows = handler.getRows();
+
+	// TODO keep plus there? clashes with toasts - or move toasts left?
 </script>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Teams</h1>

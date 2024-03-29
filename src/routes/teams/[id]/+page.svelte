@@ -73,6 +73,7 @@
 			invalidateAll();
 		}
 	}
+	// TODO deletion? -> also add edit in that case?
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
