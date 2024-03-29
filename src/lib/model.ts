@@ -22,8 +22,11 @@ export enum TeamGender {
 export interface Outcome {
 	game_id: number;
 	game_trophy_id: number;
+	game_name: string;
+	game_kind: GameKind;
 	team_id: number;
 	team_trophy_id: number;
+	team_name: string;
 	data: string | null;
 	point_value: number;
 }
