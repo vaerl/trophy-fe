@@ -12,6 +12,7 @@
 	import { messageStore } from '$lib/stores';
 	import { onDestroy } from 'svelte';
 	import type { Message } from '$lib/model';
+	import Plus from '../components/icons/Plus.svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
@@ -47,7 +48,11 @@
 			</div>
 
 			<div class="flex flex-row">
-				<a href="/users"> <UserIcon /> </a>
+				{#if $page.route.id === '/teams' || $page.route.id === '/games'}
+					<a href={`${$page.route.id}/create`}> <Plus /> </a>
+				{/if}
+
+				<a class="ml-6" href="/users"> <UserIcon /> </a>
 				<a class="ml-6" href="/logs"> <Info /> </a>
 				<button class="ml-6" on:click={logout}>
 					<Logout />
