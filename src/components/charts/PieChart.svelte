@@ -42,7 +42,7 @@
 	}
 </script>
 
-<a href={link} class="cursor-pointer">
+<a href={link} class="cursor-pointer flex flex-col justify-center">
 	{#if total == 0}
 		<h1 class="text-lg font-bold text-center">
 			Momentan sind keine <br />
