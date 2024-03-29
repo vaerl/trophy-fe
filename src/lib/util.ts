@@ -21,6 +21,10 @@ export function isEnterKeyEvent(event: KeyboardEvent) {
 	return event.key.toLowerCase() == 'enter';
 }
 
+export function isEscapeKeyEvent(event: KeyboardEvent) {
+	return event.key.toLowerCase() == 'escape';
+}
+
 export function localizeGender(gender: TeamGender): string {
 	switch (gender) {
 		case TeamGender.Female: {
