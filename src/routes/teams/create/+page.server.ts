@@ -23,7 +23,7 @@ export const actions = {
 		let team: CreateTeam = {
 			trophy_id: parseInt(trophy_id.toString()),
 			name: name.toString(),
-			gender: TeamGender.Female
+			gender: gender as TeamGender
 		};
 
 		let cookie = event.cookies.get('session');
