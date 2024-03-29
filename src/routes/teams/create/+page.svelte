@@ -59,5 +59,5 @@
 			{/each}
 		</select>
 	</div>
-	<button class="btn btn-neutral w-full">Save</button>
+	<button class="btn btn-neutral w-full">Speichern</button>
 </form>
