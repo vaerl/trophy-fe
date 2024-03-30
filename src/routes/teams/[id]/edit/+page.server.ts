@@ -20,7 +20,7 @@ export const actions = {
 			return fail(400, { field: 'Typ', missing: true });
 		}
 
-		let id = data.get('id');
+		let id = event.params.id;
 		if (!id) {
 			return fail!(422, { miscellaneous: true, detail: 'ID konnte nicht ermittelt werden.' });
 		}

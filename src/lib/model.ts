@@ -31,9 +31,14 @@ export interface Outcome {
 	point_value: number;
 }
 
-export interface Game extends Data {
+export interface CreateGame {
 	trophy_id: number;
 	kind: GameKind;
+	name: string;
+}
+
+export interface Game extends CreateGame {
+	id: number;
 	locked: boolean;
 }
 

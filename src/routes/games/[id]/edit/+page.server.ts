@@ -1,4 +1,4 @@
-import { TeamGender, type CreateTeam, type Team } from '$lib/model';
+import { type CreateGame, GameKind, type Game } from '$lib/model';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {
@@ -15,15 +15,20 @@ export const actions = {
 			return fail(400, { field: 'Name', missing: true });
 		}
 
-		let gender = data.get('gender');
-		if (!gender) {
+		let kind = data.get('kind');
+		if (!kind) {
 			return fail(400, { field: 'Typ', missing: true });
 		}
 
-		let team: CreateTeam = {
+		let id = event.params.id;
+		if (!id) {
+			return fail!(422, { miscellaneous: true, detail: 'ID konnte nicht ermittelt werden.' });
+		}
+
+		let game: CreateGame = {
 			trophy_id: parseInt(trophy_id.toString()),
 			name: name.toString(),
-			gender: gender as TeamGender
+			kind: kind as GameKind
 		};
 
 		let cookie = event.cookies.get('session');
@@ -32,13 +37,13 @@ export const actions = {
 		}
 
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let res = await event.fetch(`${baseUrl}/teams`, {
-			method: 'POST',
+		let res = await event.fetch(`${baseUrl}/games/${id}`, {
+			method: 'PUT',
 			headers: {
 				// requests won't work without this
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(team)
+			body: JSON.stringify(game)
 		});
 
 		if (res.status != 200) {
@@ -46,6 +51,6 @@ export const actions = {
 		}
 
 		// go back to overview after successful creation
-		return { success: true, team: (await res.json()) as Team };
+		return { success: true, game: (await res.json()) as Game };
 	}
 };

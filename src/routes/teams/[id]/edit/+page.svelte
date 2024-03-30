@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { MessageType, TeamGender } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
@@ -26,7 +26,7 @@
 		} else if (form?.success) {
 			messageStore.set({
 				type: MessageType.Success,
-				message: `Team ${form.team.name} wurde erfolgreich angelegt.`
+				message: `Änderungen an Team ${form.team.name} wurde erfolgreich gespeichert.`
 			});
 			goto('/teams');
 		}
@@ -37,16 +37,7 @@
 	<span class="underline">{data.team.name}</span> bearbeiten
 </h1>
 
-<form
-	method="POST"
-	class="flex flex-col w-80 m-auto gap-8"
-	use:enhance={({ formData }) => {
-		formData.append('id', `${data.team.id}`);
-		return async ({ result }) => {
-			await applyAction(result);
-		};
-	}}
->
+<form method="POST" class="flex flex-col w-80 m-auto gap-8" use:enhance>
 	<div class="w-ful">
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>

@@ -43,7 +43,6 @@ export const actions = {
 	},
 	delete: async (event) => {
 		let id = event.params.id;
-		console.log('id', id);
 
 		let cookie = event.cookies.get('session');
 		if (!cookie) {
@@ -51,7 +50,7 @@ export const actions = {
 		}
 
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let res = await event.fetch(`${baseUrl}/teams/${id}`, {
+		let res = await event.fetch(`${baseUrl}/games/${id}`, {
 			method: 'DELETE',
 			headers: {
 				// requests won't work without this
@@ -64,6 +63,6 @@ export const actions = {
 		}
 
 		// go back to /teams after deletion
-		redirect(302, '/teams');
+		redirect(302, '/games');
 	}
 };
