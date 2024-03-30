@@ -19,13 +19,13 @@
 
 	$: openOutcomeHandler = new DataHandler(
 		outcomes.filter((o) => !o.data),
-		{ rowsPerPage: 10 }
+		{ rowsPerPage: 50 }
 	);
 	$: openOutcomes = openOutcomeHandler.getRows();
 
 	$: doneOutcomeHandler = new DataHandler(
 		outcomes.filter((o) => o.data),
-		{ rowsPerPage: 10 }
+		{ rowsPerPage: 50 }
 	);
 	$: doneOutcomes = doneOutcomeHandler.getRows();
 
@@ -123,7 +123,7 @@
 
 		<Datatable handler={openOutcomeHandler}>
 			<table class="table table-zebra">
-				<thead>
+				<thead class="bg-white">
 					<tr>
 						<Th handler={openOutcomeHandler} orderBy="team_trophy_id">Trophy-ID</Th>
 						<Th handler={openOutcomeHandler} orderBy="team_name">Team</Th>
