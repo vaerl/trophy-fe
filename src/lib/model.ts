@@ -61,8 +61,12 @@ export enum UserRole {
 	Visualizer = 'visualizer'
 }
 
-export interface User {
+export interface User extends CreateUser {
 	id: number;
+	game_name?: string;
+}
+
+export interface CreateUser {
 	name: string;
 	password: string;
 	role: UserRole;
