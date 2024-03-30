@@ -43,7 +43,6 @@ export const actions = {
 	},
 	delete: async (event) => {
 		let id = event.params.id;
-		console.log('id', id);
 
 		let cookie = event.cookies.get('session');
 		if (!cookie) {

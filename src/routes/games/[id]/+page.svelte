@@ -87,7 +87,7 @@
 	</form>
 </div>
 
-<div class="absolute-center-x left-1/2 pt-6">
+<div class="absolute-center-x pt-6">
 	<div class="tooltip" data-tip="Zum Bearbeiten klicken.">
 		<a href={`/games/${game.id}/edit`}>
 			<div class="stats border">

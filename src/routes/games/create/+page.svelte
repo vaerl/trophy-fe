@@ -35,7 +35,7 @@
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Spiel anlegen</h1>
 
 <form method="POST" class="flex flex-col w-80 m-auto gap-8" use:enhance>
-	<div class="w-ful">
+	<div>
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>
 		</label>
