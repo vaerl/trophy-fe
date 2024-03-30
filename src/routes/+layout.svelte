@@ -48,12 +48,18 @@
 			</div>
 
 			<div class="flex flex-row">
-				{#if $page.route.id === '/teams' || $page.route.id === '/games'}
+				{#if ($page.route.id === '/teams' || $page.route.id === '/games', $page.route.id === '/users')}
 					<a href={`${$page.route.id}/create`}> <Plus /> </a>
 				{/if}
 
-				<a class="ml-6" href="/users"> <UserIcon /> </a>
-				<a class="ml-6" href="/logs"> <Info /> </a>
+				{#if !$page.route.id?.startsWith('/users')}
+					<a class="ml-6" href="/users"> <UserIcon /> </a>
+				{/if}
+
+				{#if !$page.route.id?.startsWith('/logs')}
+					<a class="ml-6" href="/logs"> <Info /> </a>
+				{/if}
+
 				<button class="ml-6" on:click={logout}>
 					<Logout />
 				</button>
