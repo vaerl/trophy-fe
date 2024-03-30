@@ -12,6 +12,7 @@
 	import { onDestroy } from 'svelte';
 	import type { Message } from '$lib/model';
 	import Plus from '../components/icons/Plus.svelte';
+	import Home from '../components/icons/Home.svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
@@ -41,7 +42,8 @@
 			<div class="flex flex-row">
 				<!-- only show back-arrow if we're not at charts -->
 				{#if !$page.route.id?.startsWith('/charts')}
-					<button on:click={() => history.back()}><LeftArrow /></button>
+					<a href="/charts/pie"><Home /></a>
+					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
 				{/if}
 			</div>
 
