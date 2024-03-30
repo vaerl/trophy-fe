@@ -1,8 +1,3 @@
-export interface Data {
-	id: number;
-	name: string;
-}
-
 export interface CreateTeam {
 	name: string;
 	trophy_id: number;
@@ -66,7 +61,9 @@ export enum UserRole {
 	Visualizer = 'visualizer'
 }
 
-export interface User extends Data {
+export interface User {
+	id: number;
+	name: string;
 	password: string;
 	role: UserRole;
 	game_id?: number;
@@ -78,8 +75,10 @@ export enum LogLevel {
 	Important = 'important'
 }
 
-export interface History extends Data {
+export interface History {
+	id: number;
 	user_id: number;
+	user_name: string;
 	timestamp: Date;
 	log_level: LogLevel;
 	action: string;
