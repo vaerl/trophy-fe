@@ -1,6 +1,6 @@
 import type { Game, Team } from '$lib/model';
 
-export async function load({ fetch, parent }) {
+export async function load({ fetch }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	const teamsRes = await fetch(`${baseUrl}/teams/amount`, { credentials: 'include' });
