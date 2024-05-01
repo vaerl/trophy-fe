@@ -233,7 +233,14 @@
 						required
 					/>
 				{:else}
-					<input class="input input-bordered" name="data" type="text" placeholder="Zeit" required />
+					<input
+						class="input input-bordered"
+						name="data"
+						type="text"
+						placeholder="Zeit"
+						required
+						value={modalOutcome.data}
+					/>
 				{/if}
 			</div>
 
