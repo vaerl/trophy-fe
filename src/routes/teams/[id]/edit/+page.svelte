@@ -28,7 +28,7 @@
 				type: MessageType.Success,
 				message: `Änderungen an Team ${form.team.name} wurde erfolgreich gespeichert.`
 			});
-			goto('/teams');
+			goto(`/teams/${data.team.id}`);
 		}
 	}
 </script>

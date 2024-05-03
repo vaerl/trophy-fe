@@ -28,7 +28,7 @@
 				type: MessageType.Success,
 				message: `Änderungen an Spiel ${form.game.name} wurde erfolgreich gespeichert.`
 			});
-			goto('/games');
+			goto(`/games/${data.game.id}`);
 		}
 	}
 </script>
