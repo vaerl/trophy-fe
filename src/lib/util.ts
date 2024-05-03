@@ -1,5 +1,3 @@
-import { TeamGender, type Data } from './model';
-
 /**
  * Small wrapper around fetch. Sets the content-type and specifies withCredentials: "true" as well as credentials: "include".
  * @param input Request-URL
@@ -23,24 +21,4 @@ export function isEnterKeyEvent(event: KeyboardEvent) {
 
 export function isEscapeKeyEvent(event: KeyboardEvent) {
 	return event.key.toLowerCase() == 'escape';
-}
-
-export function localizeGender(gender: TeamGender): string {
-	switch (gender) {
-		case TeamGender.Female: {
-			return 'weiblich';
-		}
-		case TeamGender.Male: {
-			return 'männlich';
-		}
-		default: {
-			return 'Unbekannt';
-		}
-	}
-}
-
-// TODO adjust return-type
-export function getNameById(items: Data[], id: number): Data {
-	let res = items.find((i) => i.id == id);
-	return res == undefined ? { name: 'Could not find element.', id: -1 } : res;
 }
