@@ -13,6 +13,7 @@
 	import type { Message } from '$lib/model';
 	import Plus from '../components/icons/Plus.svelte';
 	import Home from '../components/icons/Home.svelte';
+	import Check from '../components/icons/Check.svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
@@ -44,6 +45,10 @@
 				{#if !$page.route.id?.startsWith('/charts')}
 					<a href="/charts/pie"><Home /></a>
 					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
+				{/if}
+
+				{#if $page.route.id?.startsWith('/charts')}
+					<a href="/eval"><Check /></a>
 				{/if}
 			</div>
 

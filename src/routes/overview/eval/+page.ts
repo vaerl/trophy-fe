@@ -1,4 +1,4 @@
-import type { Game, Team } from '$lib/model';
+import type { Team, Game } from '$lib/model';
 
 export async function load({ fetch }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
@@ -15,6 +15,8 @@ export async function load({ fetch }) {
 
 	// load as few things as possible - especially the pending- and finished-calls are expensive
 	return {
+		teams,
+		games,
 		pendingTeams: pendingTeams.length,
 		finishedTeams: teams - pendingTeams.length,
 		pendingGames: pendingGames.length,
