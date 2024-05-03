@@ -14,6 +14,8 @@ export default {
     {
       // make dynamic alerts work
       pattern: /alert-.+/,
+      // make dynamic heights work - this might be a bad idea, maybe
+      pattern: /h-./
     }
   ]
 }
