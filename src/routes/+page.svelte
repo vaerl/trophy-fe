@@ -3,6 +3,6 @@
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
-		goto('/charts/pie');
+		goto('/overview/pie');
 	});
 </script>

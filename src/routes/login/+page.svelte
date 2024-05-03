@@ -7,7 +7,7 @@
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
 		if (isAuthenticated) {
-			goto('/charts/pie');
+			goto('/overview/pie');
 		}
 	});
 
@@ -23,7 +23,7 @@
 
 	async function authenticate(username: string, password: string) {
 		await login(username, password);
-		goto('/charts/pie');
+		goto('/overview/pie');
 	}
 </script>
 

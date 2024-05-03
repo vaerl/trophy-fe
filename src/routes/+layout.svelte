@@ -41,13 +41,13 @@
 	{#if $page.route.id !== '/login'}
 		<div class="flex flex-row justify-between py-6 px-4 w-full">
 			<div class="flex flex-row">
-				<!-- only show back-arrow if we're not at charts -->
-				{#if !$page.route.id?.startsWith('/charts')}
-					<a href="/charts/pie"><Home /></a>
+				<!-- only show back-arrow if we're not at overview -->
+				{#if !$page.route.id?.startsWith('/overview')}
+					<a href="/overview/pie"><Home /></a>
 					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
 				{/if}
 
-				{#if $page.route.id?.startsWith('/charts')}
+				{#if $page.route.id?.startsWith('/overview')}
 					<a href="/eval"><Check /></a>
 				{/if}
 			</div>

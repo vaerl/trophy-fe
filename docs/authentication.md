@@ -12,5 +12,5 @@ This protects all nested pages.
 
 ## Redirecting away from `/login`
 
-If the user is already logged in but somehow navigates to `/login`, we use `goto` to navigate to `/charts/pie`.
+If the user is already logged in but somehow navigates to `/login`, we use `goto` to navigate to `/overview/pie`.
 This could use `beforeNavigate`, if we only `goto` `/login`.
