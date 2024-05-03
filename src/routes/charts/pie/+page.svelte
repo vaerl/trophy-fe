@@ -30,5 +30,6 @@
 <!-- TODO test password-change, remove default password -->
 <!-- TODO show a button for resetting the trophy -->
 <!-- TODO make user removable even when IDs are used in history? -->
-<!-- TODO add dashboard for final results -> maybe show arrow to the left or have new  path for that -->
+<!-- TODO add dashboard for final results -> maybe show arrow to the left or have new path for that -->
 <!-- -> also: show download on that page, don't download on 'auswerten' - just create the page -->
+<!-- -> multiple evaluations? -->
