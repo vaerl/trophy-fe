@@ -37,6 +37,10 @@ export interface Game extends CreateGame {
 	locked: boolean;
 }
 
+export interface GameWithPending extends Game {
+	pendingTeams: number;
+}
+
 export enum GameKind {
 	Points = 'points',
 	Time = 'time'

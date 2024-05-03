@@ -3,12 +3,11 @@
 	import { onMount } from 'svelte';
 	// this has to be done like this: https://stackoverflow.com/questions/71030372/does-not-provide-an-export-named-tooltip-even-though-i-can-output-tooltip
 	import Chart, { BarController, BarElement, Legend, LinearScale, Tooltip } from 'chart.js/auto';
-	import { credentialFetch } from '../../lib/util';
-	import type { Game, Team } from '$lib/model';
+	import type { GameWithPending } from '$lib/model';
 	import { goto } from '$app/navigation';
 
-	export let games: Game[];
-	export let totalTeamsAmount: number;
+	export let games: GameWithPending[];
+	export let teams: number;
 	export let id: string;
 	const chartPrefix = 'bar-';
 	const chartId = chartPrefix + id;
@@ -21,8 +20,19 @@
 		barChart = new Chart(document.getElementById(chartId)! as HTMLCanvasElement, {
 			type: 'bar',
 			data: {
-				labels: [],
-				datasets: []
+				labels: games.map((g) => g.name),
+				datasets: [
+					{
+						label: 'Fertig',
+						data: games.map((g) => teams - g.pendingTeams),
+						backgroundColor: '#009485'
+					},
+					{
+						label: 'Offen',
+						data: games.map((g) => g.pendingTeams),
+						backgroundColor: '#ff5724'
+					}
+				]
 			},
 			options: {
 				onClick: (_event, elements, chart) => {
@@ -61,7 +71,7 @@
 					y: {
 						stacked: true,
 						beginAtZero: true,
-						max: totalTeamsAmount,
+						max: teams,
 						ticks: {
 							stepSize: 1
 						}
@@ -71,40 +81,12 @@
 		});
 	}
 
-	let responses: Promise<Team[]>[] = [];
-	for (let index = 0; index < games.length; index++) {
-		const game = games[index];
-		let response = credentialFetch(import.meta.env.VITE_BACKEND_URL + `/games/${game.id}/pending`, {
-			method: 'GET'
-		}).then((response) => response.json());
-		responses.push(response);
-	}
-	Promise.all(responses).then((responses) => {
-		// this check is necessary
-		if (barChart != undefined) {
-			barChart.data.labels = games.map((g) => g.name);
-			barChart.data.datasets = [
-				{
-					label: 'Fertig',
-					data: responses.map((r) => totalTeamsAmount - r.length),
-					backgroundColor: '#009485'
-				},
-				{
-					label: 'Offen',
-					data: responses.map((r) => r.length),
-					backgroundColor: '#ff5724'
-				}
-			];
-			barChart.update();
-		}
-	});
-
-	if (games.length > 0 && totalTeamsAmount > 0) {
+	if (games.length > 0 && teams > 0) {
 		onMount(createBar);
 	}
 </script>
 
-{#if games.length == 0 || totalTeamsAmount == 0}
+{#if games.length == 0 || teams == 0}
 	<h1 class="text-lg font-bold text-center">Momentan sind keine Daten verfügbar.</h1>
 {:else}
 	<div class="w-3/4">
