@@ -7,7 +7,7 @@
 
 <div class="absolute-center-y w-full">
 	<div class="flex flex-row justify-evenly">
-		<BarChart games={data.games} name="Fertige Teams" totalTeamsAmount={data.teamsAmount} />
+		<BarChart games={data.games} id="finished-teams" totalTeamsAmount={data.teamsAmount} />
 	</div>
 </div>
 <a class="absolute-center-y left-10 cursor-pointer" href="/charts/pie">

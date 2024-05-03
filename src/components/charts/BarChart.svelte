@@ -9,14 +9,16 @@
 
 	export let games: Game[];
 	export let totalTeamsAmount: number;
-	export let name: string;
+	export let id: string;
+	const chartPrefix = 'bar-';
+	const chartId = chartPrefix + id;
 
 	Chart.register(BarController, BarElement, Tooltip, Legend, LinearScale);
 
 	let barChart: Chart;
 
 	function createBar() {
-		barChart = new Chart(document.getElementById('bar' + name)! as HTMLCanvasElement, {
+		barChart = new Chart(document.getElementById(chartId)! as HTMLCanvasElement, {
 			type: 'bar',
 			data: {
 				labels: [],
@@ -102,6 +104,6 @@
 {:else}
 	<!-- TODO there might be a better way to make the cursor a pointer -->
 	<div class="w-1/2 cursor-pointer" on:click={() => goto('..')}>
-		<canvas id={'bar' + name} />
+		<canvas id={chartId} />
 	</div>
 {/if}
