@@ -46,10 +46,6 @@
 					<a href="/overview/pie"><Home /></a>
 					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
 				{/if}
-
-				{#if $page.route.id?.startsWith('/overview')}
-					<a href="/eval"><Check /></a>
-				{/if}
 			</div>
 
 			<div class="flex flex-row">
