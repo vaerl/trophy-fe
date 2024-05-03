@@ -30,9 +30,14 @@
 					const gameName = chart.data.labels![element.index];
 					games.forEach((game) => {
 						if (game.name == gameName) {
-							goto(`./games/${game.id}`);
+							goto(`/games/${game.id}`);
 						}
 					});
+				},
+				// taken from here: https://youtu.be/Uj_I2_7o0No?t=682
+				// NOTE we have to convince TypeScript by specifying any
+				onHover: (event: any, chartElement) => {
+					event.native!.target!.style.cursor = chartElement[0] ? 'pointer' : 'default';
 				},
 				plugins: {
 					legend: {
@@ -102,8 +107,7 @@
 {#if games.length == 0 || totalTeamsAmount == 0}
 	<h1 class="text-lg font-bold text-center">Momentan sind keine Daten verfügbar.</h1>
 {:else}
-	<!-- TODO there might be a better way to make the cursor a pointer -->
-	<div class="w-1/2 cursor-pointer" on:click={() => goto('..')}>
+	<div class="w-3/4">
 		<canvas id={chartId} />
 	</div>
 {/if}
