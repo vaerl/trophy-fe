@@ -44,7 +44,7 @@
 		};
 	}}
 >
-	<div class="w-ful">
+	<div class="w-full">
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>
 		</label>
