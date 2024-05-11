@@ -13,7 +13,6 @@
 	import type { Message } from '$lib/model';
 	import Plus from '../components/icons/Plus.svelte';
 	import Home from '../components/icons/Home.svelte';
-	import Check from '../components/icons/Check.svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
