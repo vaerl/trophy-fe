@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { messageStore } from '$lib/stores';
+	import { messageStore, yearStore } from '$lib/stores';
 	import { GameKind, MessageType } from '../../../lib/model';
 
 	export let form;
@@ -27,14 +27,23 @@
 				type: MessageType.Success,
 				message: `Spiel ${form.game.name} wurde erfolgreich angelegt.`
 			});
-			goto('/games');
+			goto(`/games?year=${$yearStore}`);
 		}
 	}
 </script>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Spiel anlegen</h1>
 
-<form method="POST" class="flex flex-col w-80 m-auto gap-8" use:enhance>
+<form
+	method="POST"
+	class="flex flex-col w-80 m-auto gap-8"
+	use:enhance={({ formData }) => {
+		formData.append('year', $yearStore);
+		return async ({ result }) => {
+			await applyAction(result);
+		};
+	}}
+>
 	<div>
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>

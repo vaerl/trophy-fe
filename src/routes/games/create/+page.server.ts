@@ -20,10 +20,16 @@ export const actions = {
 			return fail(400, { field: 'Typ', missing: true });
 		}
 
+		let year = data.get('year');
+		if (!year) {
+			return fail(400, { field: 'Jahr', missing: true });
+		}
+
 		let game: CreateGame = {
 			trophy_id: parseInt(trophy_id.toString()),
 			name: name.toString(),
-			kind: kind as GameKind
+			kind: kind as GameKind,
+			year: parseInt(year.toString())
 		};
 
 		let cookie = event.cookies.get('session');

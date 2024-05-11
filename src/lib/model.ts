@@ -2,6 +2,7 @@ export interface CreateTeam {
 	name: string;
 	trophy_id: number;
 	gender: TeamGender;
+	year: number;
 }
 
 export interface Team extends CreateTeam {
@@ -30,6 +31,7 @@ export interface CreateGame {
 	trophy_id: number;
 	kind: GameKind;
 	name: string;
+	year: number;
 }
 
 export interface Game extends CreateGame {
