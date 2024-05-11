@@ -33,7 +33,7 @@
 	 * Close the modal if we click out of it.
 	 * @param e
 	 */
-	function onClickOutside(e: MouseEvent) {
+	function onClickOutside(e: any) {
 		if (!modalContent.contains(e.target)) {
 			modalOutcome = null;
 		}
