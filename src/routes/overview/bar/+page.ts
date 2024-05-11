@@ -1,13 +1,13 @@
 import type { Game, GameWithPending, Team } from '$lib/model';
 import { credentialFetch } from '$lib/util';
 
-export async function load({ fetch }) {
+export async function load({ fetch, url }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const teamsRes = await fetch(`${baseUrl}/teams/amount`, { credentials: 'include' });
+	const teamsRes = await fetch(`${baseUrl}/teams/amount${url.search}`, { credentials: 'include' });
 	const teamsAmount: number = await teamsRes.json();
 
-	const gamesRes = await fetch(`${baseUrl}/games`, { credentials: 'include' });
+	const gamesRes = await fetch(`${baseUrl}/games${url.search}`, { credentials: 'include' });
 	const games: Game[] = await gamesRes.json();
 
 	const gamesWithPending: Promise<GameWithPending>[] = games.map(async (g) => {

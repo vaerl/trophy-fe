@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
 
 	export let data;
@@ -25,6 +26,6 @@
 	</div>
 {/if}
 
-<a class="absolute-center-y right-10 cursor-pointer" href="/overview/pie">
+<a class="absolute-center-y right-10 cursor-pointer" href="/overview/pie{$page.url.search}">
 	<RightArrow size={20} />
 </a>
