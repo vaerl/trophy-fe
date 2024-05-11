@@ -8,7 +8,7 @@ import { credentialFetch } from './util';
  * @param password
  */
 export async function login(name: string, password: string) {
-	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/user/login', {
+	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/login', {
 		method: 'POST',
 		body: JSON.stringify({ name: name, password: password })
 	});
