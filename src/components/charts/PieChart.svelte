@@ -42,7 +42,8 @@
 	}
 </script>
 
-<a href={link} class="cursor-pointer flex flex-col justify-center">
+<!-- this width controls the size of charts; 1/3 seems a bit large -->
+<a href={link} class="cursor-pointer flex flex-col justify-center w-1/4">
 	{#if total == 0}
 		<h1 class="text-lg font-bold text-center">
 			Momentan sind keine <br />
@@ -56,7 +57,7 @@
 				<p class="text-center w-full font-extrabold stat-value">
 					{total}
 				</p>
-				<p class="text-center w-full stat-desc">{name} insgesamt</p>
+				<p class="text-center w-full stat-title">{name} insgesamt</p>
 			</div>
 		</div>
 	{/if}
