@@ -1,3 +1,6 @@
+import { browser } from '$app/environment';
+import { yearStore } from './stores';
+
 /**
  * Small wrapper around fetch. Sets the content-type and specifies withCredentials: "true" as well as credentials: "include".
  * @param input Request-URL
@@ -21,4 +24,22 @@ export function isEnterKeyEvent(event: KeyboardEvent) {
 
 export function isEscapeKeyEvent(event: KeyboardEvent) {
 	return event.key.toLowerCase() == 'escape';
+}
+
+/**
+ * Get the initial value for year. Used to set the value of {@link yearStore}.
+ * @returns
+ */
+export function getYear(): string {
+	if (!browser) {
+		return new Date().getFullYear().toString();
+	}
+
+	let year = localStorage.getItem('year');
+
+	if (year) {
+		return year;
+	}
+
+	return new Date().getFullYear().toString();
 }
