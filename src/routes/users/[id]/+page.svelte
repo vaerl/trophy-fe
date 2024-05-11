@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
-	import { messageStore } from '$lib/stores';
+	import { messageStore, yearStore } from '$lib/stores';
 	import { MessageType } from '$lib/model';
 
 	export let data;
@@ -24,7 +24,7 @@
 
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-28 flex flex-row">
-	<a href={`/users/${data.user.id}/edit`} class="ml-6"><Edit /></a>
+	<a href={`/users/${data.user.id}/edit?year=${$yearStore}`} class="ml-6"><Edit /></a>
 	<form method="POST" action="?/delete">
 		<button class="ml-6"><Delete /></button>
 	</form>
@@ -32,7 +32,7 @@
 
 <div class="absolute-center-x absolute-center-y">
 	<div class="tooltip" data-tip="Zum Bearbeiten klicken.">
-		<a href={`/users/${data.user.id}/edit`}>
+		<a href={`/users/${data.user.id}/edit?year=${$yearStore}`}>
 			<div class="stats border">
 				<div class="stat place-items-center">
 					<div class="stat-title">Name</div>

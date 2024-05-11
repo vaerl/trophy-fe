@@ -79,6 +79,13 @@ export interface CreateUser {
 	game_id?: number;
 }
 
+export interface UpdateUser {
+	name: string;
+	password?: string;
+	role: UserRole;
+	game_id?: number;
+}
+
 export enum LogLevel {
 	Debug = 'debug',
 	Info = 'info',
