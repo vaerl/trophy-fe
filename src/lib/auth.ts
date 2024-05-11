@@ -8,7 +8,7 @@ import { credentialFetch } from './util';
  * @param password
  */
 export async function login(name: string, password: string) {
-	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/login', {
+	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/user/login', {
 		method: 'POST',
 		body: JSON.stringify({ name: name, password: password })
 	});
@@ -20,7 +20,7 @@ export async function login(name: string, password: string) {
  * @returns true if the user is logged in
  */
 export async function checkAuth() {
-	const value = await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/status', {
+	const value = await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/user/status', {
 		method: 'GET'
 	});
 	const response = await value.json();
