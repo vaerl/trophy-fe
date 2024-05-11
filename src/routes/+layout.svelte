@@ -53,7 +53,7 @@
 			</div>
 
 			<div class="flex flex-row">
-				{#if ($page.route.id === '/teams' || $page.route.id === '/games', $page.route.id === '/users')}
+				{#if $page.route.id === '/teams' || $page.route.id === '/games' || $page.route.id === '/users'}
 					<a href={`${$page.route.id}/create`}> <Plus /> </a>
 				{/if}
 
