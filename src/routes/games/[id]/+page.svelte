@@ -2,7 +2,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { GameKind, MessageType, type Outcome } from '$lib/model';
-	import { messageStore } from '$lib/stores.js';
+	import { messageStore, yearStore } from '$lib/stores.js';
 	import { isEscapeKeyEvent } from '$lib/util';
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 	import Edit from '../../../components/icons/Edit.svelte';
@@ -82,7 +82,16 @@
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-40 flex flex-row">
 	<a href={`/games/${game.id}/edit`} class="ml-6"><Edit /></a>
-	<form method="POST" action="?/delete">
+	<form
+		method="POST"
+		action="?/delete"
+		use:enhance={({ formData }) => {
+			formData.append('year', $yearStore);
+			return async ({ result }) => {
+				await applyAction(result);
+			};
+		}}
+	>
 		<button class="ml-6"><Delete /></button>
 	</form>
 </div>

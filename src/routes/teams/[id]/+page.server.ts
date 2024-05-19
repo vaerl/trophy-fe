@@ -43,10 +43,16 @@ export const actions = {
 	},
 	delete: async (event) => {
 		let id = event.params.id;
+		let data = await event.request.formData();
 
 		let cookie = event.cookies.get('session');
 		if (!cookie) {
 			return fail(400, { unauthorized: true });
+		}
+
+		let year = data.get('year');
+		if (!year) {
+			return fail(400, { field: 'Jahr', missing: true });
 		}
 
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
@@ -63,6 +69,6 @@ export const actions = {
 		}
 
 		// go back to /teams after deletion
-		redirect(302, '/teams');
+		redirect(302, `/teams?year=${year}`);
 	}
 };
