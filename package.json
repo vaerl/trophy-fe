@@ -21,6 +21,7 @@
 		"@sveltejs/kit": "^2.5.7",
 		"@types/chart.js": "^2.9.41",
 		"@types/cookie": "^0.6.0",
+		"@vincjo/datatables": "^1.14.5",
 		"autoprefixer": "^10.4.19",
 		"chart.js": "^4.4.2",
 		"daisyui": "^4.10.3",

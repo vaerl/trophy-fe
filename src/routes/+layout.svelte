@@ -1,21 +1,89 @@
-<script>
-	import { beforeNavigate } from '$app/navigation';
-	import { checkAuth } from '$lib/auth';
-	import { loginStore } from '$lib/stores';
-	import Login from '../components/Login.svelte';
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { checkAuth, logout } from '$lib/auth';
 	import '../app.css';
+	import { onMount } from 'svelte';
+	import Info from '../components/icons/Info.svelte';
+	import Logout from '../components/icons/Logout.svelte';
+	import UserIcon from '../components/icons/UserIcon.svelte';
+	import { page } from '$app/stores';
+	import LeftArrow from '../components/icons/LeftArrow.svelte';
+	import { messageStore, yearStore } from '$lib/stores';
+	import { onDestroy } from 'svelte';
+	import type { Message } from '$lib/model';
+	import Plus from '../components/icons/Plus.svelte';
+	import Home from '../components/icons/Home.svelte';
+	import Cog from '../components/icons/Cog.svelte';
 
-	// check authentication initially
-	checkAuth();
-
-	// TODO exclude URLs?
-	beforeNavigate(() => {
-		checkAuth();
+	onMount(async () => {
+		let isAuthenticated = await checkAuth();
+		if (!isAuthenticated) {
+			goto('/login');
+		}
 	});
+
+	let toast: Message | undefined = undefined;
+	const unsub = messageStore.subscribe((message) => {
+		// Ignore the initial state of 'undefined' - I mainly still have this subscription
+		// because of the setTimeout-function. Otherwise, we could simply use messageStore directly.
+		if (message) {
+			toast = message;
+			setTimeout(() => (toast = undefined), 30000);
+		}
+	});
+
+	onDestroy(unsub);
 </script>
 
-{#if $loginStore}
+<!-- this div makes sure that children respect parent's boundaries when using height: 100%-->
+<div class="flex flex-col h-full">
+	<!-- only show bar if we're not at /login -->
+	{#if $page.route.id !== '/login'}
+		<div class="flex flex-row justify-between py-6 px-4 w-full">
+			<div class="flex flex-row">
+				<!-- only show back-arrow if we're not at overview -->
+				{#if !$page.route.id?.startsWith('/overview')}
+					<a href="/overview/pie?year={$yearStore}"><Home /></a>
+					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
+				{/if}
+
+				{#if $page.route.id?.startsWith('/overview')}
+					<a href="/settings"><Cog /></a>
+				{/if}
+			</div>
+
+			<div class="flex flex-row">
+				{#if $page.route.id === '/teams' || $page.route.id === '/games' || $page.route.id === '/users'}
+					<a href={`${$page.route.id}/create?year=${$yearStore}`}> <Plus /> </a>
+				{/if}
+
+				{#if !$page.route.id?.startsWith('/users')}
+					<a class="ml-6" href="/users?year={$yearStore}"> <UserIcon /> </a>
+				{/if}
+
+				{#if !$page.route.id?.startsWith('/logs')}
+					<a class="ml-6" href="/logs?year={$yearStore}"> <Info /> </a>
+				{/if}
+
+				<button class="ml-6" on:click={logout}>
+					<Logout />
+				</button>
+			</div>
+		</div>
+	{/if}
+
 	<slot />
-{:else}
-	<Login />
+</div>
+
+{#if toast}
+	<div class="absolute bottom-4 right-4 flex justify-end">
+		<div class={`alert alert-${toast.type}`} role="alert">
+			<div class="flex-1">
+				<label class="mx-3" for="toast">{toast.message}</label>
+			</div>
+			<div class="flex-none">
+				<button class="btn btn-sm btn-ghost mr-2" on:click={() => (toast = undefined)}>Ok</button>
+			</div>
+		</div>
+	</div>
 {/if}

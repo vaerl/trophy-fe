@@ -1,8 +1,6 @@
 <script lang="ts">
 	// copied from here: https://github.com/GeekyAnts/svelte-admin-dashboard/blob/master/src/components/Charts/DoughnutChart.svelte
 	import { onMount } from 'svelte';
-	// this has to be done like this: https://stackoverflow.com/questions/71030372/does-not-provide-an-export-named-tooltip-even-though-i-can-output-tooltip
-	import { goto } from '$app/navigation';
 	import Chart, {
 		ArcElement,
 		CategoryScale,
@@ -44,20 +42,23 @@
 	}
 </script>
 
-{#if total == 0}
-	<h1 class="text-lg font-bold text-center cursor-pointer" on:click={() => goto(link)}>
-		Momentan sind keine <br />
-		{name} angelegt.
-	</h1>
-{:else}
-	<div class="relative cursor-pointer" on:click={() => goto(link)}>
-		<h4 class="text-3xl text-center pb-4 font-bold">{name}</h4>
-		<canvas id={'doughnut-chart' + name} />
-		<div class="absolute top-1/2 w-full">
-			<p class="text-center w-full font-extrabold stat-value">
-				{total}
-			</p>
-			<p class="text-center w-full stat-desc">{name} insgesamt</p>
+<!-- this width controls the size of charts; 1/3 seems a bit large -->
+<a href={link} class="cursor-pointer flex flex-col justify-center w-1/4">
+	{#if total == 0}
+		<h1 class="text-lg font-bold text-center">
+			Momentan sind keine <br />
+			{name} angelegt.
+		</h1>
+	{:else}
+		<div class="relative">
+			<h4 class="text-3xl text-center pb-4 font-bold">{name}</h4>
+			<canvas id={'doughnut-chart' + name} />
+			<div class="absolute top-1/2 w-full">
+				<p class="text-center w-full font-extrabold stat-value">
+					{total}
+				</p>
+				<p class="text-center w-full stat-title">{name} insgesamt</p>
+			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
+</a>

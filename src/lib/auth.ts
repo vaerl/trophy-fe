@@ -1,6 +1,4 @@
 import { goto } from '$app/navigation';
-import type { StatusResponse } from './data';
-import { loginStore } from './stores';
 import { credentialFetch } from './util';
 
 /**
@@ -17,25 +15,25 @@ export async function login(name: string, password: string) {
 	checkAuth();
 }
 
+/**
+ * Check if the current user is logged in.
+ * @returns true if the user is logged in
+ */
 export async function checkAuth() {
-	const value = await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/status', {
+	const value = await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/user/status', {
 		method: 'GET'
 	});
-	const response: StatusResponse = await value.json();
-
-	if (response.status) {
-		console.debug('User is logged in, updating store.');
-		loginStore.set(true);
-	} else {
-		console.warn('User is not logged in!');
-		loginStore.set(false);
-	}
+	const response = await value.json();
+	return response.status;
 }
 
+/**
+ * Log out the current user.
+ */
 export async function logout() {
 	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/logout', {
 		method: 'POST'
 	});
-	console.debug(`Logged out user.`);
-	goto('/');
+	console.debug('Logged out user.');
+	goto('/login');
 }

@@ -1,11 +1,12 @@
-export interface Data {
-	id: number;
+export interface CreateTeam {
 	name: string;
-}
-
-export interface Team extends Data {
 	trophy_id: number;
 	gender: TeamGender;
+	year: number;
+}
+
+export interface Team extends CreateTeam {
+	id: number;
 	points: number;
 }
 
@@ -17,16 +18,29 @@ export enum TeamGender {
 export interface Outcome {
 	game_id: number;
 	game_trophy_id: number;
+	game_name: string;
+	game_kind: GameKind;
 	team_id: number;
 	team_trophy_id: number;
+	team_name: string;
 	data: string | null;
 	point_value: number;
 }
 
-export interface Game extends Data {
+export interface CreateGame {
 	trophy_id: number;
 	kind: GameKind;
+	name: string;
+	year: number;
+}
+
+export interface Game extends CreateGame {
+	id: number;
 	locked: boolean;
+}
+
+export interface GameWithPending extends Game {
+	pendingTeams: number;
 }
 
 export enum GameKind {
@@ -34,22 +48,17 @@ export enum GameKind {
 	Time = 'time'
 }
 
-export class Message {
-	public timestamp: Date;
-
-	constructor(public type: MessageType, public message: string) {
-		this.timestamp = new Date();
-	}
-
-	public isAfter(message: Message): boolean {
-		return this.timestamp > message.timestamp;
-	}
+export interface Message {
+	type: MessageType;
+	message: String;
 }
+
+// these correspond to DaisyUI's alert-classes so we can re-use them to color the alerts.
 export enum MessageType {
 	Error = 'error',
 	Info = 'info',
-	Update = 'update',
-	Initial = 'initial'
+	Warn = 'warn',
+	Success = 'success'
 }
 
 export enum UserRole {
@@ -58,8 +67,21 @@ export enum UserRole {
 	Visualizer = 'visualizer'
 }
 
-export interface User extends Data {
+export interface User extends CreateUser {
+	id: number;
+	game_name?: string;
+}
+
+export interface CreateUser {
+	name: string;
 	password: string;
+	role: UserRole;
+	game_id?: number;
+}
+
+export interface UpdateUser {
+	name: string;
+	password?: string;
 	role: UserRole;
 	game_id?: number;
 }
@@ -70,9 +92,15 @@ export enum LogLevel {
 	Important = 'important'
 }
 
-export interface History extends Data {
+export interface History {
+	id: number;
 	user_id: number;
+	user_name: string;
 	timestamp: Date;
 	log_level: LogLevel;
 	action: string;
+}
+
+export interface StatusResponse {
+	status: boolean;
 }
