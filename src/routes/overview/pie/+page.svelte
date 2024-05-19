@@ -29,7 +29,3 @@
 <a class="absolute-center-y left-10 cursor-pointer" href="/overview/eval{$page.url.search}">
 	<LeftArrow size={20} />
 </a>
-
-<!-- TODO test password-change, remove default password -->
-<!-- TODO show a button for resetting the trophy -->
-<!-- TODO make user removable even when IDs are used in history? -->
