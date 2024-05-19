@@ -1,19 +1,15 @@
-import { type CreateUser, UserRole, type User } from '$lib/model';
+import { type UpdateUser, UserRole, type User } from '$lib/model';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {
 	default: async (event) => {
 		let data = await event.request.formData();
-		console.log(data);
+		let password = data.get('password');
+		let game_id = data.get('game_id');
 
 		let name = data.get('name');
 		if (!name) {
 			return fail(400, { field: 'Name', missing: true });
-		}
-
-		let password = data.get('password');
-		if (!password) {
-			return fail(400, { field: 'Passwort', missing: true });
 		}
 
 		let role = data.get('role');
@@ -21,13 +17,14 @@ export const actions = {
 			return fail(400, { field: 'Rolle', missing: true });
 		}
 
-		let game_id = data.get('game_id');
-		let user: CreateUser = {
+		let user: UpdateUser = {
+			password: password ? password!.toString() : undefined,
 			name: name.toString(),
 			role: role as UserRole,
-			password: password.toString(),
-			game_id: game_id?.toString().trim() === '' ? undefined : parseInt(game_id?.toString()!)
+			game_id: game_id ? parseInt(game_id!.toString()) : undefined
 		};
+
+		console.log(user);
 
 		let cookie = event.cookies.get('session');
 		if (!cookie) {

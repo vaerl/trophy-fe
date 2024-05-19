@@ -54,15 +54,15 @@
 
 			<div class="flex flex-row">
 				{#if $page.route.id === '/teams' || $page.route.id === '/games' || $page.route.id === '/users'}
-					<a href={`${$page.route.id}/create`}> <Plus /> </a>
+					<a href={`${$page.route.id}/create?year=${$yearStore}`}> <Plus /> </a>
 				{/if}
 
 				{#if !$page.route.id?.startsWith('/users')}
-					<a class="ml-6" href="/users"> <UserIcon /> </a>
+					<a class="ml-6" href="/users?year={$yearStore}"> <UserIcon /> </a>
 				{/if}
 
 				{#if !$page.route.id?.startsWith('/logs')}
-					<a class="ml-6" href="/logs"> <Info /> </a>
+					<a class="ml-6" href="/logs?year={$yearStore}"> <Info /> </a>
 				{/if}
 
 				<button class="ml-6" on:click={logout}>
