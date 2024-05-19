@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { MessageType, TeamGender } from '$lib/model.js';
-	import { messageStore } from '$lib/stores';
+	import { messageStore, yearStore } from '$lib/stores';
 
 	export let data;
 	export let form;
@@ -37,7 +37,16 @@
 	<span class="underline">{data.team.name}</span> bearbeiten
 </h1>
 
-<form method="POST" class="flex flex-col w-80 m-auto gap-8" use:enhance>
+<form
+	method="POST"
+	class="flex flex-col w-80 m-auto gap-8"
+	use:enhance={({ formData }) => {
+		formData.append('year', $yearStore);
+		return async ({ result }) => {
+			await applyAction(result);
+		};
+	}}
+>
 	<div class="w-full">
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>

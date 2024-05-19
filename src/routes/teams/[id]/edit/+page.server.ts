@@ -25,10 +25,16 @@ export const actions = {
 			return fail!(422, { miscellaneous: true, detail: 'ID konnte nicht ermittelt werden.' });
 		}
 
+		let year = data.get('year');
+		if (!year) {
+			return fail(400, { field: 'Jahr', missing: true });
+		}
+
 		let team: CreateTeam = {
 			trophy_id: parseInt(trophy_id.toString()),
 			name: name.toString(),
-			gender: gender as TeamGender
+			gender: gender as TeamGender,
+			year: parseInt(year.toString())
 		};
 
 		let cookie = event.cookies.get('session');
