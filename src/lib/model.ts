@@ -100,3 +100,7 @@ export interface History {
 	log_level: LogLevel;
 	action: string;
 }
+
+export interface StatusResponse {
+	status: boolean;
+}

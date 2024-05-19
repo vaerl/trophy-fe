@@ -1,17 +1,18 @@
-import type { Team, Game } from '$lib/model';
+import type { Team, Game, StatusResponse } from '$lib/model';
 
 export async function load({ fetch, url }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const teamsRes = await fetch(`${baseUrl}/teams/amount${url.search}`, { credentials: 'include' });
-	const teams: number = await teamsRes.json();
-	const pendingTeamsRes = await fetch(`${baseUrl}/teams/pending${url.search}`, {
+	const trophyDoneRes = await fetch(`${baseUrl}/done${url.search}`, {
 		credentials: 'include'
 	});
-	const pendingTeams: Team[] = await pendingTeamsRes.json();
+	const trophyDone: StatusResponse = await trophyDoneRes.json();
 
-	const gamesRes = await fetch(`${baseUrl}/games/amount${url.search}`, { credentials: 'include' });
-	const games: number = await gamesRes.json();
+	const evalDoneRes = await fetch(`${baseUrl}/done${url.search}`, {
+		credentials: 'include'
+	});
+	const evalDone: StatusResponse = await evalDoneRes.json();
+
 	const pendingGamesRes = await fetch(`${baseUrl}/games/pending${url.search}`, {
 		credentials: 'include'
 	});
@@ -19,11 +20,8 @@ export async function load({ fetch, url }) {
 
 	// load as few things as possible - especially the pending- and finished-calls are expensive
 	return {
-		teams,
-		games,
-		pendingTeams: pendingTeams.length,
-		finishedTeams: teams - pendingTeams.length,
 		pendingGames: pendingGames.length,
-		finishedGames: games - pendingGames.length
+		trophyDone,
+		evalDone
 	};
 }
