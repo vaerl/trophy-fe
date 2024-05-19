@@ -68,11 +68,11 @@
 	</div>
 
 	<div class="w-full">
-		<label class="label" for="role">
-			<span class="label-text">Rolle</span>
+		<label class="label" for="game">
+			<span class="label-text">Spiel</span>
 		</label>
 		<select
-			name="role"
+			name="game"
 			class="select select-bordered w-full max-w-xs"
 			required
 			value={data.user.game_id}
