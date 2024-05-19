@@ -1,15 +1,44 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { MessageType } from '$lib/model';
+	import { messageStore } from '$lib/stores';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
 
 	export let data;
+	let trophyDone = data.trophyDone.status;
+	let evalDone = data.evalDone.status;
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+
+	async function evaluate() {
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+
+		const res = await fetch(`${baseUrl}/eval${$page.url.search}`, {
+			credentials: 'include'
+		});
+
+		if (res.status == 200) {
+			messageStore.set({
+				type: MessageType.Success,
+				message: 'Trophy evaluiert.'
+			});
+			evalDone = true;
+		} else {
+			console.log(res);
+			messageStore.set({
+				type: MessageType.Error,
+				message: `Fehler beim Evaluieren: ${res.body}`
+			});
+		}
+	}
 </script>
 
-{#if data.trophyDone.status && !data.evalDone.status}
-	<button>Auswerten</button>
-	<a href={`${baseUrl}/eval${$page.url.search}`}>CSV herunterladen</a>
-{:else if data.evalDone.status}
+{#if trophyDone && !evalDone}
+	<div class="absolute-center-y absolute-center-x text-center">
+		<h1 class="text-4xl pb-8">Die Trophy kann ausgewertet werden.</h1>
+
+		<button class="btn btn-primary" on:click={evaluate}>Auswerten</button>
+	</div>
+{:else if evalDone}
 	<div class="absolute-center-y absolute-center-x text-center">
 		<h1 class="text-4xl pb-4">Die Trophy ist ausgewertet.</h1>
 

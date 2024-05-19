@@ -8,7 +8,7 @@ export async function load({ fetch, url }) {
 	});
 	const trophyDone: StatusResponse = await trophyDoneRes.json();
 
-	const evalDoneRes = await fetch(`${baseUrl}/done${url.search}`, {
+	const evalDoneRes = await fetch(`${baseUrl}/eval/done${url.search}`, {
 		credentials: 'include'
 	});
 	const evalDone: StatusResponse = await evalDoneRes.json();
