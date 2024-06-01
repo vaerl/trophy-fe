@@ -6,6 +6,6 @@
 
 	onMount(async () => {
 		$page.url.searchParams.set('year', $yearStore);
-		goto(`/overview/pie${$page.url.search}`);
+		goto(`/overview/pie`);
 	});
 </script>

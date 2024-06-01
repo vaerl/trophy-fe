@@ -8,7 +8,7 @@
 	import UserIcon from '../components/icons/UserIcon.svelte';
 	import { page } from '$app/stores';
 	import LeftArrow from '../components/icons/LeftArrow.svelte';
-	import { messageStore, yearStore } from '$lib/stores';
+	import { messageStore } from '$lib/stores';
 	import { onDestroy } from 'svelte';
 	import type { Message } from '$lib/model';
 	import Plus from '../components/icons/Plus.svelte';
@@ -43,7 +43,7 @@
 			<div class="flex flex-row">
 				<!-- only show back-arrow if we're not at overview -->
 				{#if !$page.route.id?.startsWith('/overview')}
-					<a href="/overview/pie?year={$yearStore}"><Home /></a>
+					<a href="/overview/pie"><Home /></a>
 					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
 				{/if}
 
@@ -54,15 +54,15 @@
 
 			<div class="flex flex-row">
 				{#if $page.route.id === '/teams' || $page.route.id === '/games' || $page.route.id === '/users'}
-					<a href={`${$page.route.id}/create?year=${$yearStore}`}> <Plus /> </a>
+					<a href={`${$page.route.id}/create`}> <Plus /> </a>
 				{/if}
 
 				{#if !$page.route.id?.startsWith('/users')}
-					<a class="ml-6" href="/users?year={$yearStore}"> <UserIcon /> </a>
+					<a class="ml-6" href="/users"> <UserIcon /> </a>
 				{/if}
 
 				{#if !$page.route.id?.startsWith('/logs')}
-					<a class="ml-6" href="/logs?year={$yearStore}"> <Info /> </a>
+					<a class="ml-6" href="/logs"> <Info /> </a>
 				{/if}
 
 				<button class="ml-6" on:click={logout}>
