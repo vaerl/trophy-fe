@@ -31,10 +31,6 @@ export function isEscapeKeyEvent(event: KeyboardEvent) {
  * @returns
  */
 export function getYear(): string {
-	if (!browser) {
-		return new Date().getFullYear().toString();
-	}
-
 	let year = localStorage.getItem('year');
 
 	if (year) {

@@ -1,19 +1,23 @@
-import type { Team, Game, StatusResponse } from '$lib/model';
+import type { Game, StatusResponse } from '$lib/model';
+import { getYear } from '$lib/util.js';
 
-export async function load({ fetch, url }) {
+export async function load({ fetch }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const trophyDoneRes = await fetch(`${baseUrl}/done${url.search}`, {
+	let year = getYear();
+	let params = `?year=${year}`;
+
+	const trophyDoneRes = await fetch(`${baseUrl}/done${params}`, {
 		credentials: 'include'
 	});
 	const trophyDone: StatusResponse = await trophyDoneRes.json();
 
-	const evalDoneRes = await fetch(`${baseUrl}/eval/done${url.search}`, {
+	const evalDoneRes = await fetch(`${baseUrl}/eval/done${params}`, {
 		credentials: 'include'
 	});
 	const evalDone: StatusResponse = await evalDoneRes.json();
 
-	const pendingGamesRes = await fetch(`${baseUrl}/games/pending${url.search}`, {
+	const pendingGamesRes = await fetch(`${baseUrl}/games/pending${params}`, {
 		credentials: 'include'
 	});
 	const pendingGames: Game[] = await pendingGamesRes.json();
