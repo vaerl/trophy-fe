@@ -70,12 +70,12 @@
 	</div>
 
 	<div class="w-full">
-		<label class="label" for="game">
+		<label class="label" for="game_id">
 			<span class="label-text">Spiel</span>
 		</label>
-		<select name="game" class="select select-bordered w-full max-w-xs" value={null}>
-			{#each data.games as game, id (game.id)}
-				<option value={id}> {game.name} </option>
+		<select name="game_id" class="select select-bordered w-full max-w-xs" value={null}>
+			{#each data.games as game (game.id)}
+				<option value={game.id}> {game.name} </option>
 			{/each}
 
 			<option value={null}> Kein Spiel </option>
