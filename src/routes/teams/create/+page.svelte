@@ -1,49 +1,56 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { messageStore, yearStore } from '$lib/stores';
-	import { MessageType, TeamGender } from '../../../lib/model';
+	import { getYear } from '$lib/util';
+	import { MessageType, TeamGender, type CreateTeam, type Team } from '../../../lib/model';
 
-	export let form;
+	async function create(event: any) {
+		const data = new FormData(event.target);
 
-	$: {
-		if (form?.missing) {
+		let trophy_id = data.get('trophy_id');
+		let name = data.get('name');
+		let gender = data.get('gender');
+		let year = getYear();
+
+		let team: CreateTeam = {
+			trophy_id: parseInt(trophy_id!.toString()),
+			name: name!.toString(),
+			gender: gender as TeamGender,
+			year: parseInt(year.toString())
+		};
+
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+		let res = await fetch(`${baseUrl}/teams`, {
+			method: 'POST',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(team),
+			credentials: 'include'
+		});
+
+		if (res.status != 200) {
 			messageStore.set({
 				type: MessageType.Error,
-				message: `Das Feld '${form.field}' muss angegeben werden.`
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
 			});
-		} else if (form?.unauthorized) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: 'Das Team konnte nicht angelegt werden, bitte melde dich erneut an.'
-			});
-		} else if (form?.miscellaneous) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${form.detail}`
-			});
-		} else if (form?.success) {
-			messageStore.set({
-				type: MessageType.Success,
-				message: `Team ${form.team.name} wurde erfolgreich angelegt.`
-			});
-			goto(`/teams?year=${$yearStore}`);
+			return;
 		}
+
+		// go back to overview after successful creation
+		let teamRes: Team = await res.json();
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Team ${teamRes.name} wurde erfolgreich angelegt.`
+		});
+		goto(`/teams`);
 	}
 </script>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Team anlegen</h1>
 
-<form
-	method="POST"
-	class="flex flex-col w-80 m-auto gap-8"
-	use:enhance={({ formData }) => {
-		formData.append('year', $yearStore);
-		return async ({ result }) => {
-			await applyAction(result);
-		};
-	}}
->
+<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={create}>
 	<div class="w-full">
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>

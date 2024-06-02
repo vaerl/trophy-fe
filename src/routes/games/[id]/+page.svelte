@@ -68,7 +68,7 @@
 		}
 
 		// go back to overview after successful creation
-		let gameRes = (await res.json()) as Game;
+		let gameRes: Game = await res.json();
 		messageStore.set({
 			type: MessageType.Success,
 			message: `Spiel ${gameRes.name} wurde erfolgreich gelöscht.`
@@ -76,15 +76,25 @@
 		goto(`/games`);
 	}
 
-	async function saveOutcome(event: any) {
-		const data = new FormData(event.target);
-		let outcome = data.get('outcome');
+	async function saveOutcome(event: any, outcome: Outcome) {
+		const form = new FormData(event.target);
+		let data = form.get('data');
+
+		// ignore update if there are no changes
+		if (outcome.data === data!.toString()) {
+			modalOutcome = null;
+			return;
+		}
 
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 		let updatedOutcome: Outcome = {
-			...JSON.parse(outcome!.toString()),
-			data
+			...outcome,
+			data: data!.toString()
 		};
+
+		// always close the modal once the request is happening
+		modalOutcome = null;
+
 		let res = await fetch(`${baseUrl}/outcomes`, {
 			method: 'PUT',
 			headers: {
@@ -106,9 +116,8 @@
 		let outcomeRes: Outcome = await res.json();
 		messageStore.set({
 			type: MessageType.Success,
-			message: `Ergebnis für ${outcomeRes.game_name} wurde erfolgreich gespeichert.`
+			message: `Ergebnis für ${outcomeRes.team_name} wurde erfolgreich gespeichert.`
 		});
-		// TODO
 		// This causes the load-function to run again - this is a bit over the top, we'd only need to
 		// re-load outcomes.
 		invalidateAll();
@@ -232,9 +241,13 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-{#if modalOutcome}
+{#if modalOutcome != null}
 	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
-		<form class="modal-box" bind:this={modalContent} on:submit|preventDefault={saveOutcome}>
+		<form
+			class="modal-box"
+			bind:this={modalContent}
+			on:submit|preventDefault={(event) => saveOutcome(event, modalOutcome)}
+		>
 			<h3 class="font-bold text-xl text-center pb-6">
 				{#if modalOutcome.data}
 					Ergebnis für
