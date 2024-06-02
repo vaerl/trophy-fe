@@ -51,10 +51,18 @@
 		<h1 class="text-4xl pb-4">Die Trophy kann noch nicht ausgewertet werden.</h1>
 
 		<h2 class="text-2xl">
-			Zuerst müssen noch
-			<a href="/games" class="link">
-				{data.pendingGames} Spiele
-			</a>
+			{#if data.pendingGames == 1}
+				Zuerst muss noch
+				<a href="/games" class="link">
+					{data.pendingGames} Spiel
+				</a>
+			{:else}
+				Zuerst müssen noch
+				<a href="/games" class="link">
+					{data.pendingGames} Spiele
+				</a>
+			{/if}
+
 			abgeschlossen werden.
 		</h2>
 	</div>
