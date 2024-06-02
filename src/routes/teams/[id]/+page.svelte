@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { GameKind, MessageType, type Outcome, type Team } from '$lib/model';
-	import { messageStore, yearStore } from '$lib/stores.js';
-	import { isEscapeKeyEvent } from '$lib/util';
+	import { messageStore } from '$lib/stores.js';
+	import { isEnterKeyEvent, isEscapeKeyEvent } from '$lib/util';
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
 	import { page } from '$app/stores';
+	import type { HtmlTagDescriptor } from 'vite';
 
 	export let data;
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
@@ -47,6 +47,13 @@
 	function handleKeyDown(event: KeyboardEvent) {
 		if (isEscapeKeyEvent(event)) {
 			modalOutcome = null;
+		}
+		// submit outcome-form on enter
+		else if (isEnterKeyEvent(event) && modalOutcome != null) {
+			let form: HTMLElement | null = document.getElementById('outcome-form');
+			if (form != null) {
+				(form as HTMLFormElement).requestSubmit();
+			}
 		}
 	}
 
@@ -250,6 +257,7 @@
 {#if modalOutcome != null}
 	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
 		<form
+			id="outcome-form"
 			class="modal-box"
 			bind:this={modalContent}
 			on:submit|preventDefault={(event) => saveOutcome(event, modalOutcome)}
