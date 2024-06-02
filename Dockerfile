@@ -1,4 +1,5 @@
-FROM node:alpine as builder
+# we can't use alpine due to detection-issues with rollup
+FROM node:latest as builder
 
 WORKDIR /app
 COPY package.json package-lock.json .
