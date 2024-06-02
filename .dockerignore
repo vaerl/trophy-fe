@@ -9,3 +9,5 @@ node_modules
 README.md
 Dockerfile
 .svelte-kit
+.docs
+tests
