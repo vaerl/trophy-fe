@@ -2,30 +2,43 @@
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
 	import { messageStore, yearStore } from '$lib/stores';
-	import { MessageType } from '$lib/model';
+	import { MessageType, type User } from '$lib/model';
+	import { goto } from '$app/navigation';
 
 	export let data;
-	export let form;
+	async function handleDelete(event: any) {
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+		let res = await fetch(`${baseUrl}/users/${data.user.id}`, {
+			method: 'DELETE',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		});
 
-	$: {
-		if (form?.unauthorized) {
+		if (res.status != 200) {
 			messageStore.set({
 				type: MessageType.Error,
-				message: 'Das Ergebnis konnte nicht gespeichert werden, bitte melde dich erneut an.'
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
 			});
-		} else if (form?.miscellaneous) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${form.detail}`
-			});
+			return;
 		}
+
+		// go back to /users after deletion
+		let userRes: User = await res.json();
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Nutzer ${userRes.name} wurde erfolgreich gelöscht.`
+		});
+		goto(`/users`);
 	}
 </script>
 
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-28 flex flex-row">
 	<a href={`/users/${data.user.id}/edit?year=${$yearStore}`} class="ml-6"><Edit /></a>
-	<form method="POST" action="?/delete">
+	<form on:submit|preventDefault={handleDelete}>
 		<button class="ml-6"><Delete /></button>
 	</form>
 </div>
