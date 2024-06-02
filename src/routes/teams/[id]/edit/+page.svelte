@@ -48,7 +48,6 @@
 			message: `Änderungen an Team ${teamRes.name} wurde erfolgreich gespeichert.`
 		});
 		goto(`/teams/${data.team.id}`);
-		return { success: true, team: (await res.json()) as Team };
 	}
 </script>
 
