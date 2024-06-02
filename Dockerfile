@@ -1,10 +1,13 @@
-FROM node:alpine
+FROM node:alpine as builder
 
 WORKDIR /app
-COPY package.json pnpm-lock.yaml .
-RUN npm install
+COPY package.json package-lock.json .
+RUN npm ci
 
 COPY . .
 RUN npm run build
 
-CMD HOST=0.0.0.0 PORT=3000 node -r dotenv/config build
+FROM nginx:latest as runner
+
+COPY --from=builder /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf

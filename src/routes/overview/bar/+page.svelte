@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import BarChart from '../../../components/charts/BarChart.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 
@@ -11,6 +10,6 @@
 		<BarChart games={data.gamesWithPending} id="finished-teams" teams={data.teamsAmount} />
 	</div>
 </div>
-<a class="absolute-center-y left-10 cursor-pointer" href="/overview/pie{$page.url.search}">
+<a class="absolute-center-y left-10 cursor-pointer" href="/overview/pie">
 	<LeftArrow size={20} />
 </a>

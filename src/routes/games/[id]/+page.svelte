@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
 	import { goto, invalidateAll } from '$app/navigation';
-	import { GameKind, MessageType, type Outcome } from '$lib/model';
-	import { messageStore, yearStore } from '$lib/stores.js';
-	import { isEscapeKeyEvent } from '$lib/util';
+	import { GameKind, MessageType, type Game, type Outcome } from '$lib/model';
+	import { messageStore } from '$lib/stores.js';
+	import { isEnterKeyEvent, isEscapeKeyEvent } from '$lib/util';
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
-	export let form;
+	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	$: game = data.game;
 	$: outcomes = data.outcomes;
@@ -47,33 +47,87 @@
 		if (isEscapeKeyEvent(event)) {
 			modalOutcome = null;
 		}
+		// submit outcome-form on enter
+		else if (isEnterKeyEvent(event) && modalOutcome != null) {
+			let form: HTMLElement | null = document.getElementById('outcome-form');
+			if (form != null) {
+				(form as HTMLFormElement).requestSubmit();
+			}
+		}
 	}
 
-	$: {
-		if (form?.missing) {
+	async function handleDelete() {
+		let res = await fetch(`${baseUrl}/games/${$page.params.id}`, {
+			method: 'DELETE',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		});
+
+		if (res.status != 200) {
 			messageStore.set({
 				type: MessageType.Error,
-				message: `Das Feld '${form.field}' muss angegeben werden.`
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
 			});
-		} else if (form?.unauthorized) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: 'Das Ergebnis konnte nicht gespeichert werden, bitte melde dich erneut an.'
-			});
-		} else if (form?.miscellaneous) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${form.detail}`
-			});
-		} else if (form?.success) {
-			messageStore.set({
-				type: MessageType.Success,
-				message: `Ergebnis für ${form.outcome.game_name} wurde erfolgreich gespeichert.`
-			});
-			// This causes the load-function to run again - this is a bit over the top, we'd only need to
-			// re-load outcomes.
-			invalidateAll();
+			return;
 		}
+
+		// go back to overview after successful creation
+		let gameRes: Game = await res.json();
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Spiel ${gameRes.name} wurde erfolgreich gelöscht.`
+		});
+		goto(`/games`);
+	}
+
+	async function saveOutcome(event: any, outcome: Outcome) {
+		const form = new FormData(event.target);
+		let data = form.get('data');
+
+		// ignore update if there are no changes
+		if (outcome.data === data!.toString()) {
+			modalOutcome = null;
+			return;
+		}
+
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+		let updatedOutcome: Outcome = {
+			...outcome,
+			data: data!.toString()
+		};
+
+		// always close the modal once the request is happening
+		modalOutcome = null;
+
+		let res = await fetch(`${baseUrl}/outcomes`, {
+			method: 'PUT',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updatedOutcome),
+			credentials: 'include'
+		});
+
+		if (res.status != 200) {
+			messageStore.set({
+				type: MessageType.Error,
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
+			});
+			return;
+		}
+
+		let outcomeRes: Outcome = await res.json();
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Ergebnis für ${outcomeRes.team_name} wurde erfolgreich gespeichert.`
+		});
+		// This causes the load-function to run again - this is a bit over the top, we'd only need to
+		// re-load outcomes.
+		invalidateAll();
 	}
 </script>
 
@@ -82,16 +136,7 @@
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-40 flex flex-row">
 	<a href={`/games/${game.id}/edit`} class="ml-6"><Edit /></a>
-	<form
-		method="POST"
-		action="?/delete"
-		use:enhance={({ formData }) => {
-			formData.append('year', $yearStore);
-			return async ({ result }) => {
-				await applyAction(result);
-			};
-		}}
-	>
+	<form on:submit|preventDefault={handleDelete}>
 		<button class="ml-6"><Delete /></button>
 	</form>
 </div>
@@ -115,14 +160,17 @@
 					<div class="stat-value">{game.kind}</div>
 				</div>
 
-				<div class="stat place-items-center">
-					<div class="stat-title">Abgeschlossen</div>
-					<div class="stat-value text-secondary">
-						{Math.round(($doneOutcomes.length / outcomes.length) * 100)}%
+				<!-- only show percentage if there are any outcomes -->
+				{#if outcomes.length > 0}
+					<div class="stat place-items-center">
+						<div class="stat-title">Abgeschlossen</div>
+						<div class="stat-value text-secondary">
+							{Math.round(($doneOutcomes.length / outcomes.length) * 100)}%
+						</div>
 					</div>
-				</div>
-			</div></a
-		>
+				{/if}
+			</div>
+		</a>
 	</div>
 </div>
 
@@ -200,20 +248,13 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-{#if modalOutcome}
+{#if modalOutcome != null}
 	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
 		<form
-			method="POST"
-			action="?/save"
+			id="outcome-form"
 			class="modal-box"
 			bind:this={modalContent}
-			use:enhance={({ formData }) => {
-				formData.append('outcome', JSON.stringify(modalOutcome));
-				return async ({ result }) => {
-					await applyAction(result);
-					modalOutcome = null;
-				};
-			}}
+			on:submit|preventDefault={(event) => saveOutcome(event, modalOutcome)}
 		>
 			<h3 class="font-bold text-xl text-center pb-6">
 				{#if modalOutcome.data}

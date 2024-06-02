@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { MessageType } from '$lib/model';
-	import { messageStore } from '$lib/stores';
+	import { messageStore, paramStore } from '$lib/stores';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
 
 	export let data;
@@ -12,7 +12,7 @@
 	async function evaluate() {
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-		const res = await fetch(`${baseUrl}/eval${$page.url.search}`, {
+		const res = await fetch(`${baseUrl}/eval${paramStore}`, {
 			credentials: 'include'
 		});
 
@@ -42,7 +42,7 @@
 	<div class="absolute-center-y absolute-center-x text-center">
 		<h1 class="text-4xl pb-4">Die Trophy ist ausgewertet.</h1>
 
-		<a href={`${baseUrl}/eval/sheet${$page.url.search}`} class="link text-2xl" target="_blank">
+		<a href={`${baseUrl}/eval/sheet${$paramStore}`} class="link text-2xl" target="_blank">
 			Ergebnisse herunterladen.
 		</a>
 	</div>
@@ -51,15 +51,23 @@
 		<h1 class="text-4xl pb-4">Die Trophy kann noch nicht ausgewertet werden.</h1>
 
 		<h2 class="text-2xl">
-			Zuerst müssen noch
-			<a href="/games{$page.url.search}" class="link">
-				{data.pendingGames} Spiele
-			</a>
+			{#if data.pendingGames == 1}
+				Zuerst muss noch
+				<a href="/games" class="link">
+					{data.pendingGames} Spiel
+				</a>
+			{:else}
+				Zuerst müssen noch
+				<a href="/games" class="link">
+					{data.pendingGames} Spiele
+				</a>
+			{/if}
+
 			abgeschlossen werden.
 		</h2>
 	</div>
 {/if}
 
-<a class="absolute-center-y right-10 cursor-pointer" href="/overview/pie{$page.url.search}">
+<a class="absolute-center-y right-10 cursor-pointer" href="/overview/pie">
 	<RightArrow size={20} />
 </a>
