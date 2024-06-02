@@ -5,10 +5,10 @@
 	import { getYear } from '$lib/util';
 
 	async function create(event: any) {
-		const data = new FormData(event.target);
-		let trophy_id = data.get('trophy_id');
-		let name = data.get('name');
-		let kind = data.get('kind');
+		const form = new FormData(event.target);
+		let trophy_id = form.get('trophy_id');
+		let name = form.get('name');
+		let kind = form.get('kind');
 		let year = getYear();
 
 		let game: CreateGame = {

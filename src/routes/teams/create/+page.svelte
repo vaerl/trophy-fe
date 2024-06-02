@@ -5,11 +5,11 @@
 	import { MessageType, TeamGender, type CreateTeam, type Team } from '../../../lib/model';
 
 	async function create(event: any) {
-		const data = new FormData(event.target);
+		const form = new FormData(event.target);
 
-		let trophy_id = data.get('trophy_id');
-		let name = data.get('name');
-		let gender = data.get('gender');
+		let trophy_id = form.get('trophy_id');
+		let name = form.get('name');
+		let gender = form.get('gender');
 		let year = getYear();
 
 		let team: CreateTeam = {
