@@ -85,10 +85,10 @@
 
 	async function saveOutcome(event: any, outcome: Outcome) {
 		const form = new FormData(event.target);
-		let data = form.get('data');
+		let value = form.get('data');
 
 		// ignore update if there are no changes
-		if (outcome.data === data!.toString()) {
+		if (outcome.data === value!.toString()) {
 			modalOutcome = null;
 			return;
 		}
@@ -96,7 +96,7 @@
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 		let updatedOutcome: Outcome = {
 			...outcome,
-			data: data!.toString()
+			data: value!.toString()
 		};
 
 		// always close the modal once the request is happening
