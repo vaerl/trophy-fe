@@ -98,13 +98,7 @@
 	<details class="collapse border collapse-arrow">
 		<summary class="collapse-title font-medium">Passwort ändern</summary>
 		<div class="collapse-content">
-			<input
-				class="input input-bordered w-full"
-				name="password"
-				type="text"
-				minlength="4"
-				value={null}
-			/>
+			<input class="input input-bordered w-full" name="password" type="text" minlength="4" />
 		</div>
 	</details>
 

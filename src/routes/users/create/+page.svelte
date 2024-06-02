@@ -86,13 +86,7 @@
 		<label class="label" for="password">
 			<span class="label-text">Passwort</span>
 		</label>
-		<input
-			class="input input-bordered w-full"
-			name="password"
-			type="text"
-			minlength="4"
-			value={null}
-		/>
+		<input class="input input-bordered w-full" name="password" type="text" minlength="4" />
 	</div>
 
 	<button class="btn btn-neutral w-full">Speichern</button>
