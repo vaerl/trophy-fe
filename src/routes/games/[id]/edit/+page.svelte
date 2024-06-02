@@ -1,35 +1,51 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { GameKind, MessageType } from '$lib/model.js';
-	import { messageStore, yearStore } from '$lib/stores';
+	import { GameKind, MessageType, type CreateGame, type Game } from '$lib/model.js';
+	import { messageStore } from '$lib/stores';
+	import { getYear } from '$lib/util.js';
 
 	export let data;
-	export let form;
 
-	$: {
-		if (form?.missing) {
+	async function save(event: any) {
+		const form = new FormData(event.target);
+
+		let trophy_id = form.get('trophy_id');
+		let name = form.get('name');
+		let kind = form.get('kind');
+		let year = getYear();
+
+		let game: CreateGame = {
+			trophy_id: parseInt(trophy_id!.toString()),
+			name: name!.toString(),
+			kind: kind as GameKind,
+			year: parseInt(year.toString())
+		};
+
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+		let res = await fetch(`${baseUrl}/games/${data.game.id}`, {
+			method: 'PUT',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(game),
+			credentials: 'include'
+		});
+
+		if (res.status != 200) {
 			messageStore.set({
 				type: MessageType.Error,
-				message: `Das Feld '${form.field}' muss angegeben werden.`
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
 			});
-		} else if (form?.unauthorized) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: 'Das Spiel konnte nicht angelegt werden, bitte melde dich erneut an.'
-			});
-		} else if (form?.miscellaneous) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${form.detail}`
-			});
-		} else if (form?.success) {
-			messageStore.set({
-				type: MessageType.Success,
-				message: `Änderungen an Spiel ${form.game.name} wurde erfolgreich gespeichert.`
-			});
-			goto(`/games/${data.game.id}`);
+			return;
 		}
+
+		let gameRes: Game = await res.json();
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Änderungen an Spiel ${gameRes.name} wurde erfolgreich gespeichert.`
+		});
+		goto(`/games/${data.game.id}`);
 	}
 </script>
 
@@ -37,16 +53,7 @@
 	<span class="underline">{data.game.name}</span> bearbeiten
 </h1>
 
-<form
-	method="POST"
-	class="flex flex-col w-80 m-auto gap-8"
-	use:enhance={({ formData }) => {
-		formData.append('year', $yearStore);
-		return async ({ result }) => {
-			await applyAction(result);
-		};
-	}}
->
+<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={save}>
 	<div class="w-full">
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>

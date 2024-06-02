@@ -1,49 +1,55 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { messageStore, yearStore } from '$lib/stores';
-	import { GameKind, MessageType } from '../../../lib/model';
+	import { GameKind, MessageType, type CreateGame, type Game } from '../../../lib/model';
+	import { getYear } from '$lib/util';
 
-	export let form;
+	async function create(event: any) {
+		const data = new FormData(event.target);
+		let trophy_id = data.get('trophy_id');
+		let name = data.get('name');
+		let kind = data.get('kind');
+		let year = getYear();
 
-	$: {
-		if (form?.missing) {
+		let game: CreateGame = {
+			trophy_id: parseInt(trophy_id!.toString()),
+			name: name!.toString(),
+			kind: kind as GameKind,
+			year: parseInt(year.toString())
+		};
+
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+		let res = await fetch(`${baseUrl}/games`, {
+			method: 'POST',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include',
+			body: JSON.stringify(game)
+		});
+
+		if (res.status != 200) {
 			messageStore.set({
 				type: MessageType.Error,
-				message: `Das Feld '${form.field}' muss angegeben werden.`
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
 			});
-		} else if (form?.unauthorized) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: 'Das Spiel konnte nicht angelegt werden, bitte melde dich erneut an.'
-			});
-		} else if (form?.miscellaneous) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${form.detail}`
-			});
-		} else if (form?.success) {
-			messageStore.set({
-				type: MessageType.Success,
-				message: `Spiel ${form.game.name} wurde erfolgreich angelegt.`
-			});
-			goto(`/games?year=${$yearStore}`);
+			return;
 		}
+
+		// go back to overview after successful creation
+		let gameRes = (await res.json()) as Game;
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Spiel ${gameRes.name} wurde erfolgreich angelegt.`
+		});
+		goto(`/games`);
 	}
 </script>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Spiel anlegen</h1>
 
-<form
-	method="POST"
-	class="flex flex-col w-80 m-auto gap-8"
-	use:enhance={({ formData }) => {
-		formData.append('year', $yearStore);
-		return async ({ result }) => {
-			await applyAction(result);
-		};
-	}}
->
+<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={create}>
 	<div>
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>
