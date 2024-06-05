@@ -176,7 +176,7 @@
 
 <div class="flex flex-row h-full pt-20 pb-6 px-4">
 	<div class="w-1/2 h-full flex flex-col">
-		<h1 class="text-2xl font-bold underline text-center">Offene Spiele</h1>
+		<h1 class="text-2xl font-bold underline text-center">Offene Teams</h1>
 
 		<Datatable handler={openOutcomeHandler}>
 			<table class="table table-zebra">
@@ -210,7 +210,7 @@
 	<div class="divider divider-horizontal"></div>
 
 	<div class="w-1/2 h-full flex flex-col">
-		<h1 class="text-2xl font-bold underline text-center">Fertige Spiele</h1>
+		<h1 class="text-2xl font-bold underline text-center">Fertige Teams</h1>
 		<Datatable handler={doneOutcomeHandler}>
 			<table class="table table-zebra">
 				<thead>
