@@ -55,7 +55,15 @@
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>
 		</label>
-		<input class="input input-bordered w-full" name="trophy_id" type="number" required min="1" />
+		<!-- svelte-ignore a11y-autofocus -->
+		<input
+			class="input input-bordered w-full"
+			name="trophy_id"
+			type="number"
+			required
+			min="1"
+			autofocus
+		/>
 	</div>
 
 	<div>

@@ -55,7 +55,8 @@
 		<label class="label" for="name">
 			<span class="label-text">Name</span>
 		</label>
-		<input class="input input-bordered w-full" name="name" type="text" required />
+		<!-- svelte-ignore a11y-autofocus -->
+		<input class="input input-bordered w-full" name="name" type="text" required autofocus />
 	</div>
 
 	<div class="w-full">
