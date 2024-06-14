@@ -274,6 +274,7 @@
 			</h3>
 
 			<div class="flex justify-center">
+				<!-- svelte-ignore a11y-autofocus -->
 				{#if modalOutcome.game_kind == GameKind.Points}
 					<input
 						class="input input-bordered"
@@ -282,6 +283,7 @@
 						placeholder="Punkte"
 						value={modalOutcome.data}
 						required
+						autofocus
 					/>
 				{:else}
 					<input
@@ -291,6 +293,7 @@
 						placeholder="Zeit"
 						required
 						value={modalOutcome.data}
+						autofocus
 					/>
 				{/if}
 			</div>
