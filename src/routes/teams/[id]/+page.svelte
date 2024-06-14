@@ -129,6 +129,44 @@
 		// re-load outcomes.
 		invalidateAll();
 	}
+
+	async function deleteOutcome(outcome: Outcome) {
+		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+		let updatedOutcome: Outcome = {
+			...outcome,
+			data: null
+		};
+
+		// always close the modal once the request is happening
+		modalOutcome = null;
+
+		let res = await fetch(`${baseUrl}/outcomes`, {
+			method: 'PUT',
+			headers: {
+				// requests won't work without this
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updatedOutcome),
+			credentials: 'include'
+		});
+
+		if (res.status != 200) {
+			messageStore.set({
+				type: MessageType.Error,
+				message: `Etwas ist schiefgelaufen: ${await res.text()}`
+			});
+			return;
+		}
+
+		let outcomeRes: Outcome = await res.json();
+		messageStore.set({
+			type: MessageType.Success,
+			message: `Ergebnis für ${outcomeRes.team_name} wurde erfolgreich gespeichert.`
+		});
+		// This causes the load-function to run again - this is a bit over the top, we'd only need to
+		// re-load outcomes.
+		invalidateAll();
+	}
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
@@ -261,6 +299,8 @@
 			bind:this={modalContent}
 			on:submit|preventDefault={(event) => saveOutcome(event, modalOutcome)}
 		>
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
 			<h3 class="font-bold text-xl text-center pb-6">
 				{#if modalOutcome.data}
 					Ergebnis für
@@ -282,7 +322,6 @@
 						type="number"
 						placeholder="Punkte"
 						value={modalOutcome.data}
-						required
 						autofocus
 					/>
 				{:else}
@@ -291,15 +330,20 @@
 						name="data"
 						type="text"
 						placeholder="Zeit"
-						required
 						value={modalOutcome.data}
 						autofocus
 					/>
 				{/if}
 			</div>
 
-			<div class="modal-action flex flex-row justify-between">
-				<button class="btn" on:click={() => (modalOutcome = null)}>Abbrechen</button>
+			<div class="modal-action flex flex-row" class:justify-between={modalOutcome.data != null}>
+				{#if modalOutcome.data != null}
+					<button
+						class="btn"
+						on:click|preventDefault={(event) => deleteOutcome({ ...modalOutcome, data: null })}
+						>Löschen</button
+					>
+				{/if}
 				<button class="btn btn-neutral">Speichern</button>
 			</div>
 		</form>
