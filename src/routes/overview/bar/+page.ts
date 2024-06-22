@@ -1,5 +1,5 @@
 import type { Game, GameWithPending, Team } from '$lib/model';
-import { credentialFetch, getYear } from '$lib/util';
+import { getYear } from '$lib/util';
 
 export async function load({ fetch }) {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
@@ -13,10 +13,11 @@ export async function load({ fetch }) {
 	const games: Game[] = await gamesRes.json();
 
 	const gamesWithPending: Promise<GameWithPending>[] = games.map(async (g) => {
-		const pendingTeamsRes = await credentialFetch(
+		const pendingTeamsRes = await fetch(
 			import.meta.env.VITE_BACKEND_URL + `/games/${g.id}/pending`,
 			{
-				method: 'GET'
+				method: 'GET',
+				credentials: 'include'
 			}
 		);
 		const pendingTeams: Team[] = await pendingTeamsRes.json();

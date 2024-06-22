@@ -1,5 +1,4 @@
 import { goto } from '$app/navigation';
-import { credentialFetch } from './util';
 
 /**
  * Tries to log in the current user by POSTing username and password to the backend(which is sourced from the environment).
@@ -8,8 +7,9 @@ import { credentialFetch } from './util';
  * @param password
  */
 export async function login(name: string, password: string) {
-	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/login', {
+	await fetch(import.meta.env.VITE_BACKEND_URL + '/login', {
 		method: 'POST',
+		credentials: 'include',
 		body: JSON.stringify({ name: name, password: password })
 	});
 	checkAuth();
@@ -20,8 +20,9 @@ export async function login(name: string, password: string) {
  * @returns true if the user is logged in
  */
 export async function checkAuth() {
-	const value = await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/user/status', {
-		method: 'GET'
+	const value = await fetch(import.meta.env.VITE_BACKEND_URL + '/user/status', {
+		method: 'GET',
+		credentials: 'include'
 	});
 	const response = await value.json();
 	return response.status;
@@ -31,8 +32,9 @@ export async function checkAuth() {
  * Log out the current user.
  */
 export async function logout() {
-	await credentialFetch(import.meta.env.VITE_BACKEND_URL + '/logout', {
-		method: 'POST'
+	await fetch(import.meta.env.VITE_BACKEND_URL + '/logout', {
+		method: 'POST',
+		credentials: 'include'
 	});
 	console.debug('Logged out user.');
 	goto('/login');
