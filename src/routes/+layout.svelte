@@ -14,7 +14,14 @@
 	import Plus from '../components/icons/Plus.svelte';
 	import Home from '../components/icons/Home.svelte';
 	import Cog from '../components/icons/Cog.svelte';
-	import Error from './+error.svelte';
+
+	// TODO stop always loading all teams/games, just react to websocket-messages
+	// TODO show the done-status in game- and team-table -> this would require a lot of requests for each table though
+	// TODO maybe block creation and updates once we've evaluated
+	// TODO create and download PDFs directly, also be able to request singular PDFs
+	// TODO maybe version outcomes -> list of outcomes and their creator, each outcome would know the next outcome
+	// -> we could switch through outcomes in a modal
+	// TODO provide a quick-switcher by pressing CTRL+p -> jump to games, teams, etc.
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
