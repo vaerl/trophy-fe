@@ -10,10 +10,11 @@
 	import LeftArrow from '../components/icons/LeftArrow.svelte';
 	import { messageStore } from '$lib/stores';
 	import { onDestroy } from 'svelte';
-	import type { Message } from '$lib/model';
+	import { MessageType, type Message } from '$lib/model';
 	import Plus from '../components/icons/Plus.svelte';
 	import Home from '../components/icons/Home.svelte';
 	import Cog from '../components/icons/Cog.svelte';
+	import Error from './+error.svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
@@ -77,7 +78,14 @@
 
 {#if toast}
 	<div class="absolute bottom-4 right-4 flex justify-end">
-		<div class={`alert alert-${toast.type}`} role="alert">
+		<div
+			class="alert"
+			class:alert-info={toast.type == MessageType.Info}
+			class:alert-success={toast.type == MessageType.Success}
+			class:alert-warning={toast.type == MessageType.Warn}
+			class:alert-error={toast.type == MessageType.Error}
+			role="alert"
+		>
 			<div class="flex-1">
 				<label class="mx-3" for="toast">{toast.message}</label>
 			</div>
