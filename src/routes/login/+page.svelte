@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { checkAuth, login } from '$lib/auth';
-	import { yearStore } from '$lib/stores';
 	import { isEnterKeyEvent } from '$lib/util';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
 		let isAuthenticated = await checkAuth();
 		if (isAuthenticated) {
-			goto(`/overview/pie?year=${$yearStore}`);
+			goto(`/overview/pie`);
 		}
 	});
 
@@ -24,7 +23,7 @@
 
 	async function authenticate(username: string, password: string) {
 		await login(username, password);
-		goto(`/overview/pie?year=${$yearStore}`);
+		goto(`/overview/pie`);
 	}
 </script>
 
