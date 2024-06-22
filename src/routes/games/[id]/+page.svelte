@@ -10,6 +10,8 @@
 
 	export let data;
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+	let showDeletion = false;
+	let nameInput: string;
 
 	$: game = data.game;
 	$: outcomes = data.outcomes;
@@ -36,7 +38,16 @@
 	function onClickOutside(e: any) {
 		if (!modalContent.contains(e.target)) {
 			modalOutcome = null;
+			closeDeletion();
 		}
+	}
+
+	/**
+	 * Hide the modal and reset the value of the input.
+	 */
+	function closeDeletion() {
+		showDeletion = false;
+		nameInput = '';
 	}
 
 	/**
@@ -175,9 +186,7 @@
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-40 flex flex-row">
 	<a href={`/games/${game.id}/edit`} class="ml-6"><Edit /></a>
-	<form on:submit|preventDefault={handleDelete}>
-		<button class="ml-6"><Delete /></button>
-	</form>
+	<button class="ml-6" on:click={() => (showDeletion = true)}><Delete /></button>
 </div>
 
 <div class="absolute-center-x pt-6">
@@ -350,6 +359,40 @@
 					>
 				{/if}
 				<button class="btn btn-primary">Speichern</button>
+			</div>
+		</form>
+	</dialog>
+{/if}
+
+{#if showDeletion}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
+		<form id="confirmation-form" class="modal-box" bind:this={modalContent}>
+			<button
+				class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+				on:click={closeDeletion}>✕</button
+			>
+
+			<h1 class="font-bold text-xl text-center pb-2">Spiel "{game.name}" wirklich löschen?</h1>
+			<p class="text-center pb-6">Bitte gib den Namen des Spiels ein, um es zu löschen.</p>
+			<input
+				class="input input-bordered w-full"
+				name="input"
+				type="text"
+				required
+				bind:value={nameInput}
+			/>
+
+			<div class="modal-action flex flex-row justify-between">
+				<button class="btn btn-secondary" on:click|preventDefault={closeDeletion}>
+					Abbrechen
+				</button>
+				<button
+					class="btn btn-primary"
+					class:btn-disabled={game.name !== nameInput}
+					on:click|preventDefault={handleDelete}>Löschen</button
+				>
 			</div>
 		</form>
 	</dialog>
