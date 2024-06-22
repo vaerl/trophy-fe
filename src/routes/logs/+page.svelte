@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SubjectType } from '$lib/model.js';
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 
 	export let data;
@@ -17,17 +18,19 @@
 			<thead class="bg-white">
 				<tr>
 					<Th {handler} orderBy="id">ID</Th>
-					<Th {handler} orderBy="log_level">Level</Th>
+					<Th {handler} orderBy="level">Level</Th>
 					<Th {handler} orderBy="timestamp">Timestamp</Th>
 					<Th {handler} orderBy="user_name">Nutzer</Th>
-					<Th {handler} orderBy="action">Aktion</Th>
+					<Th {handler} orderBy="operation">Operation</Th>
+					<Th {handler} orderBy="subject_id">Subjekt</Th>
 				</tr>
 				<tr>
 					<ThFilter {handler} filterBy="id" />
-					<ThFilter {handler} filterBy="log_level" />
+					<ThFilter {handler} filterBy="level" />
 					<ThFilter {handler} filterBy="timestamp" />
 					<ThFilter {handler} filterBy="user_name" />
-					<ThFilter {handler} filterBy="action" />
+					<ThFilter {handler} filterBy="operation" />
+					<ThFilter {handler} filterBy="subject_id" />
 				</tr>
 			</thead>
 
@@ -35,26 +38,31 @@
 				{#each $rows as row}
 					<tr>
 						<td>{row.id}</td>
-						<td>{row.log_level}</td>
+						<td>{row.level}</td>
 						<td>{new Date(row.timestamp).toLocaleString('de-DE')}</td>
-						<td>{row.user_name}</td>
-						<td>{row.action}</td>
+						<td>
+							{#if row.user_id}
+								<a href={`/users/${row.user_id}`} class="link">{row.user_name}</a>
+							{:else}
+								<p>Kein Nutzer</p>
+							{/if}
+						</td>
+						<td>
+							{row.operation}
+						</td>
+						<!-- TODO this could use some nicer linking at some point -->
+						<td>
+							{#if row.subject_id && (row.subject_type == SubjectType.Game || row.subject_type == SubjectType.Team || row.subject_type == SubjectType.User)}
+								<a href={`/${row.subject_type}s/${row.subject_id}`} class="link"
+									>{row.subject_type} {row.subject_id}</a
+								>
+							{:else}
+								{row.subject_type}
+							{/if}
+						</td>
 					</tr>
 				{/each}
 			</tbody>
 		</table>
 	</Datatable>
 </div>
-
-<style>
-	tbody td {
-		border: 1px solid #f5f5f5;
-		padding: 4px 20px;
-	}
-	tbody tr {
-		transition: all, 0.2s;
-	}
-	tbody tr:hover {
-		background: #f5f5f5;
-	}
-</style>

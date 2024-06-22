@@ -92,13 +92,25 @@ export enum LogLevel {
 	Important = 'important'
 }
 
+export enum SubjectType {
+	Game = 'game',
+	Team = 'team',
+	Outcome = 'outcome',
+	History = 'history',
+	User = 'user',
+	Eval = 'eval',
+	General = 'general'
+}
+
 export interface History {
 	id: number;
-	user_id: number;
-	user_name: string;
+	user_id?: number;
+	user_name?: string;
 	timestamp: Date;
-	log_level: LogLevel;
-	action: string;
+	level: LogLevel;
+	operation: string;
+	subject_id?: number;
+	subject_type: SubjectType;
 }
 
 export interface StatusResponse {
