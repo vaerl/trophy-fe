@@ -232,12 +232,14 @@
 
 				<tbody>
 					{#each $openOutcomes as row}
-						<tr on:click={() => (modalOutcome = row)} class="cursor-pointer">
-							<td>
+						<tr>
+							<td on:click={() => (modalOutcome = row)} class="cursor-pointer">
 								{row.team_trophy_id}
 							</td>
 							<td>
-								{row.team_name}
+								<a href={`/teams/${row.team_id}`} class="link">
+									{row.team_name}
+								</a>
 							</td>
 						</tr>
 					{/each}
@@ -267,12 +269,14 @@
 
 				<tbody>
 					{#each $doneOutcomes as row}
-						<tr on:click={() => (modalOutcome = row)} class="cursor-pointer">
-							<td>
+						<tr>
+							<td on:click={() => (modalOutcome = row)} class="cursor-pointer">
 								{row.team_trophy_id}
 							</td>
 							<td>
-								{row.team_name}
+								<a href={`/teams/${row.team_id}`} class="link">
+									{row.team_name}
+								</a>
 							</td>
 							<td>
 								{row.data}
