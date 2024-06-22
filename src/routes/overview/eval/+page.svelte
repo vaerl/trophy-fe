@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { MessageType } from '$lib/model';
 	import { messageStore, paramStore } from '$lib/stores';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
@@ -12,7 +11,7 @@
 	async function evaluate() {
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-		const res = await fetch(`${baseUrl}/eval${paramStore}`, {
+		const res = await fetch(`${baseUrl}/eval${$paramStore}`, {
 			credentials: 'include'
 		});
 
