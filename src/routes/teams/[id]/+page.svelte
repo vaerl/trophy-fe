@@ -182,7 +182,12 @@
 <div class="absolute-center-x pt-6">
 	<div class="tooltip" data-tip="Zum Bearbeiten klicken.">
 		<a href={`/teams/${team.id}/edit`}>
-			<div class="stats border">
+			<div class="stats border bg-neutral-content">
+				<div class="stat place-items-center">
+					<div class="stat-title">Typ</div>
+					<div class="stat-value">Team</div>
+				</div>
+
 				<div class="stat place-items-center">
 					<div class="stat-title">Name</div>
 					<div class="stat-value">{team.name}</div>

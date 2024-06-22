@@ -183,7 +183,12 @@
 <div class="absolute-center-x pt-6">
 	<div class="tooltip" data-tip="Zum Bearbeiten klicken.">
 		<a href={`/games/${game.id}/edit`}>
-			<div class="stats border">
+			<div class="stats border bg-neutral">
+				<div class="stat place-items-center">
+					<div class="stat-title">Typ</div>
+					<div class="stat-value">Spiel</div>
+				</div>
+
 				<div class="stat place-items-center">
 					<div class="stat-title">Name</div>
 					<div class="stat-value">{game.name}</div>
