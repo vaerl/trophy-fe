@@ -82,5 +82,5 @@
 			{/each}
 		</select>
 	</div>
-	<button class="btn btn-neutral w-full">Speichern</button>
+	<button class="btn btn-primary w-full">Speichern</button>
 </form>

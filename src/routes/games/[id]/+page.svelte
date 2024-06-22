@@ -349,7 +349,7 @@
 						>Löschen</button
 					>
 				{/if}
-				<button class="btn btn-neutral">Speichern</button>
+				<button class="btn btn-primary">Speichern</button>
 			</div>
 		</form>
 	</dialog>
