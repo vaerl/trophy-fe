@@ -10,7 +10,11 @@ export async function login(name: string, password: string) {
 	await fetch(import.meta.env.VITE_BACKEND_URL + '/login', {
 		method: 'POST',
 		credentials: 'include',
-		body: JSON.stringify({ name: name, password: password })
+		body: JSON.stringify({ name: name, password: password }),
+		headers: {
+			// requests won't work without this
+			'Content-Type': 'application/json'
+		}
 	});
 	checkAuth();
 }
