@@ -296,7 +296,7 @@
 									{row.game_name}
 								</a>
 							</td>
-							<td>
+							<td on:click={() => (modalOutcome = row)} class="cursor-pointer">
 								{row.data}
 							</td>
 						</tr>
