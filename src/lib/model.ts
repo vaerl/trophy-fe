@@ -116,3 +116,6 @@ export interface History {
 export interface StatusResponse {
 	status: boolean;
 }
+
+export type DisplayName = 'Spiel' | 'Team' | 'Nutzer';
+export type Link = '/games' | '/teams' | '/users';

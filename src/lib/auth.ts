@@ -23,11 +23,15 @@ export async function login(name: string, password: string) {
  * Check if the current user is logged in.
  * @returns true if the user is logged in
  */
-export async function checkAuth() {
-	const value = await fetch(import.meta.env.VITE_BACKEND_URL + '/user/status', {
+export async function checkAuth(
+	kitFetch?: (input: string | URL | Request, init?: RequestInit | undefined) => Promise<Response>
+) {
+	const fetchFunc = kitFetch ? kitFetch : fetch;
+	const value = await fetchFunc(import.meta.env.VITE_BACKEND_URL + '/user/status', {
 		method: 'GET',
 		credentials: 'include'
 	});
+
 	const response = await value.json();
 	return response.status;
 }
