@@ -317,7 +317,10 @@
 			bind:this={modalContent}
 			on:submit|preventDefault={(event) => saveOutcome(event, modalOutcome)}
 		>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			<button
+				class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+				on:click|stopPropagation={() => (modalOutcome = null)}>✕</button
+			>
 
 			<h3 class="font-bold text-xl text-center pb-6">
 				{#if modalOutcome.data}
