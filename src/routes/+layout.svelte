@@ -21,7 +21,7 @@
 	// TODO create and download PDFs directly, also be able to request singular PDFs
 	// TODO maybe version outcomes -> list of outcomes and their creator, each outcome would know the next outcome
 	// -> we could switch through outcomes in a modal
-	// TODO have a toast for bad passwords
+	// TODO show loaders if possible/a good idea -> see https://kit.svelte.dev/docs/load#streaming-with-promises
 
 	export let data;
 
