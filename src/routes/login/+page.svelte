@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { checkAuth, login } from '$lib/auth';
+	import { MessageType } from '$lib/model';
+	import { messageStore } from '$lib/stores';
 	import { isEnterKeyEvent } from '$lib/util';
 	import { onMount } from 'svelte';
 
@@ -22,8 +24,15 @@
 	}
 
 	async function authenticate(username: string, password: string) {
-		await login(username, password);
-		goto(`/overview/pie`);
+		const res = await login(username, password);
+		if (res.status == 200) {
+			goto(`/overview/pie`);
+		} else {
+			messageStore.set({
+				type: MessageType.Error,
+				message: `Fehler beim Anmelden: ${await res.text()}`
+			});
+		}
 	}
 </script>
 

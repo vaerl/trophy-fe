@@ -6,8 +6,8 @@ import { goto } from '$app/navigation';
  * @param username
  * @param password
  */
-export async function login(name: string, password: string) {
-	await fetch(import.meta.env.VITE_BACKEND_URL + '/login', {
+export async function login(name: string, password: string): Promise<Response> {
+	const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/login', {
 		method: 'POST',
 		credentials: 'include',
 		body: JSON.stringify({ name: name, password: password }),
@@ -16,7 +16,7 @@ export async function login(name: string, password: string) {
 			'Content-Type': 'application/json'
 		}
 	});
-	checkAuth();
+	return response;
 }
 
 /**
