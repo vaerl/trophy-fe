@@ -34,7 +34,8 @@
 
 	$: {
 		if (searchValue != '') {
-			searchResults = fuse.search(searchValue);
+			// only display the first 10 results
+			searchResults = fuse.search(searchValue).slice(0, 10);
 			if (searchResults.length > 0) {
 				selectedIndex = 0;
 			}
