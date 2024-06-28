@@ -7,24 +7,27 @@ export async function load({ fetch }) {
 	let year = getYear();
 	let params = `?year=${year}`;
 
-	const trophyDoneRes = await fetch(`${baseUrl}/done${params}`, {
+	const trophyDone: Promise<boolean> = fetch(`${baseUrl}/done${params}`, {
 		credentials: 'include'
-	});
-	const trophyDone: StatusResponse = await trophyDoneRes.json();
+	})
+		.then((res) => res.json())
+		.then((res: StatusResponse) => res.status);
 
-	const evalDoneRes = await fetch(`${baseUrl}/eval/done${params}`, {
+	const evalDone: Promise<boolean> = fetch(`${baseUrl}/eval/done${params}`, {
 		credentials: 'include'
-	});
-	const evalDone: StatusResponse = await evalDoneRes.json();
+	})
+		.then((res) => res.json())
+		.then((res: StatusResponse) => res.status);
 
-	const pendingGamesRes = await fetch(`${baseUrl}/games/pending${params}`, {
+	const pendingGames: Promise<number> = fetch(`${baseUrl}/games/pending${params}`, {
 		credentials: 'include'
-	});
-	const pendingGames: Game[] = await pendingGamesRes.json();
+	})
+		.then((res) => res.json())
+		.then((games: Game[]) => games.length);
 
 	// load as few things as possible - especially the pending- and finished-calls are expensive
 	return {
-		pendingGames: pendingGames.length,
+		pendingGames,
 		trophyDone,
 		evalDone
 	};

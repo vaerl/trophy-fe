@@ -6,12 +6,17 @@
 	export let data;
 </script>
 
-<div class="absolute-center-y w-full">
-	<div class="flex flex-row justify-evenly">
-		<PieChart name="Teams" open={data.pendingTeams} done={data.finishedTeams} link="/teams" />
-		<PieChart name="Spiele" open={data.pendingGames} done={data.finishedGames} link="/games" />
+{#await Promise.all([data.pendingTeams, data.finishedTeams, data.pendingGames, data.finishedGames])}
+	<span class="loading loading-spinner loading-lg absolute-center-y absolute-center-x"></span>
+{:then [pendingTeams, finishedTeams, pendingGames, finishedGames]}
+	<div class="absolute-center-y w-full">
+		<div class="flex flex-row justify-evenly">
+			<PieChart name="Teams" open={pendingTeams} done={finishedTeams} link="/teams" />
+			<PieChart name="Spiele" open={pendingGames} done={finishedGames} link="/games" />
+		</div>
 	</div>
-</div>
+{/await}
+
 <a class="absolute-center-y right-10 cursor-pointer" href="/overview/bar">
 	<RightArrow size={20} />
 </a>
