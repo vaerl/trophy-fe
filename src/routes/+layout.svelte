@@ -26,7 +26,7 @@
 	export let data;
 
 	let isCtrlDown = false,
-		isPDown = false,
+		isSpaceDown = false,
 		showSwitcher = false;
 	let searchValue = '',
 		searchResults: any[] = [],
@@ -109,7 +109,7 @@
 				event.preventDefault();
 				break;
 			case ' ':
-				isPDown = true;
+				isSpaceDown = true;
 				break;
 			case 'Escape':
 				showSwitcher = false;
@@ -119,7 +119,7 @@
 
 		// only show the switcher if it's not already visible -> this should ignore updates when the switcher is already open
 		// don't show the switcher for /login
-		if (!showSwitcher && isCtrlDown && isPDown && !$page.route.id?.startsWith('/login')) {
+		if (!showSwitcher && isCtrlDown && isSpaceDown && !$page.route.id?.startsWith('/login')) {
 			showSwitcher = true;
 		}
 	}
@@ -136,7 +136,7 @@
 				event.preventDefault();
 				break;
 			case ' ':
-				isPDown = false;
+				isSpaceDown = false;
 				event.preventDefault();
 				break;
 		}
