@@ -134,7 +134,7 @@
 				isCtrlDown = false;
 				event.preventDefault();
 				break;
-			case 'p':
+			case ' ':
 				isPDown = false;
 				event.preventDefault();
 				break;
