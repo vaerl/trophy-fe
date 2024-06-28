@@ -107,9 +107,8 @@
 				// key stroke for its own shortcuts or text input.
 				event.preventDefault();
 				break;
-			case 'p':
+			case ' ':
 				isPDown = true;
-				event.preventDefault();
 				break;
 			case 'Escape':
 				showSwitcher = false;
