@@ -4,6 +4,7 @@
 	import { MessageType, TeamGender, type CreateTeam, type Team } from '$lib/model.js';
 	import { messageStore, yearStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
+	import LeftArrow from '../../../../components/icons/LeftArrow.svelte';
 
 	export let data;
 
@@ -50,6 +51,8 @@
 		goto(`/teams/${data.team.id}`);
 	}
 </script>
+
+<a href={`/teams/${data.team.id}`} class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">
 	<span class="underline">{data.team.name}</span> bearbeiten

@@ -5,7 +5,6 @@
 	import Logout from '../components/icons/Logout.svelte';
 	import UserIcon from '../components/icons/UserIcon.svelte';
 	import { page } from '$app/stores';
-	import LeftArrow from '../components/icons/LeftArrow.svelte';
 	import { messageStore } from '$lib/stores';
 	import { onDestroy } from 'svelte';
 	import { MessageType, type DisplayName, type Link, type Message } from '$lib/model';
@@ -157,7 +156,6 @@
 				<!-- only show back-arrow if we're not at overview -->
 				{#if !$page.route.id?.startsWith('/overview')}
 					<a href="/overview/pie"><Home /></a>
-					<button on:click={() => history.back()} class="ml-6"><LeftArrow /></button>
 				{/if}
 
 				{#if $page.route.id?.startsWith('/overview')}

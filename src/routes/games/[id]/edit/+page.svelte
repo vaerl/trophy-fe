@@ -3,6 +3,7 @@
 	import { GameKind, MessageType, type CreateGame, type Game } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
+	import LeftArrow from '../../../../components/icons/LeftArrow.svelte';
 
 	export let data;
 
@@ -48,6 +49,8 @@
 		goto(`/games/${data.game.id}`);
 	}
 </script>
+
+<a href={`/games/${data.game.id}`} class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">
 	<span class="underline">{data.game.name}</span> bearbeiten

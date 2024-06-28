@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { messageStore, yearStore } from '$lib/stores';
 	import { getYear } from '$lib/util';
+	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import { MessageType, TeamGender, type CreateTeam, type Team } from '../../../lib/model';
 
 	async function create(event: any) {
@@ -49,6 +50,8 @@
 </script>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Team anlegen</h1>
+
+<a href="/teams" class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={create}>
 	<div class="w-full">

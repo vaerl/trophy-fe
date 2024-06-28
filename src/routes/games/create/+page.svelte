@@ -3,6 +3,7 @@
 	import { messageStore, yearStore } from '$lib/stores';
 	import { GameKind, MessageType, type CreateGame, type Game } from '../../../lib/model';
 	import { getYear } from '$lib/util';
+	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 
 	async function create(event: any) {
 		const form = new FormData(event.target);
@@ -46,6 +47,8 @@
 		goto(`/games`);
 	}
 </script>
+
+<a href="/games" class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Spiel anlegen</h1>
 

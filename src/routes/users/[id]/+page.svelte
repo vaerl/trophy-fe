@@ -4,6 +4,7 @@
 	import { messageStore, yearStore } from '$lib/stores';
 	import { MessageType, type User } from '$lib/model';
 	import { goto } from '$app/navigation';
+	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 
 	export let data;
 	let showDeletion = false;
@@ -56,6 +57,8 @@
 		nameInput = '';
 	}
 </script>
+
+<a href="/users" class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-28 flex flex-row">

@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { MessageType, UserRole, type UpdateUser, type User } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
+	import LeftArrow from '../../../../components/icons/LeftArrow.svelte';
 
 	export let data;
 
@@ -47,6 +48,8 @@
 		goto(`/users/${data.user.id}`);
 	}
 </script>
+
+<a href={`/users/${data.user.id}`} class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">
 	<span class="underline">{data.user.name}</span> bearbeiten

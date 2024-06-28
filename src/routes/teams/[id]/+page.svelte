@@ -7,6 +7,7 @@
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
 	import { page } from '$app/stores';
+	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 
 	export let data;
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
@@ -181,6 +182,8 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
+
+<a href="/teams" class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-40 flex flex-row">
