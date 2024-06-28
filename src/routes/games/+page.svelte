@@ -5,7 +5,18 @@
 	export let data;
 	const handler = new DataHandler(data.games, { rowsPerPage: 20 });
 	const rows = handler.getRows();
+
+	function keyDown(event: any) {
+		event.preventDefault();
+		switch (event.key) {
+			case 'n':
+				goto('/games/create');
+				break;
+		}
+	}
 </script>
+
+<svelte:window on:keydown={keyDown} />
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Spiele</h1>
 <div style="height: calc(100% - 72px);">
