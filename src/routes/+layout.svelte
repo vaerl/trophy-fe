@@ -21,6 +21,7 @@
 	// TODO maybe version outcomes -> list of outcomes and their creator, each outcome would know the next outcome
 	// -> we could switch through outcomes in a modal
 	// TODO show loaders if possible/a good idea -> see https://kit.svelte.dev/docs/load#streaming-with-promises
+	// TODO fix the calc-occurrences -> layout in details is scuffed, using "height: 100%" isn' working because of the stats-stuff
 
 	export let data;
 

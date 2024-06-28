@@ -230,7 +230,7 @@
 	</div>
 </div>
 
-<div class="flex flex-row h-full pt-20 pb-6 px-4">
+<div class="flex flex-row pt-20" style="height: calc(100% - 104px);">
 	<div class="w-1/2 h-full flex flex-col">
 		<h1 class="text-2xl font-bold underline text-center">Offene Teams</h1>
 
