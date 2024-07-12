@@ -13,6 +13,8 @@
 	import Cog from '../components/icons/Cog.svelte';
 	import Fuse from 'fuse.js';
 	import { goto } from '$app/navigation';
+	import hotkeys from 'hotkeys-js';
+	import { DataHandler } from '@vincjo/datatables';
 
 	// TODO stop always loading all teams/games, just react to websocket-messages
 	// TODO show the done-status in game- and team-table -> this would require a lot of requests for each table though
@@ -65,87 +67,48 @@
 		}
 	});
 
-	function keyDown(event: any) {
-		// `keydown` event is fired while the physical key is held down.
+	hotkeys.filter = (_event) => true;
+	hotkeys('ctrl+p,command+p,esc,enter,up, down', (event, handler) => {
+		event.preventDefault();
 
-		// Assuming you only want to handle the first press, we early
-		// return to skip.
-		if (event.repeat) {
-			return;
-		}
-		// handle up- and down-arrows if the switcher is open
-		if (showSwitcher && searchResults.length > 0) {
-			switch (event.key) {
-				case 'ArrowUp':
-					if (selectedIndex == 0) {
-						selectedIndex = searchResults.length - 1;
-					} else {
-						selectedIndex--;
-					}
-					return;
-				case 'ArrowDown':
-					if (selectedIndex + 1 == searchResults.length) {
-						selectedIndex = 0;
-					} else {
-						selectedIndex++;
-					}
-					return;
-				case 'Enter':
-					const result = searchResults[selectedIndex];
-					searchValue = '';
-					showSwitcher = false;
-					goto(`${result.item.link}/${result.item.id}`);
-					return;
-			}
-		}
-
-		// In the switch-case we're updating our boolean flags whenever the
-		// desired bound keys are pressed.
-		switch (event.key) {
-			case 'Control':
-				isCtrlDown = true;
-				// By using `preventDefault`, it tells the Browser not to handle the
-				// key stroke for its own shortcuts or text input.
-				event.preventDefault();
+		switch (handler.key) {
+			case 'ctrl+p':
+			case 'command+p':
+				showSwitcher = true;
 				break;
-			case ' ':
-				isSpaceDown = true;
-				break;
-			case 'Escape':
+			case 'esc':
 				showSwitcher = false;
 				searchValue = '';
 				break;
-		}
+			case 'enter':
+				if (showSwitcher) {
+					// reset the switcher
+					searchValue = '';
+					showSwitcher = false;
 
-		// only show the switcher if it's not already visible -> this should ignore updates when the switcher is already open
-		// don't show the switcher for /login
-		if (!showSwitcher && isCtrlDown && isSpaceDown && !$page.route.id?.startsWith('/login')) {
-			showSwitcher = true;
-		}
-	}
-
-	function keyUp(event: any) {
-		// `keyup` is the reverse, it fires whenever the physical key was let.
-		// go after being held down
-
-		// Just like our `keydown` handler, we need to update the boolean
-		// flags, but in the opposite direction.
-		switch (event.key) {
-			case 'Control':
-				isCtrlDown = false;
-				event.preventDefault();
+					const result = searchResults[selectedIndex];
+					goto(`${result.item.link}/${result.item.id}`);
+				}
 				break;
-			case ' ':
-				isSpaceDown = false;
-				event.preventDefault();
+			case 'up':
+				if (selectedIndex == 0) {
+					selectedIndex = searchResults.length - 1;
+				} else {
+					selectedIndex--;
+				}
+				break;
+			case 'down':
+				if (selectedIndex + 1 == searchResults.length) {
+					selectedIndex = 0;
+				} else {
+					selectedIndex++;
+				}
 				break;
 		}
-	}
+	});
 
 	onDestroy(unsub);
 </script>
-
-<svelte:window on:keydown={keyDown} on:keyup={keyUp} />
 
 <!-- this div makes sure that children respect parent's boundaries when using height: 100%-->
 <div class="flex flex-col h-full">
@@ -230,7 +193,9 @@
 				<ul class="menu rounded-box w-full p-0 gap-1">
 					{#each searchResults as result}
 						<li class="w-full">
-							<div
+							<a
+								href={`${result.item.link}/${result.item.id}`}
+								on:click={() => ((showSwitcher = false), (searchValue = ''))}
 								class="flex flex-row justify-between w-full font-bold"
 								class:bg-primary={result.refIndex == searchResults[selectedIndex].refIndex}
 								class:text-white={result.refIndex == searchResults[selectedIndex].refIndex}
@@ -244,7 +209,7 @@
 								<p>
 									{result.item.displayName}
 								</p>
-							</div>
+							</a>
 						</li>
 					{/each}
 				</ul>
