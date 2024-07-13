@@ -27,8 +27,7 @@
 
 	export let data;
 
-	let isCtrlDown = false,
-		isSpaceDown = false,
+	let switcherContent: HTMLElement,
 		showSwitcher = false;
 	let searchValue = '',
 		searchResults: any[] = [],
@@ -65,6 +64,8 @@
 			toast = message;
 			setTimeout(() => (toast = undefined), 30000);
 		}
+
+		hotkeys.unbind();
 	});
 
 	hotkeys.filter = (_event) => true;
@@ -106,6 +107,12 @@
 				break;
 		}
 	});
+
+	function onClickOutside(e: any) {
+		if (!switcherContent.contains(e.target)) {
+			showSwitcher = false;
+		}
+	}
 
 	onDestroy(unsub);
 </script>
@@ -172,8 +179,9 @@
 {#if showSwitcher}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-	<dialog class="modal modal-open">
-		<form id="confirmation-form w-full" class="modal-box">
+	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
+		>
+		<form id="confirmation-form w-full" class="modal-box" bind:this={switcherContent}>
 			<h1 class="font-bold text-xl text-center pb-2">Switcher</h1>
 
 			<!-- svelte-ignore a11y-autofocus -->
