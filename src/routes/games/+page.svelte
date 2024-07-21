@@ -4,6 +4,7 @@
 
 	export let data;
 	const handler = new DataHandler(data.games, { rowsPerPage: 20 });
+	handler.sortAsc('trophy_id');
 	const rows = handler.getRows();
 	let isCtrlDown = false,
 		isCDown = false,

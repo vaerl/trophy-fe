@@ -14,23 +14,26 @@
 	let showDeletion = false;
 	let nameInput: string;
 
-	$: game = data.game;
-	$: outcomes = data.outcomes;
-
 	let modalOutcome: Outcome | null = null;
 	let modalContent: HTMLFormElement;
 
-	$: openOutcomeHandler = new DataHandler(
-		outcomes.filter((o) => !o.data),
+	let openOutcomeHandler = new DataHandler(
+		data.outcomes.filter((o) => !o.data),
 		{ rowsPerPage: 50 }
 	);
-	$: openOutcomes = openOutcomeHandler.getRows();
+	openOutcomeHandler.sortAsc('team_trophy_id');
+	let openOutcomes = openOutcomeHandler.getRows();
+	// react to new data
+	$: data, openOutcomeHandler.setRows(data.outcomes.filter((o) => !o.data));
 
-	$: doneOutcomeHandler = new DataHandler(
-		outcomes.filter((o) => o.data),
+	let doneOutcomeHandler = new DataHandler(
+		data.outcomes.filter((o) => o.data),
 		{ rowsPerPage: 50 }
 	);
-	$: doneOutcomes = doneOutcomeHandler.getRows();
+	doneOutcomeHandler.sortAsc('team_trophy_id');
+	let doneOutcomes = doneOutcomeHandler.getRows();
+	// react to new data
+	$: data, doneOutcomeHandler.setRows(data.outcomes.filter((o) => o.data));
 
 	/**
 	 * Close the modal if we click out of it.
@@ -188,13 +191,13 @@
 
 <!-- this is kinda hacky, but works -->
 <div class="absolute right-0 top-0 py-6 mr-40 flex flex-row">
-	<a href={`/games/${game.id}/edit`} class="ml-6"><Edit /></a>
+	<a href={`/games/${data.game.id}/edit`} class="ml-6"><Edit /></a>
 	<button class="ml-6" on:click={() => (showDeletion = true)}><Delete /></button>
 </div>
 
 <div class="absolute-center-x pt-6">
 	<div class="tooltip" data-tip="Zum Bearbeiten klicken.">
-		<a href={`/games/${game.id}/edit`}>
+		<a href={`/games/${data.game.id}/edit`}>
 			<div class="stats border bg-neutral">
 				<div class="stat place-items-center">
 					<div class="stat-title">Typ</div>
@@ -203,25 +206,25 @@
 
 				<div class="stat place-items-center">
 					<div class="stat-title">Name</div>
-					<div class="stat-value">{game.name}</div>
+					<div class="stat-value">{data.game.name}</div>
 				</div>
 
 				<div class="stat place-items-center">
 					<div class="stat-title">Trophy-ID</div>
-					<div class="stat-value">{game.trophy_id}</div>
+					<div class="stat-value">{data.game.trophy_id}</div>
 				</div>
 
 				<div class="stat place-items-center">
 					<div class="stat-title">Typ</div>
-					<div class="stat-value">{game.kind}</div>
+					<div class="stat-value">{data.game.kind}</div>
 				</div>
 
 				<!-- only show percentage if there are any outcomes -->
-				{#if outcomes.length > 0}
+				{#if data.outcomes.length > 0}
 					<div class="stat place-items-center">
 						<div class="stat-title">Abgeschlossen</div>
 						<div class="stat-value text-secondary">
-							{Math.round(($doneOutcomes.length / outcomes.length) * 100)}%
+							{Math.round(($doneOutcomes.length / data.outcomes.length) * 100)}%
 						</div>
 					</div>
 				{/if}
@@ -380,7 +383,7 @@
 				on:click={closeDeletion}>✕</button
 			>
 
-			<h1 class="font-bold text-xl text-center pb-2">Spiel "{game.name}" wirklich löschen?</h1>
+			<h1 class="font-bold text-xl text-center pb-2">Spiel "{data.game.name}" wirklich löschen?</h1>
 			<p class="text-center pb-6">Bitte gib den Namen des Spiels ein, um es zu löschen.</p>
 			<input
 				class="input input-bordered w-full"
@@ -396,7 +399,7 @@
 				</button>
 				<button
 					class="btn btn-primary"
-					class:btn-disabled={game.name !== nameInput}
+					class:btn-disabled={data.game.name !== nameInput}
 					on:click|preventDefault={handleDelete}>Löschen</button
 				>
 			</div>

@@ -5,6 +5,8 @@
 	export let data;
 	// keep this at 50 if we ever add referee-users
 	const handler = new DataHandler(data.users, { rowsPerPage: 50 });
+	handler.sortAsc('id');
+
 	const rows = handler.getRows();
 	let isCtrlDown = false,
 		isCDown = false,
