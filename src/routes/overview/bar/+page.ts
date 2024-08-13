@@ -6,30 +6,28 @@ export async function load({ fetch }) {
 	let year = getYear();
 	let params = `?year=${year}`;
 
-	const teamsRes = await fetch(`${baseUrl}/teams/amount${params}`, { credentials: 'include' });
-	const teamsAmount: number = await teamsRes.json();
+	const teamsAmount: Promise<number> = fetch(`${baseUrl}/teams/amount${params}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
+	const games: Promise<Game[]> = fetch(`${baseUrl}/games${params}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
 
-	const gamesRes = await fetch(`${baseUrl}/games${params}`, { credentials: 'include' });
-	const games: Game[] = await gamesRes.json();
-
-	const gamesWithPending: Promise<GameWithPending>[] = games.map(async (g) => {
-		const pendingTeamsRes = await fetch(
-			import.meta.env.VITE_BACKEND_URL + `/games/${g.id}/pending`,
-			{
-				method: 'GET',
-				credentials: 'include'
-			}
-		);
-		const pendingTeams: Team[] = await pendingTeamsRes.json();
-
-		return {
-			...g,
-			pendingTeams: pendingTeams.length
-		};
-	});
+	const gamesWithPending: Promise<GameWithPending[]> = games.then((games) =>
+		Promise.all(
+			games.map((g) =>
+				fetch(import.meta.env.VITE_BACKEND_URL + `/games/${g.id}/pending`, {
+					method: 'GET',
+					credentials: 'include'
+				})
+					.then((res) => res.json())
+					.then((teams: Team[]) => ({ ...g, pendingTeams: teams.length }))
+			)
+		)
+	);
 
 	return {
 		teamsAmount,
-		gamesWithPending: await Promise.all(gamesWithPending)
+		gamesWithPending
 	};
 }
