@@ -8,6 +8,7 @@
 	import Delete from '../../../components/icons/Delete.svelte';
 	import { page } from '$app/stores';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
+	import TimeInput from '../../../components/TimeInput.svelte';
 
 	export let data;
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
@@ -99,21 +100,8 @@
 	}
 
 	// TODO these outcome-functions can probably be extracted to util or something
-	async function saveOutcome(event: any, outcome: Outcome) {
-		const form = new FormData(event.target);
-		let value = form.get('data');
-
-		// ignore update if there are no changes
-		if (outcome.data === value!.toString()) {
-			modalOutcome = null;
-			return;
-		}
-
+	async function saveOutcome(outcome: Outcome) {
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let updatedOutcome: Outcome = {
-			...outcome,
-			data: value!.toString()
-		};
 
 		// always close the modal once the request is happening
 		modalOutcome = null;
@@ -124,7 +112,7 @@
 				// requests won't work without this
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(updatedOutcome),
+			body: JSON.stringify(outcome),
 			credentials: 'include'
 		});
 
@@ -317,7 +305,7 @@
 			id="outcome-form"
 			class="modal-box"
 			bind:this={modalContent}
-			on:submit|preventDefault={(event) => saveOutcome(event, modalOutcome)}
+			on:submit|preventDefault={() => saveOutcome(modalOutcome)}
 		>
 			<button
 				class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -344,18 +332,11 @@
 						name="data"
 						type="number"
 						placeholder="Punkte"
-						value={modalOutcome.data}
+						bind:value={modalOutcome.data}
 						autofocus
 					/>
 				{:else}
-					<input
-						class="input input-bordered"
-						name="data"
-						type="text"
-						placeholder="Zeit"
-						value={modalOutcome.data}
-						autofocus
-					/>
+					<TimeInput bind:time={modalOutcome.data} />
 				{/if}
 			</div>
 

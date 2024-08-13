@@ -1,0 +1,60 @@
+<script lang="ts">
+	// default to a valid "time" if nothing was passed
+	export let time: string | null;
+	let defaultTime = '00:00';
+	let inputElement;
+
+	if (time == null) {
+		time = defaultTime;
+	}
+
+	function handleInput(event) {
+		let input = event.target.value.replace(/\D/g, '');
+		let cursorPosition = event.target.selectionStart;
+
+		// if the input is shorter than 4 digits, pad it with zeros at the beginning
+		input = input.padStart(4, '0');
+
+		let minutes = input.slice(0, 2);
+		let seconds = input.slice(2, 4);
+
+		minutes = Math.min(59, parseInt(minutes)).toString().padStart(2, '0');
+		seconds = Math.min(59, parseInt(seconds)).toString().padStart(2, '0');
+
+		time = `${minutes}:${seconds}`;
+	}
+
+	function handleKeydown(event) {
+		if (event.key >= '0' && event.key <= '9') {
+			// ignore the colon
+			let newTime = time!.replace(/:/g, '');
+			newTime = (newTime + event.key).slice(-4);
+			let minutes = newTime.slice(0, 2);
+			let seconds = newTime.slice(2, 4);
+
+			// make sure to not exceed the possible values for minutes or seconds
+			minutes = Math.min(59, parseInt(minutes)).toString().padStart(2, '0');
+			seconds = Math.min(59, parseInt(seconds)).toString().padStart(2, '0');
+
+			time = `${minutes}:${seconds}`;
+			event.preventDefault();
+		}
+	}
+</script>
+
+<div class="form-control w-full max-w-xs">
+	<label for="timeInput" class="label">
+		<span class="label-text">Gib eine Zeit an (mm:ss):</span>
+	</label>
+	<input
+		id="time"
+		type="text"
+		bind:value={time}
+		on:input={handleInput}
+		on:keydown={handleKeydown}
+		bind:this={inputElement}
+		placeholder="mm:ss"
+		maxlength="5"
+		class="input input-bordered w-full max-w-xs"
+	/>
+</div>
