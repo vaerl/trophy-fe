@@ -3,10 +3,10 @@
 	import { MessageType, type CreateGame, type CreateTeam } from '$lib/model';
 	import { messageStore, yearStore } from '$lib/stores';
 
-	export let data;
-	let showYearModal = false;
-	let showImportModal = false;
-	let modalContent: HTMLFormElement;
+	let { data } = $props();
+	let showYearModal = $state(false);
+	let showImportModal = $state(false);
+	let modalContent: HTMLFormElement | undefined = $state();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	// explicitly add the current year as an option if it's somehow not included
@@ -15,31 +15,35 @@
 	}
 
 	// sync year to localStorage, because this depends on a store, it'll be set accordingly
-	$: {
+	$effect(() => {
 		localStorage.setItem('year', $yearStore);
-	}
+	});
 
 	/**
 	 * Close the modal if we click out of it.
 	 * @param e
 	 */
-	function onClickOutside(e: any) {
-		if (!modalContent.contains(e.target)) {
-			closeModals();
+	function onClickOutside(event: MouseEvent & { currentTarget: EventTarget & HTMLDialogElement }) {
+		if (modalContent && !modalContent.contains(event.currentTarget)) {
+			closeModals(event);
 		}
 	}
 
 	/**
 	 * Hide the modal and reset the value of the input.
 	 */
-	function closeModals() {
+	function closeModals(event: Event) {
+		event.preventDefault();
 		showYearModal = false;
 		showImportModal = false;
 	}
 
-	async function createNewYear(event: any) {
-		const form = new FormData(event.target);
-		closeModals();
+	async function createNewYear(
+		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }
+	) {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
+		closeModals(event);
 
 		let newYear = parseInt(form.get('newYear')!.toString());
 		let copyTeams = Boolean(form.get('copyTeams')?.toString());
@@ -129,9 +133,11 @@
 		goto(`/overview/pie`);
 	}
 
-	async function importTeams(event: any) {
-		const form = new FormData(event.target);
-		closeModals();
+	async function importTeams(
+		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }
+	) {
+		const form = new FormData(event.currentTarget);
+		closeModals(event);
 
 		let sheet_name = form.get('sheet_name')!.toString();
 		let trophy_id_header = form.get('trophy_id_header')!.toString();
@@ -207,25 +213,25 @@
 	<button
 		class="w-1/3 btn btn-accent"
 		class:btn-disabled={data.years.length == 0 && data.games.length == 0}
-		on:click={() => (showYearModal = true)}>Bestehende Daten zu neuem Jahr kopieren</button
+		onclick={() => (showYearModal = true)}>Bestehende Daten zu neuem Jahr kopieren</button
 	>
 
-	<button class="w-1/3 btn btn-accent" on:click={() => (showImportModal = true)}
+	<button class="w-1/3 btn btn-accent" onclick={() => (showImportModal = true)}
 		>Teams importieren</button
 	>
 </div>
 
 {#if showYearModal}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+	<dialog class="modal modal-open" onclick={onClickOutside}>
 		<form
 			id="confirmation-form"
 			class="modal-box"
 			bind:this={modalContent}
-			on:submit|preventDefault={createNewYear}
+			onsubmit={createNewYear}
 		>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" on:click={closeModals}
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={closeModals}
 				>✕</button
 			>
 
@@ -256,7 +262,7 @@
 			/>
 
 			<div class="modal-action flex flex-row justify-between">
-				<button class="btn btn-secondary" on:click|preventDefault={closeModals}> Abbrechen </button>
+				<button class="btn btn-secondary" onclick={closeModals}> Abbrechen </button>
 				<button class="btn btn-primary">Speichern</button>
 			</div>
 		</form>
@@ -264,16 +270,11 @@
 {/if}
 
 {#if showImportModal}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-	<dialog class="modal modal-open" on:click={(e) => onClickOutside(e)}>
-		<form
-			id="confirmation-form"
-			class="modal-box"
-			bind:this={modalContent}
-			on:submit|preventDefault={importTeams}
-		>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" on:click={closeModals}
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+	<dialog class="modal modal-open" onclick={onClickOutside}>
+		<form id="confirmation-form" class="modal-box" bind:this={modalContent} onsubmit={importTeams}>
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={closeModals}
 				>✕</button
 			>
 
@@ -371,7 +372,7 @@
 			</div>
 
 			<div class="modal-action flex flex-row justify-between">
-				<button class="btn btn-secondary" on:click|preventDefault={closeModals}> Abbrechen </button>
+				<button class="btn btn-secondary" onclick={closeModals}> Abbrechen </button>
 				<button class="btn btn-primary">Importieren</button>
 			</div>
 		</form>

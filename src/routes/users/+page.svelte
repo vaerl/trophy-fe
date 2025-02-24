@@ -2,7 +2,7 @@
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 	import { goto } from '$app/navigation';
 
-	export let data;
+	let { data } = $props();
 	// keep this at 50 if we ever add referee-users
 	const handler = new DataHandler(data.users, { rowsPerPage: 50 });
 	handler.sortAsc('id');
@@ -60,7 +60,7 @@
 	}
 </script>
 
-<svelte:window on:keydown={keyDown} on:keyup={keyUp} />
+<svelte:window onkeydown={keyDown} onkeyup={keyUp} />
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Nutzer</h1>
 
@@ -84,7 +84,7 @@
 
 			<tbody>
 				{#each $rows as row}
-					<tr on:click={() => goto(`/users/${row.id}`)} class="cursor-pointer">
+					<tr onclick={() => goto(`/users/${row.id}`)} class="cursor-pointer">
 						<td>{row.id}</td>
 						<td>{row.name}</td>
 						<td>{row.role}</td>

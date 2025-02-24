@@ -4,7 +4,7 @@
 	import { messageStore, paramStore } from '$lib/stores';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
 
-	export let data;
+	let { data } = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	async function evaluate() {
@@ -37,7 +37,7 @@
 		<div class="absolute-center-y absolute-center-x text-center">
 			<h1 class="text-4xl pb-8">Die Trophy kann ausgewertet werden.</h1>
 
-			<button class="btn btn-primary" on:click={evaluate}>Auswerten</button>
+			<button class="btn btn-primary" onclick={evaluate}>Auswerten</button>
 		</div>
 	{:else if evalDone}
 		<div class="absolute-center-y absolute-center-x text-center">

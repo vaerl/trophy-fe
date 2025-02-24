@@ -6,9 +6,13 @@
 	import type { GameWithPending } from '$lib/model';
 	import { goto } from '$app/navigation';
 
-	export let games: GameWithPending[];
-	export let teams: number;
-	export let id: string;
+	interface Props {
+		games: GameWithPending[];
+		teams: number;
+		id: string;
+	}
+
+	let { games, teams, id }: Props = $props();
 	const chartPrefix = 'bar-';
 	const chartId = chartPrefix + id;
 
@@ -90,6 +94,6 @@
 	<h1 class="text-lg font-bold text-center">Momentan sind keine Daten verfügbar.</h1>
 {:else}
 	<div class="w-3/4">
-		<canvas id={chartId} />
+		<canvas id={chartId}></canvas>
 	</div>
 {/if}

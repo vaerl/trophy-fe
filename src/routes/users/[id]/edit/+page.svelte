@@ -4,10 +4,11 @@
 	import { messageStore } from '$lib/stores';
 	import LeftArrow from '../../../../components/icons/LeftArrow.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	async function save(event: any) {
-		const form = new FormData(event.target);
+	async function save(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
 		let password = form.get('password');
 		let game_id = form.get('game_id');
 		let name = form.get('name');
@@ -55,7 +56,7 @@
 	<span class="underline">{data.user.name}</span> bearbeiten
 </h1>
 
-<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={save}>
+<form class="flex flex-col w-80 m-auto gap-8" onsubmit={save}>
 	<div class="w-full">
 		<label class="label" for="name">
 			<span class="label-text">Name</span>

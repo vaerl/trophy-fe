@@ -9,10 +9,19 @@
 		Tooltip
 	} from 'chart.js/auto';
 
-	export let name: string;
-	export let link: string;
-	export let done: number;
-	export let open: number;
+	interface Props {
+		name: string;
+		link: string;
+		done: number;
+		open: number;
+	}
+
+	let {
+		name,
+		link,
+		done,
+		open
+	}: Props = $props();
 	let total = open + done;
 	let chart;
 
@@ -52,7 +61,7 @@
 	{:else}
 		<div class="relative">
 			<h4 class="text-3xl text-center pb-4 font-bold">{name}</h4>
-			<canvas id={'doughnut-chart' + name} />
+			<canvas id={'doughnut-chart' + name}></canvas>
 			<div class="absolute top-1/2 w-full">
 				<p class="text-center w-full font-extrabold stat-value">
 					{total}

@@ -1,16 +1,18 @@
 <script lang="ts">
-	// default to a valid "time" if nothing was passed
-	export let time: string | null;
+	interface Props {
+		// default to a valid "time" if nothing was passed
+		time: string | null;
+	}
+
+	let { time = $bindable() }: Props = $props();
 	let defaultTime = '00:00';
-	let inputElement;
 
 	if (time == null) {
 		time = defaultTime;
 	}
 
-	function handleInput(event) {
-		let input = event.target.value.replace(/\D/g, '');
-		let cursorPosition = event.target.selectionStart;
+	function handleInput(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+		let input = event.currentTarget.value.replace(/\D/g, '');
 
 		// if the input is shorter than 4 digits, pad it with zeros at the beginning
 		input = input.padStart(4, '0');
@@ -24,7 +26,7 @@
 		time = `${minutes}:${seconds}`;
 	}
 
-	function handleKeydown(event) {
+	function handleKeydown(event: KeyboardEvent) {
 		if (event.key >= '0' && event.key <= '9') {
 			// ignore the colon
 			let newTime = time!.replace(/:/g, '');
@@ -50,9 +52,8 @@
 		id="time"
 		type="text"
 		bind:value={time}
-		on:input={handleInput}
-		on:keydown={handleKeydown}
-		bind:this={inputElement}
+		oninput={handleInput}
+		onkeydown={handleKeydown}
 		placeholder="mm:ss"
 		maxlength="5"
 		class="input input-bordered w-full max-w-xs"

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 
-	export let data;
+	let { data } = $props();
 	const handler = new DataHandler(data.teams, { rowsPerPage: 50 });
 	handler.sortAsc('trophy_id');
 	const rows = handler.getRows();
@@ -58,7 +58,7 @@
 	}
 </script>
 
-<svelte:window on:keydown={keyDown} on:keyup={keyUp} />
+<svelte:window onkeydown={keyDown} onkeyup={keyUp} />
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Teams</h1>
 
@@ -83,7 +83,7 @@
 			<tbody>
 				{#each $rows as row}
 					<!-- even though I'd like to use <a>, only this will make sure the entire row is clickable -->
-					<tr on:click={() => goto(`/teams/${row.id}`)} class="cursor-pointer">
+					<tr onclick={() => goto(`/teams/${row.id}`)} class="cursor-pointer">
 						<td>
 							{row.trophy_id}
 						</td>

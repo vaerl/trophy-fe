@@ -3,7 +3,7 @@
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 {#await Promise.all([data.pendingTeams, data.finishedTeams, data.pendingGames, data.finishedGames])}

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
+	import { Datatable, TableHandler, Th, ThFilter } from '@vincjo/datatables';
 
-	export let data;
-	const handler = new DataHandler(data.games, { rowsPerPage: 20 });
-	handler.sortAsc('trophy_id');
-	const rows = handler.getRows();
+	let { data } = $props();
+	const table= new TableHandler(data.games, { rowsPerPage: 20 });
+	let sort = table.createSort('trophy_id')
+	sort.isActive = true;
+	
 	let isCtrlDown = false,
 		isCDown = false,
 		isShiftDown = false;
@@ -58,29 +59,29 @@
 	}
 </script>
 
-<svelte:window on:keydown={keyDown} on:keyup={keyUp} />
+<svelte:window onkeydown={keyDown} onkeyup={keyUp} />
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Spiele</h1>
 <div style="height: calc(100% - 72px);">
-	<Datatable {handler}>
+	<Datatable {table}>
 		<table class="table table-zebra">
 			<thead class="bg-white">
 				<tr>
-					<Th {handler} orderBy="trophy_id">Trophy-ID</Th>
-					<Th {handler} orderBy="name">Name</Th>
-					<Th {handler} orderBy="kind">Typ</Th>
+					<Th {table} orderBy="trophy_id">Trophy-ID</Th>
+					<Th {table} orderBy="name">Name</Th>
+					<Th {table} orderBy="kind">Typ</Th>
 				</tr>
 				<tr>
-					<ThFilter {handler} filterBy="trophy_id" />
-					<ThFilter {handler} filterBy="name" />
-					<ThFilter {handler} filterBy="kind" />
+					<ThFilter {table} filterBy="trophy_id" />
+					<ThFilter {table} filterBy="name" />
+					<ThFilter {table} filterBy="kind" />
 				</tr>
 			</thead>
 
 			<tbody>
-				{#each $rows as row}
+				{#each table.rows as row}
 					<!-- even though I'd like to use <a>, only this will make sure the entire row is clickable -->
-					<tr on:click={() => goto(`/games/${row.id}`)} class="cursor-pointer">
+					<tr onclick={() => goto(`/games/${row.id}`)} class="cursor-pointer">
 						<td>
 							{row.trophy_id}
 						</td>

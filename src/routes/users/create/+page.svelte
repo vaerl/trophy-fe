@@ -4,10 +4,11 @@
 	import { messageStore } from '$lib/stores';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	async function create(event: any) {
-		const form = new FormData(event.target);
+	async function create(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
 		let password = form.get('password');
 		let game_id = form.get('game_id');
 		let name = form.get('name');
@@ -53,12 +54,12 @@
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neuen Nutzer anlegen</h1>
 
-<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={create}>
+<form class="flex flex-col w-80 m-auto gap-8" onsubmit={create}>
 	<div class="w-full">
 		<label class="label" for="name">
 			<span class="label-text">Name</span>
 		</label>
-		<!-- svelte-ignore a11y-autofocus -->
+		<!-- svelte-ignore a11y_autofocus -->
 		<input class="input input-bordered w-full" name="name" type="text" required autofocus />
 	</div>
 

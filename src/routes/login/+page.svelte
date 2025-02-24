@@ -13,8 +13,8 @@
 		}
 	});
 
-	let username: string = '',
-		password: string = '';
+	let username: string = $state(''),
+		password: string = $state('');
 
 	async function handleKeydown(event: KeyboardEvent) {
 		// login on enter
@@ -36,7 +36,7 @@
 	}
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 <div class="flex flex-row h-full items-center">
 	<div class="flex flex-col w-1/3 m-auto gap-2">
 		<h1 class="text-4xl text-center">Anmelden</h1>
@@ -52,6 +52,6 @@
 			bind:value={password}
 			type="password"
 		/>
-		<button class="btn" on:click={() => authenticate(username, password)}>Anmelden</button>
+		<button class="btn" onclick={() => authenticate(username, password)}>Anmelden</button>
 	</div>
 </div>

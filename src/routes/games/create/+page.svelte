@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { messageStore, yearStore } from '$lib/stores';
+	import { messageStore } from '$lib/stores';
 	import { GameKind, MessageType, type CreateGame, type Game } from '../../../lib/model';
 	import { getYear } from '$lib/util';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 
-	async function create(event: any) {
-		const form = new FormData(event.target);
+	async function create(event: SubmitEvent & { currentTarget: HTMLFormElement | undefined }) {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
 		let trophy_id = form.get('trophy_id');
 		let name = form.get('name');
 		let kind = form.get('kind');
@@ -52,12 +53,12 @@
 
 <h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Neues Spiel anlegen</h1>
 
-<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={create}>
+<form class="flex flex-col w-80 m-auto gap-8" onsubmit={create}>
 	<div>
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>
 		</label>
-		<!-- svelte-ignore a11y-autofocus -->
+		<!-- svelte-ignore a11y_autofocus -->
 		<input
 			class="input input-bordered w-full"
 			name="trophy_id"

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { messageStore, yearStore } from '$lib/stores';
+	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import { MessageType, TeamGender, type CreateTeam, type Team } from '../../../lib/model';
 
-	async function create(event: any) {
-		const form = new FormData(event.target);
+	async function create(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+		event.preventDefault();
+		const form = new FormData(event.currentTarget);
 
 		let trophy_id = form.get('trophy_id');
 		let name = form.get('name');
@@ -53,12 +54,12 @@
 
 <a href="/teams" class="absolute top-0 left-14 py-6"><LeftArrow /></a>
 
-<form class="flex flex-col w-80 m-auto gap-8" on:submit|preventDefault={create}>
+<form class="flex flex-col w-80 m-auto gap-8" onsubmit={create}>
 	<div class="w-full">
 		<label class="label" for="trophy_id">
 			<span class="label-text">Trophy-ID</span>
 		</label>
-		<!-- svelte-ignore a11y-autofocus -->
+		<!-- svelte-ignore a11y_autofocus -->
 		<input
 			class="input input-bordered w-full"
 			name="trophy_id"

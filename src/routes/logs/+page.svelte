@@ -2,7 +2,7 @@
 	import { SubjectType } from '$lib/model.js';
 	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
 
-	export let data;
+	let { data } = $props();
 
 	const handler = new DataHandler(data.logs, { rowsPerPage: 50 });
 	handler.applySort({ orderBy: 'id', direction: 'desc' });
