@@ -10,6 +10,15 @@ export interface Team extends CreateTeam {
 	points: number;
 }
 
+export function isTeam(item: Team | Game): item is Team {
+	return (item as Team).gender !== undefined;
+}
+
+export function areTeams(items: Team[] | Game[]): items is Team[] {
+	// TODO check if there are items
+	return (items as Team[])[0].gender !== undefined;
+}
+
 export enum TeamGender {
 	Male = 'male',
 	Female = 'female'

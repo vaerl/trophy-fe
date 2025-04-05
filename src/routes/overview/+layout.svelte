@@ -1,9 +1,25 @@
 <script lang="ts">
+	import Cog from '../../components/icons/Cog.svelte';
+	import Info from '../../components/icons/Info.svelte';
+	import UserIcon from '../../components/icons/UserIcon.svelte';
+	import LogoutButton from '../../components/LogoutButton.svelte';
+	import Navbar from '../../components/Navbar.svelte';
+
 	// this somehow just works, more here: https://svelte.dev/tutorial/kit/layouts
 	let { children } = $props();
 </script>
 
-<!-- if this ever breaks, nest this and slot under a parent-div -->
-<h1 class="text-6xl font-extrabold absolute-center-x pt-6">Übersicht</h1>
+<div class="w-full h-full flex flex-col">
+	<Navbar title="Übersicht">
+		{#snippet left()}
+			<a href="/settings"><Cog /></a>
+		{/snippet}
+		{#snippet right()}
+			<a href="/users"> <UserIcon /> </a>
+			<a href="/logs"> <Info /> </a>
+			<LogoutButton></LogoutButton>
+		{/snippet}
+	</Navbar>
 
-{@render children()}
+	{@render children()}
+</div>

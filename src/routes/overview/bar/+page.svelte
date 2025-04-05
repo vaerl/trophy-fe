@@ -5,15 +5,17 @@
 	let { data } = $props();
 </script>
 
-{#await Promise.all([data.teamsAmount, data.gamesWithPending])}
-	<span class="loading loading-spinner loading-lg absolute-center-y absolute-center-x"></span>
-{:then [teamsAmount, gamesWithPending]}
-	<div class="absolute-center-y w-full">
-		<div class="flex flex-row justify-evenly">
+<div class="flex flex-row h-full justify-around">
+	{#await Promise.all([data.teamsAmount, data.gamesWithPending])}
+		<span class="loading loading-spinner loading-xl"></span>
+	{:then [teamsAmount, gamesWithPending]}
+		<div class="w-full h-full flex flex-row items-center justify-between">
+			<a class="cursor-pointer" href="/overview/pie">
+				<LeftArrow size={20} />
+			</a>
 			<BarChart games={gamesWithPending} id="finished-teams" teams={teamsAmount} />
+			<!-- empty div so justify-between works-->
+			<div></div>
 		</div>
-	</div>
-{/await}
-<a class="absolute-center-y left-10 cursor-pointer" href="/overview/pie">
-	<LeftArrow size={20} />
-</a>
+	{/await}
+</div>

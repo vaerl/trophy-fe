@@ -18,5 +18,5 @@ export async function load({ fetch, params }) {
 	});
 	const outcomes: Outcome[] = await outcomeRes.json();
 
-	return { game, outcomes };
+	return { item: game, outcomes };
 }

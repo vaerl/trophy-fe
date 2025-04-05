@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
-@config '../tailwind.config.js';
-
 @plugin "daisyui";
+
+/* safelist properties, more here: https://github.com/tailwindlabs/tailwindcss/pull/17147 */
+@source inline('h-20');
 
 
 @utility absolute-center-y {

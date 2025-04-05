@@ -16,12 +16,7 @@
 		open: number;
 	}
 
-	let {
-		name,
-		link,
-		done,
-		open
-	}: Props = $props();
+	let { name, link, done, open }: Props = $props();
 	let total = open + done;
 	let chart;
 
