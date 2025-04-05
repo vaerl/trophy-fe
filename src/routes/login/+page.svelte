@@ -41,13 +41,13 @@
 	<div class="flex flex-col w-1/3 m-auto gap-2">
 		<h1 class="text-4xl text-center">Anmelden</h1>
 		<input
-			class="input input-bordered"
+			class="input input-bordered w-full"
 			placeholder="Benutzername"
 			bind:value={username}
 			type="text"
 		/>
 		<input
-			class="input input-bordered"
+			class="input input-bordered w-full"
 			placeholder="Passwort"
 			bind:value={password}
 			type="password"
