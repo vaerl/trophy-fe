@@ -17,7 +17,7 @@
 	let linkPrefix = itemsAreTeams ? 'teams' : 'games';
 	let typeName = itemsAreTeams ? 'Team' : 'Spiel';
 
-	const table = new TableHandler<Team | Game>(items, { rowsPerPage: 50 });
+	const table = new TableHandler<Team | Game>(items, { rowsPerPage: 100 });
 	let sort = table.createSort('trophy_id');
 	sort.isActive = true;
 

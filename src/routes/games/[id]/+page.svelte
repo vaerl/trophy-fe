@@ -3,7 +3,7 @@
 	import { GameKind, MessageType, type Game, type Outcome } from '$lib/model';
 	import { messageStore } from '$lib/stores.js';
 	import { isEnterKeyEvent, isEscapeKeyEvent } from '$lib/util';
-	import { Datatable, TableHandler, Th, ThFilter, ThSort } from '@vincjo/datatables';
+	import { Datatable, TableHandler, ThFilter, ThSort } from '@vincjo/datatables';
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
@@ -29,7 +29,7 @@
 
 	let openOutcomeTable = new TableHandler(
 		outcomes.filter((o) => !o.data),
-		{ rowsPerPage: 50 }
+		{ rowsPerPage: 100 }
 	);
 	let openOutcomeSort = openOutcomeTable.createSort('team_trophy_id');
 	openOutcomeSort.isActive = true;
@@ -40,7 +40,7 @@
 
 	let doneOutcomeTable = new TableHandler(
 		outcomes.filter((o) => o.data),
-		{ rowsPerPage: 50 }
+		{ rowsPerPage: 100 }
 	);
 	let doneOutcomeSort = doneOutcomeTable.createSort('team_trophy_id');
 	doneOutcomeSort.isActive = true;
@@ -263,7 +263,7 @@
 			<h1 class="text-2xl font-bold underline text-center">Fertige Teams</h1>
 			<div class="overflow-scroll">
 				<Datatable table={doneOutcomeTable}>
-					<table class="table table-zebra">
+					<table>
 						<!-- make sure to not scroll over title and header -->
 						<thead class="bg-white!">
 							<tr>
