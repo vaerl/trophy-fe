@@ -3,7 +3,13 @@
 	import { GameKind, MessageType, type CreateGame, type Game } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
+	import Cog from '../../../../components/icons/Cog.svelte';
+	import Home from '../../../../components/icons/Home.svelte';
+	import Info from '../../../../components/icons/Info.svelte';
 	import LeftArrow from '../../../../components/icons/LeftArrow.svelte';
+	import UserIcon from '../../../../components/icons/UserIcon.svelte';
+	import LogoutButton from '../../../../components/LogoutButton.svelte';
+	import Navbar from '../../../../components/Navbar.svelte';
 
 	let { data } = $props();
 
@@ -51,55 +57,66 @@
 	}
 </script>
 
-<a href={`/games/${data.game.id}`} class="absolute top-0 left-14 py-6"><LeftArrow /></a>
+<div class="flex flex-col h-full">
+	<Navbar title={`${data.game.name} bearbeiten`}>
+		{#snippet left()}
+			<a href="/settings"><Cog /></a>
+			<a href="/overview/pie"><Home /></a>
+			<a href={`/games/${data.game.id}`}><LeftArrow /></a>
+		{/snippet}
+		{#snippet right()}
+			<a href="/users"> <UserIcon /> </a>
+			<a href="/logs"> <Info /> </a>
+			<LogoutButton></LogoutButton>
+		{/snippet}
+	</Navbar>
 
-<h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">
-	<span class="underline">{data.game.name}</span> bearbeiten
-</h1>
+	<div class="w-full h-full flex justify-center items-center">
+		<form class="flex flex-col w-80 gap-8" onsubmit={save}>
+			<div class="w-full">
+				<label class="label" for="trophy_id">
+					<span class="label-text">Trophy-ID</span>
+				</label>
+				<input
+					class="input input-bordered w-full"
+					name="trophy_id"
+					type="number"
+					required
+					min="1"
+					value={data.game.trophy_id}
+				/>
+			</div>
 
-<form class="flex flex-col w-80 m-auto gap-8" onsubmit={save}>
-	<div class="w-full">
-		<label class="label" for="trophy_id">
-			<span class="label-text">Trophy-ID</span>
-		</label>
-		<input
-			class="input input-bordered w-full"
-			name="trophy_id"
-			type="number"
-			required
-			min="1"
-			value={data.game.trophy_id}
-		/>
+			<div>
+				<label class="label" for="name">
+					<span class="label-text">Name</span>
+				</label>
+				<input
+					class="input input-bordered w-full"
+					name="name"
+					type="text"
+					required
+					minlength="1"
+					value={data.game.name}
+				/>
+			</div>
+
+			<div>
+				<label class="label" for="kind">
+					<span class="label-text">Typ</span>
+				</label>
+				<select
+					name="kind"
+					class="select select-bordered w-full max-w-xs"
+					required
+					value={data.game.kind}
+				>
+					{#each Object.values(GameKind) as value}
+						<option {value}> {value} </option>
+					{/each}
+				</select>
+			</div>
+			<button class="btn btn-primary w-full">Speichern</button>
+		</form>
 	</div>
-
-	<div>
-		<label class="label" for="name">
-			<span class="label-text">Name</span>
-		</label>
-		<input
-			class="input input-bordered w-full"
-			name="name"
-			type="text"
-			required
-			minlength="1"
-			value={data.game.name}
-		/>
-	</div>
-
-	<div>
-		<label class="label" for="kind">
-			<span class="label-text">Typ</span>
-		</label>
-		<select
-			name="kind"
-			class="select select-bordered w-full max-w-xs"
-			required
-			value={data.game.kind}
-		>
-			{#each Object.values(GameKind) as value}
-				<option {value}> {value} </option>
-			{/each}
-		</select>
-	</div>
-	<button class="btn btn-primary w-full">Speichern</button>
-</form>
+</div>
