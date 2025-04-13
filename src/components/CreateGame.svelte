@@ -35,8 +35,8 @@
 		let year = getYear();
 
 		let updatedGame: CreateGame = {
-			trophy_id: parseInt(trophy_id!.toString()),
-			name: name!.toString(),
+			trophy_id: parseInt(trophy_id!.toString().trim()),
+			name: name!.toString().trim(),
 			kind: kind as GameKind,
 			year: parseInt(year.toString())
 		};
@@ -103,7 +103,7 @@
 			type: MessageType.Success,
 			message: `Spiel ${gameRes.name} wurde erfolgreich angelegt.`
 		});
-		await goto(`/games`);
+		await goto(`/games/${gameRes.id}`);
 	}
 </script>
 
