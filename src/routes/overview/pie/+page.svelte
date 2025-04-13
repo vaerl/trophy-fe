@@ -2,13 +2,14 @@
 	import PieChart from '../../../components/charts/PieChart.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
+	import Loader from '../../../components/Loader.svelte';
 
 	let { data } = $props();
 </script>
 
 <div class="flex flex-row h-full justify-around">
 	{#await Promise.all( [data.pendingTeams, data.finishedTeams, data.pendingGames, data.finishedGames] )}
-		<span class="loading loading-spinner loading-xl"></span>
+		<Loader></Loader>
 	{:then [pendingTeams, finishedTeams, pendingGames, finishedGames]}
 		<div class="w-full h-full flex flex-row justify-between items-center">
 			<a class="cursor-pointer" href="/overview/eval">
