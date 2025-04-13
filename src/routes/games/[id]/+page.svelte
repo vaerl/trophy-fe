@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import { GameKind, MessageType, type Game, type Outcome } from '$lib/model';
 	import { messageStore } from '$lib/stores.js';
 	import { isEnterKeyEvent, isEscapeKeyEvent } from '$lib/util';
@@ -8,7 +8,6 @@
 	import Delete from '../../../components/icons/Delete.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import TimeInput from '../../../components/TimeInput.svelte';
-	import { page } from '$app/state';
 	import Navbar from '../../../components/Navbar.svelte';
 	import Cog from '../../../components/icons/Cog.svelte';
 	import Info from '../../../components/icons/Info.svelte';
@@ -17,12 +16,10 @@
 	import LogoutButton from '../../../components/LogoutButton.svelte';
 	import Home from '../../../components/icons/Home.svelte';
 	import Stats from '../../../components/Stats.svelte';
+	import DeleteModal from '../../../components/DeleteModal.svelte';
 
 	let { data } = $props();
 	let { outcomes, item } = data;
-	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-	let showDeletion = $state(false);
-	let nameInput: string = $state('');
 
 	let modalOutcome: Outcome | null = $state(null);
 	let modalContent: HTMLFormElement | undefined = $state();
@@ -57,17 +54,7 @@
 	function onClickOutside(event: MouseEvent & { currentTarget: EventTarget & HTMLDialogElement }) {
 		if (modalContent && !modalContent.contains(event.currentTarget)) {
 			modalOutcome = null;
-			closeDeletion(event);
 		}
-	}
-
-	/**
-	 * Hide the modal and reset the value of the input.
-	 */
-	function closeDeletion(event: Event) {
-		event.preventDefault();
-		showDeletion = false;
-		nameInput = '';
 	}
 
 	/**
@@ -85,34 +72,6 @@
 				(form as HTMLFormElement).requestSubmit();
 			}
 		}
-	}
-
-	async function handleDelete(event: Event) {
-		event.preventDefault();
-		let res = await fetch(`${baseUrl}/games/${page.params.id}`, {
-			method: 'DELETE',
-			headers: {
-				// requests won't work without this
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		});
-
-		if (res.status != 200) {
-			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${await res.text()}`
-			});
-			return;
-		}
-
-		// go back to overview after successful creation
-		let gameRes: Game = await res.json();
-		messageStore.set({
-			type: MessageType.Success,
-			message: `Spiel ${gameRes.name} wurde erfolgreich gelöscht.`
-		});
-		goto(`/games`);
 	}
 
 	// TODO these outcome-functions can probably be extracted to util or something
@@ -212,7 +171,10 @@
 		{/snippet}
 		{#snippet right()}
 			<a href={`/games/${item.id}/edit`} class="ml-6"><Edit /></a>
-			<button class="h-min cursor-pointer" onclick={() => (showDeletion = true)}><Delete /></button>
+			<button
+				class="h-min cursor-pointer"
+				onclick={() => document.getElementById('confirm-deletion')?.showModal()}><Delete /></button
+			>
 			<a href="/games/create"> <Plus /> </a>
 			<a href="/users"> <UserIcon /> </a>
 			<a href="/logs"> <Info /> </a>
@@ -306,7 +268,7 @@
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 {#if modalOutcome != null}
 	<dialog class="modal modal-open" onclick={onClickOutside}>
-		modalOutcome can't be null here
+		<!-- modalOutcome can't be null here -->
 		<form
 			id="outcome-form"
 			class="modal-box"
@@ -364,33 +326,4 @@
 	</dialog>
 {/if}
 
-{#if showDeletion}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<dialog class="modal modal-open" onclick={(e) => onClickOutside(e)}>
-		<form id="confirmation-form" class="modal-box" bind:this={modalContent}>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={closeDeletion}
-				>✕</button
-			>
-
-			<h1 class="font-bold text-xl text-center pb-2">Spiel "{item.name}" wirklich löschen?</h1>
-			<p class="text-center pb-6">Bitte gib den Namen des Spiels ein, um es zu löschen.</p>
-			<input
-				class="input input-bordered w-full"
-				name="input"
-				type="text"
-				required
-				bind:value={nameInput}
-			/>
-
-			<div class="modal-action flex flex-row justify-between">
-				<button class="btn btn-secondary" onclick={closeDeletion}> Abbrechen </button>
-				<button
-					class="btn btn-primary"
-					class:btn-disabled={item.name !== nameInput}
-					onclick={handleDelete}>Löschen</button
-				>
-			</div>
-		</form>
-	</dialog>
-{/if}
+<DeleteModal {item}></DeleteModal>
