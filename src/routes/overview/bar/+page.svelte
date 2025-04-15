@@ -1,7 +1,7 @@
 <script lang="ts">
+	import Loader from '../../../components/blocks/Loader.svelte';
 	import BarChart from '../../../components/charts/BarChart.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
-	import Loader from '../../../components/Loader.svelte';
 
 	let { data } = $props();
 </script>

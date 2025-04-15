@@ -1,8 +1,8 @@
 <script lang="ts">
+	import Loader from '../../../components/blocks/Loader.svelte';
 	import PieChart from '../../../components/charts/PieChart.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
-	import Loader from '../../../components/Loader.svelte';
 
 	let { data } = $props();
 </script>

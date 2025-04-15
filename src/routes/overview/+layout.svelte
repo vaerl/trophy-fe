@@ -1,10 +1,9 @@
 <script lang="ts">
+	import LogoutButton from '../../components/blocks/LogoutButton.svelte';
+	import Navbar from '../../components/blocks/Navbar.svelte';
 	import Cog from '../../components/icons/Cog.svelte';
 	import Info from '../../components/icons/Info.svelte';
 	import UserIcon from '../../components/icons/UserIcon.svelte';
-	import LogoutButton from '../../components/LogoutButton.svelte';
-	import Navbar from '../../components/Navbar.svelte';
-
 	// this somehow just works, more here: https://svelte.dev/tutorial/kit/layouts
 	let { children } = $props();
 </script>

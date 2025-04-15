@@ -3,14 +3,14 @@
 	import { GameKind, MessageType, type CreateGame, type Game } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
+	import Loader from './blocks/Loader.svelte';
+	import LogoutButton from './blocks/LogoutButton.svelte';
+	import Navbar from './blocks/Navbar.svelte';
 	import Cog from './icons/Cog.svelte';
 	import Home from './icons/Home.svelte';
 	import Info from './icons/Info.svelte';
 	import LeftArrow from './icons/LeftArrow.svelte';
 	import UserIcon from './icons/UserIcon.svelte';
-	import Loader from './Loader.svelte';
-	import LogoutButton from './LogoutButton.svelte';
-	import Navbar from './Navbar.svelte';
 
 	let { game }: { game?: Promise<Game> } = $props();
 	let isLoading = $state(false);

@@ -7,7 +7,7 @@
 	import Edit from '../../../components/icons/Edit.svelte';
 	import Delete from '../../../components/icons/Delete.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
-	import TimeInput from '../../../components/TimeInput.svelte';
+	import TimeInput from '../../../components/blocks/TimeInput.svelte';
 	import { page } from '$app/state';
 
 	let { data } = $props();
