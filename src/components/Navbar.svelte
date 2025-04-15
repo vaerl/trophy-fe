@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import Loader from './Loader.svelte';
 
 	let {
 		title,
@@ -7,7 +8,7 @@
 		right,
 		center
 	}: {
-		title?: string;
+		title?: string | Promise<string>;
 		left: Snippet;
 		right: Snippet;
 		center?: Snippet;
@@ -19,7 +20,11 @@
 
 	{#if title}
 		<div class="flex justify-center flex-1">
-			<h1 class="text-6xl font-extrabold">{title}</h1>
+			{#await title}
+				<Loader></Loader>
+			{:then title}
+				<h1 class="text-6xl font-extrabold">{title}</h1>
+			{/await}
 		</div>
 	{:else if center}
 		{@render center()}
