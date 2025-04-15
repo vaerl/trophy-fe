@@ -15,7 +15,10 @@ export function isTeam(item: Team | Game): item is Team {
 }
 
 export function areTeams(items: Team[] | Game[]): items is Team[] {
-	// TODO check if there are items
+	if (items.length == 0) {
+		throw new Error(`Can't determine type if array is empty: ${items}`);
+	}
+
 	return (items as Team[])[0].gender !== undefined;
 }
 
