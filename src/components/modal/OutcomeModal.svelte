@@ -99,7 +99,9 @@
 				</div>
 			</form>
 		{:else}
-			<Loader></Loader>
+			<div class="flex justify-center">
+				<Loader></Loader>
+			</div>
 		{/if}
 	</div>
 	<form method="dialog" class="modal-backdrop">
