@@ -1,3 +1,4 @@
+import { isTeam, type Game, type Outcome, type Team } from './model';
 import { yearStore } from './stores';
 
 export function isEnterKeyEvent(event: KeyboardEvent) {
@@ -20,4 +21,19 @@ export function getYear(): string {
 	}
 
 	return new Date().getFullYear().toString();
+}
+
+export function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export const doneOutcomeFilter = (o: Outcome) => o.data;
+export const openOutcomeFilter = (o: Outcome) => !o.data;
+
+export function linkPrefix(item: Team | Game) {
+	return isTeam(item) ? 'teams' : 'games';
+}
+
+export function typeName(item: Team | Game) {
+	return isTeam(item) ? 'Team' : 'Spiel';
 }
