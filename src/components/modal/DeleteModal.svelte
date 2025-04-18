@@ -2,12 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { isTeam, MessageType, type Game, type Team } from '$lib/model';
 	import { messageStore } from '$lib/stores';
+	import Loader from '../blocks/Loader.svelte';
 
-	let { item }: { item: Game | Team } = $props();
+	let { item }: { item: Promise<Game | Team> } = $props();
 
 	let nameInput: string = $state('');
 
-	async function deleteItem(event: Event) {
+	async function deleteItem(event: Event, item: Game | Team) {
 		event.preventDefault();
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 		let itemIsTeam = isTeam(item);
@@ -45,25 +46,29 @@
 		<form method="dialog">
 			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
-		<form>
-			<h1 class="font-bold text-xl text-center pb-2">Spiel "{item.name}" wirklich löschen?</h1>
-			<p class="text-center pb-6">Bitte gib den Namen des Spiels ein, um es zu löschen.</p>
-			<input
-				class="input input-bordered w-full"
-				name="input"
-				type="text"
-				required
-				bind:value={nameInput}
-			/>
+		{#await item}
+			<div class="flex justify-center"><Loader></Loader></div>
+		{:then item}
+			<form>
+				<h1 class="font-bold text-xl text-center pb-2">Spiel "{item.name}" wirklich löschen?</h1>
+				<p class="text-center pb-6">Bitte gib den Namen des Spiels ein, um es zu löschen.</p>
+				<input
+					class="input input-bordered w-full"
+					name="input"
+					type="text"
+					required
+					bind:value={nameInput}
+				/>
 
-			<div class="modal-action flex flex-row justify-end">
-				<button
-					class="btn btn-primary w-full"
-					class:btn-disabled={item.name !== nameInput}
-					onclick={deleteItem}>Löschen</button
-				>
-			</div>
-		</form>
+				<div class="modal-action flex flex-row justify-end">
+					<button
+						class="btn btn-primary w-full"
+						class:btn-disabled={item.name !== nameInput}
+						onclick={(e) => deleteItem(e, item)}>Löschen</button
+					>
+				</div>
+			</form>
+		{/await}
 	</div>
 	<form method="dialog" class="modal-backdrop">
 		<button>close</button>
