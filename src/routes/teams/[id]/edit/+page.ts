@@ -1,10 +1,12 @@
 import type { Team } from '$lib/model.js';
+import type { PageLoad } from './$types.js';
 
-export async function load({ fetch, params }) {
+export const load: PageLoad = ({ fetch, params }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const teamRes = await fetch(`${baseUrl}/teams/${params.id}`, { credentials: 'include' });
-	const team: Team = await teamRes.json();
+	const team: Promise<Team> = fetch(`${baseUrl}/teams/${params.id}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
 
 	return { team };
-}
+};
