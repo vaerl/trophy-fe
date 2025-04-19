@@ -1,16 +1,19 @@
 import type { Game, User } from '$lib/model';
+import type { PageLoad } from './$types.js';
 
-export async function load({ fetch, params, url }) {
+export const load: PageLoad = ({ fetch, params, url }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const userRes = await fetch(`${baseUrl}/users/${params.id}`, { credentials: 'include' });
-	const user: User = await userRes.json();
+	const user: Promise<User> = fetch(`${baseUrl}/users/${params.id}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
 
-	const gamesRes = await fetch(`${baseUrl}/games${url.search}`, { credentials: 'include' });
-	const games: Game[] = await gamesRes.json();
+	const games: Promise<Game[]> = fetch(`${baseUrl}/games${url.search}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
 
 	return {
 		user,
 		games
 	};
-}
+};

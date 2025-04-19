@@ -1,15 +1,17 @@
-import type { Game, User } from '$lib/model';
+import type { Game } from '$lib/model';
 import { getYear } from '$lib/util';
+import type { PageLoad } from './$types.js';
 
-export async function load({ fetch }) {
+export const load: PageLoad = ({ fetch }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 	let year = getYear();
 	let params = `?year=${year}`;
 
-	const gamesRes = await fetch(`${baseUrl}/games${params}`, { credentials: 'include' });
-	const games: Game[] = await gamesRes.json();
+	const games: Promise<Game[]> = fetch(`${baseUrl}/games${params}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
 
 	return {
 		games
 	};
-}
+};
