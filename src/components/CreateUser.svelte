@@ -79,15 +79,14 @@
 				type: MessageType.Success,
 				message: `Änderungen an Nutzer ${userRes.name} wurde erfolgreich gespeichert.`
 			});
-			await goto(`/users/${userRes.id}`);
 		} else {
 			messageStore.set({
 				type: MessageType.Success,
 				message: `Nutzer ${userRes.name} wurde erfolgreich angelegt.`
 			});
-			await goto(`/users/${userRes.id}`);
 		}
 
+		await goto(`/users/${userRes.id}`);
 		isLoading = false;
 	}
 </script>

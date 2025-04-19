@@ -80,15 +80,14 @@
 				type: MessageType.Success,
 				message: `Änderungen an Team ${teamRes.name} wurde erfolgreich gespeichert.`
 			});
-			await goto(`/teams/${teamRes.id}`);
 		} else {
 			messageStore.set({
 				type: MessageType.Success,
 				message: `Team ${teamRes.name} wurde erfolgreich angelegt.`
 			});
-			await goto(`/teams/${teamRes.id}`);
 		}
 
+		await goto(`/teams/${teamRes.id}`);
 		isLoading = false;
 	}
 </script>

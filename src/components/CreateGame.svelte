@@ -41,25 +41,30 @@
 			year: parseInt(year.toString())
 		};
 
-		if (game) {
-			await update(game.id, updatedGame);
-		} else {
-			await create(updatedGame);
-		}
-		isLoading = false;
-	}
-
-	async function update(id: number, game: CreateGame) {
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let res = await fetch(`${baseUrl}/games/${id}`, {
-			method: 'PUT',
-			headers: {
-				// requests won't work without this
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(game),
-			credentials: 'include'
-		});
+		let res;
+
+		if (game) {
+			res = await fetch(`${baseUrl}/games/${game.id}`, {
+				method: 'PUT',
+				headers: {
+					// requests won't work without this
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(game),
+				credentials: 'include'
+			});
+		} else {
+			res = await fetch(`${baseUrl}/games`, {
+				method: 'POST',
+				headers: {
+					// requests won't work without this
+					'Content-Type': 'application/json'
+				},
+				credentials: 'include',
+				body: JSON.stringify(game)
+			});
+		}
 
 		if (res.status != 200) {
 			messageStore.set({
@@ -70,40 +75,19 @@
 		}
 
 		let gameRes: Game = await res.json();
-		messageStore.set({
-			type: MessageType.Success,
-			message: `Änderungen an Spiel ${gameRes.name} wurde erfolgreich gespeichert.`
-		});
-		await goto(`/games/${id}`);
-	}
-
-	async function create(game: CreateGame) {
-		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let res = await fetch(`${baseUrl}/games`, {
-			method: 'POST',
-			headers: {
-				// requests won't work without this
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include',
-			body: JSON.stringify(game)
-		});
-
-		if (res.status != 200) {
+		if (game) {
 			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${await res.text()}`
+				type: MessageType.Success,
+				message: `Änderungen an Spiel ${gameRes.name} wurde erfolgreich gespeichert.`
 			});
-			return;
+		} else {
+			messageStore.set({
+				type: MessageType.Success,
+				message: `Spiel ${gameRes.name} wurde erfolgreich angelegt.`
+			});
 		}
-
-		// go back to overview after successful creation
-		let gameRes = (await res.json()) as Game;
-		messageStore.set({
-			type: MessageType.Success,
-			message: `Spiel ${gameRes.name} wurde erfolgreich angelegt.`
-		});
 		await goto(`/games/${gameRes.id}`);
+		isLoading = false;
 	}
 </script>
 
