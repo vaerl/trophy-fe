@@ -2,6 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { MessageType, type CreateGame, type CreateTeam } from '$lib/model';
 	import { messageStore, yearStore } from '$lib/stores';
+	import LogoutButton from '../../components/blocks/LogoutButton.svelte';
+	import Navbar from '../../components/blocks/Navbar.svelte';
+	import Home from '../../components/icons/Home.svelte';
+	import Info from '../../components/icons/Info.svelte';
+	import UserIcon from '../../components/icons/UserIcon.svelte';
 
 	let { data } = $props();
 	let showYearModal = $state(false);
@@ -189,7 +194,16 @@
 	}
 </script>
 
-<h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Einstellungen</h1>
+<Navbar title="Einstellungen">
+	{#snippet left()}
+		<a href="/overview/pie"><Home /></a>
+	{/snippet}
+	{#snippet right()}
+		<a href="/users"> <UserIcon /> </a>
+		<a href="/logs"> <Info /> </a>
+		<LogoutButton></LogoutButton>
+	{/snippet}
+</Navbar>
 
 <div class="w-full flex flex-col items-center pt-20 gap-8">
 	<div class="flex flex-row w-1/3 justify-between min-w-96">
