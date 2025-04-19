@@ -1,12 +1,14 @@
 import type { User } from '$lib/model';
+import type { PageLoad } from './$types.js';
 
-export async function load({ fetch, params }) {
+export const load: PageLoad = ({ fetch, params }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const userRes = await fetch(`${baseUrl}/users/${params.id}`, { credentials: 'include' });
-	const user: User = await userRes.json();
+	const user: Promise<User> = fetch(`${baseUrl}/users/${params.id}`, {
+		credentials: 'include'
+	}).then((res) => res.json());
 
 	return {
 		user
 	};
-}
+};
