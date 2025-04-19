@@ -74,13 +74,6 @@ export interface User extends CreateUser {
 
 export interface CreateUser {
 	name: string;
-	password: string;
-	role: UserRole;
-	game_id?: number;
-}
-
-export interface UpdateUser {
-	name: string;
 	password?: string;
 	role: UserRole;
 	game_id?: number;
