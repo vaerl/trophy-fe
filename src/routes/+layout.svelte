@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { messageStore } from '$lib/stores';
-	import { onDestroy, type Snippet } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import {
 		MessageType,
 		type DisplayName,
@@ -14,13 +14,9 @@
 	import Fuse, { type FuseResult } from 'fuse.js';
 	import { goto } from '$app/navigation';
 	import hotkeys from 'hotkeys-js';
+	import type { LayoutProps } from './$types';
 
-	type Props = {
-		data: any;
-		children?: Snippet;
-	};
-
-	let { data, children }: Props = $props();
+	let { data, children }: LayoutProps = $props();
 	let switcherModalId = 'switcher-modal';
 	type SwitcherItem = {
 		displayName: DisplayName;
