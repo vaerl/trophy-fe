@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { logout } from '$lib/auth';
 	import '../app.css';
-	import Info from '../components/icons/Info.svelte';
-	import Logout from '../components/icons/Logout.svelte';
-	import UserIcon from '../components/icons/UserIcon.svelte';
 	import { messageStore } from '$lib/stores';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, type Snippet } from 'svelte';
 	import {
 		MessageType,
 		type DisplayName,
@@ -15,39 +11,52 @@
 		type Team,
 		type User
 	} from '$lib/model';
-	import Plus from '../components/icons/Plus.svelte';
-	import Home from '../components/icons/Home.svelte';
-	import Cog from '../components/icons/Cog.svelte';
-	import Fuse from 'fuse.js';
+	import Fuse, { type FuseResult } from 'fuse.js';
 	import { goto } from '$app/navigation';
 	import hotkeys from 'hotkeys-js';
-	import { page } from '$app/state';
 
 	// TODO show the done-status in game- and team-table -> this would require a lot of requests for each table though
 	// TODO maybe block creation and updates once we've evaluated
 	// TODO create and download PDFs directly, also be able to request singular PDFs
 	// TODO maybe version outcomes -> list of outcomes and their creator, each outcome would know the next outcome
 	// -> we could switch through outcomes in a modal
-	// TODO show loaders if possible/a good idea -> see https://kit.svelte.dev/docs/load#streaming-with-promises
+	// TODO maybe shortcuts can be handled globally?
 
-	interface Props {
-		// TODO fix the calc-occurrences -> layout in details is scuffed, using "height: 100%" isn' working because of the stats-stuff
+	type Props = {
 		data: any;
-		children?: import('svelte').Snippet;
-	}
+		children?: Snippet;
+	};
 
 	let { data, children }: Props = $props();
+	let switcherModalId = 'switcher-modal';
+	type SwitcherItem = {
+		displayName: DisplayName;
+		link: Link;
+		id: number;
+		trophy_id: number;
+		name: string;
+	};
 
-	let switcherContent: HTMLElement | undefined = $state(),
-		showSwitcher = $state(false);
-	let searchValue = $state(''),
-		searchResults: any[] = $state([]),
-		selectedIndex: number = $state(0);
+	let searchValue = $state('');
+	let selectedIndex = $state(0);
 
+	let mixedObjects = $derived([
+		...data.teams.map((t: Team) => ({ ...t, displayName: 'Team', link: '/teams' })),
+		...data.games.map((t: Game) => ({ ...t, displayName: 'Spiel', link: '/games' })),
+		...data.users.map((t: User) => ({ ...t, displayName: 'Nutzer', link: '/users' }))
+	] as SwitcherItem[]);
 	const options = {
 		keys: ['name', 'trophy_id', 'type'],
 		threshold: 0.3
 	};
+	let fuse = $derived(new Fuse(mixedObjects, options));
+	let searchResults = $derived.by(() => {
+		if (searchValue != '') {
+			// only display the first 10 results
+			return fuse.search(searchValue).slice(0, 10);
+		}
+		return [];
+	});
 
 	let toast: Message | undefined = $state(undefined);
 	const unsub = messageStore.subscribe((message) => {
@@ -62,25 +71,26 @@
 	});
 
 	hotkeys.filter = (_event) => true;
-	hotkeys('ctrl+p,command+p,esc,enter,up, down', (event, handler) => {
+	hotkeys('ctrl+p,command+p,esc,enter,up,down', (event, handler) => {
 		event.preventDefault();
 
 		switch (handler.key) {
 			case 'ctrl+p':
 			case 'command+p':
-				showSwitcher = true;
+				// just default to the first item when opening, as users may have set a different index when the switcher was closed
+				selectedIndex = 0;
+				(document.getElementById(switcherModalId) as HTMLDialogElement).show();
 				break;
 			case 'esc':
-				showSwitcher = false;
+				(document.getElementById(switcherModalId) as HTMLDialogElement).close();
 				searchValue = '';
 				break;
 			case 'enter':
-				if (showSwitcher) {
-					// reset the switcher
-					searchValue = '';
-					showSwitcher = false;
-
-					const result = searchResults[selectedIndex];
+				let result: FuseResult<SwitcherItem> | undefined = searchResults[selectedIndex];
+				// reset the switcher after capturing the result
+				(document.getElementById(switcherModalId) as HTMLDialogElement).close();
+				searchValue = '';
+				if (result) {
 					goto(`${result.item.link}/${result.item.id}`);
 				}
 				break;
@@ -101,70 +111,10 @@
 		}
 	});
 
-	function onClickOutside(e: MouseEvent & { currentTarget: EventTarget & HTMLDialogElement }) {
-		if (switcherContent && !switcherContent.contains(e.currentTarget)) {
-			showSwitcher = false;
-		}
-	}
-
 	onDestroy(unsub);
-	let mixedObjects = $derived([
-		...data.teams.map((t: Team) => ({ ...t, displayName: 'Team', link: '/teams' })),
-		...data.games.map((t: Game) => ({ ...t, displayName: 'Spiel', link: '/games' })),
-		...data.users.map((t: User) => ({ ...t, displayName: 'Nutzer', link: '/users' }))
-	] as { displayName: DisplayName; link: Link; id: number; trophy_id: number }[]);
-	let fuse = $derived(new Fuse(mixedObjects, options));
-	$effect(() => {
-		if (searchValue != '') {
-			// only display the first 10 results
-			searchResults = fuse.search(searchValue).slice(0, 10);
-			if (searchResults.length > 0) {
-				selectedIndex = 0;
-			}
-		} else {
-			searchResults = [];
-		}
-	});
 </script>
 
-<!-- this div makes sure that children respect parent's boundaries when using height: 100%-->
-<div class="flex flex-col h-full">
-	<!-- only show bar if we're not at /login -->
-	{#if page.route.id !== '/login'}
-		<div class="flex flex-row justify-between py-6 px-4 w-full">
-			<div class="flex flex-row">
-				<!-- only show back-arrow if we're not at overview -->
-				{#if !page.route.id?.startsWith('/overview')}
-					<a href="/overview/pie"><Home /></a>
-				{/if}
-
-				{#if page.route.id?.startsWith('/overview')}
-					<a href="/settings"><Cog /></a>
-				{/if}
-			</div>
-
-			<div class="flex flex-row">
-				{#if page.route.id === '/teams' || page.route.id === '/games' || page.route.id === '/users'}
-					<a href={`${page.route.id}/create`}> <Plus /> </a>
-				{/if}
-
-				{#if !page.route.id?.startsWith('/users')}
-					<a class="ml-6" href="/users"> <UserIcon /> </a>
-				{/if}
-
-				{#if !page.route.id?.startsWith('/logs')}
-					<a class="ml-6" href="/logs"> <Info /> </a>
-				{/if}
-
-				<button class="ml-6" onclick={logout}>
-					<Logout />
-				</button>
-			</div>
-		</div>
-	{/if}
-
-	{@render children?.()}
-</div>
+{@render children?.()}
 
 {#if toast}
 	<div class="absolute bottom-4 right-4 flex justify-end">
@@ -186,12 +136,14 @@
 	</div>
 {/if}
 
-{#if showSwitcher}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<dialog class="modal modal-open" onclick={(e) => onClickOutside(e)}>
-		>
-		<form id="confirmation-form w-full" class="modal-box" bind:this={switcherContent}>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<dialog class="modal" id={switcherModalId}>
+	<div class="modal-box">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<form>
 			<h1 class="font-bold text-xl text-center pb-2">Switcher</h1>
 
 			<!-- svelte-ignore a11y_autofocus -->
@@ -203,7 +155,7 @@
 				bind:value={searchValue}
 			/>
 
-			{#if searchValue != '' && searchResults.length == 0}
+			{#if searchValue != '' && searchResults && searchResults.length == 0}
 				<p>
 					Keine Treffer für '{searchValue}'.
 				</p>
@@ -213,7 +165,10 @@
 						<li class="w-full">
 							<a
 								href={`${result.item.link}/${result.item.id}`}
-								onclick={() => ((showSwitcher = false), (searchValue = ''))}
+								onclick={() => {
+									(document.getElementById(switcherModalId) as HTMLDialogElement).close();
+									searchValue = '';
+								}}
 								class="flex flex-row justify-between w-full font-bold"
 								class:bg-primary={result.refIndex == searchResults[selectedIndex].refIndex}
 								class:text-white={result.refIndex == searchResults[selectedIndex].refIndex}
@@ -233,5 +188,8 @@
 				</ul>
 			{/if}
 		</form>
-	</dialog>
-{/if}
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>
