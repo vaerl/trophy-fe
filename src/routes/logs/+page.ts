@@ -1,12 +1,14 @@
 import type { History } from '$lib/model.js';
+import type { PageLoad } from './$types.js';
 
-export async function load({ fetch }) {
+export const load: PageLoad = ({ fetch }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
-	const logsRes = await fetch(`${baseUrl}/history`, { credentials: 'include' });
-	const logs: History[] = await logsRes.json();
+	const logs: Promise<History[]> = fetch(`${baseUrl}/history`, { credentials: 'include' }).then(
+		(res) => res.json()
+	);
 
 	return {
 		logs
 	};
-}
+};

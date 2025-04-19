@@ -1,68 +1,111 @@
 <script lang="ts">
 	import { SubjectType } from '$lib/model.js';
-	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
+	import { TableHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
+	import type { PageProps } from './$types';
+	import Loader from '../../components/blocks/Loader.svelte';
+	import ThSort from '../../components/table/ThSort.svelte';
+	import LogoutButton from '../../components/blocks/LogoutButton.svelte';
+	import Navbar from '../../components/blocks/Navbar.svelte';
+	import Cog from '../../components/icons/Cog.svelte';
+	import Home from '../../components/icons/Home.svelte';
+	import UserIcon from '../../components/icons/UserIcon.svelte';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
 
-	const handler = new DataHandler(data.logs, { rowsPerPage: 50 });
-	handler.applySort({ orderBy: 'id', direction: 'desc' });
-	const rows = handler.getRows();
+	const table = data.logs.then((logs) => new TableHandler(logs, { rowsPerPage: 30 }));
 </script>
 
-<h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Logs</h1>
+<div class="w-full h-full flex flex-col">
+	<Navbar title="Logs">
+		{#snippet left()}
+			<a href="/settings"><Cog /></a>
+			<a href="/overview/pie"><Home /></a>
+		{/snippet}
+		{#snippet right()}
+			<a href="/users"> <UserIcon /> </a>
+			<LogoutButton></LogoutButton>
+		{/snippet}
+	</Navbar>
 
-<!-- we need to subtract the header from the table's height -->
-<div style="height: calc(100% - 72px);">
-	<Datatable {handler}>
-		<table class="table table-zebra">
-			<thead class="bg-white">
-				<tr>
-					<Th {handler} orderBy="id">ID</Th>
-					<Th {handler} orderBy="level">Level</Th>
-					<Th {handler} orderBy="timestamp">Timestamp</Th>
-					<Th {handler} orderBy="user_name">Nutzer</Th>
-					<Th {handler} orderBy="operation">Operation</Th>
-					<Th {handler} orderBy="subject_id">Subjekt</Th>
-				</tr>
-				<tr>
-					<ThFilter {handler} filterBy="id" />
-					<ThFilter {handler} filterBy="level" />
-					<ThFilter {handler} filterBy="timestamp" />
-					<ThFilter {handler} filterBy="user_name" />
-					<ThFilter {handler} filterBy="operation" />
-					<ThFilter {handler} filterBy="subject_id" />
-				</tr>
-			</thead>
-
-			<tbody>
-				{#each $rows as row}
+	{#await table}
+		<div class="flex grow justify-center items-center">
+			<Loader></Loader>
+		</div>
+	{:then table}
+		<Datatable {table}>
+			<table class="table table-zebra">
+				<thead class="bg-white">
 					<tr>
-						<td>{row.id}</td>
-						<td>{row.level}</td>
-						<td>{new Date(row.timestamp).toLocaleString('de-DE')}</td>
-						<td>
-							{#if row.user_id}
-								<a href={`/users/${row.user_id}`} class="link">{row.user_name}</a>
-							{:else}
-								<p>Kein Nutzer</p>
-							{/if}
-						</td>
-						<td>
-							{row.operation}
-						</td>
-						<!-- TODO this could use some nicer linking at some point -->
-						<td>
-							{#if row.subject_id && (row.subject_type == SubjectType.Game || row.subject_type == SubjectType.Team || row.subject_type == SubjectType.User)}
-								<a href={`/${row.subject_type}s/${row.subject_id}`} class="link"
-									>{row.subject_type} {row.subject_id}</a
-								>
-							{:else}
-								{row.subject_type}
-							{/if}
-						</td>
+						<ThSort {table} field="id" isActive={true}>ID</ThSort>
+						<ThSort {table} field="level">Level</ThSort>
+						<ThSort {table} field="timestamp">Timestamp</ThSort>
+						<ThSort {table} field="user_name">Nutzer</ThSort>
+						<ThSort {table} field="operation">Operation</ThSort>
+						<ThSort {table} field="subject_id">Subjekt</ThSort>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</Datatable>
+					<tr>
+						<ThFilter {table} field="id" />
+						<ThFilter {table} field="level" />
+						<ThFilter {table} field="timestamp" />
+						<ThFilter {table} field="user_name" />
+						<ThFilter {table} field="operation" />
+						<ThFilter {table} field="subject_id" />
+					</tr>
+				</thead>
+
+				<tbody>
+					{#each table.rows as row}
+						<tr>
+							<td>{row.id}</td>
+							<td>{row.level}</td>
+							<td>{new Date(row.timestamp).toLocaleString('de-DE')}</td>
+							<td>
+								{#if row.user_id}
+									<a href={`/users/${row.user_id}`} class="link">{row.user_name}</a>
+								{:else}
+									<p>Kein Nutzer</p>
+								{/if}
+							</td>
+							<td>
+								{row.operation}
+							</td>
+							<!-- TODO this could use some nicer linking at some point -->
+							<td>
+								{#if row.subject_id && (row.subject_type == SubjectType.Game || row.subject_type == SubjectType.Team || row.subject_type == SubjectType.User)}
+									<a href={`/${row.subject_type}s/${row.subject_id}`} class="link"
+										>{row.subject_type} {row.subject_id}</a
+									>
+								{:else}
+									{row.subject_type}
+								{/if}
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</Datatable>
+		<div class="w-full flex flex-row gap-2 justify-end p-4">
+			<button
+				class="btn"
+				class:btn-disabled={table.currentPage == 1}
+				onclick={() => table.setPage('previous')}>Zurück</button
+			>
+			{#each table.pagesWithEllipsis as page}
+				<button
+					type="button"
+					class="btn"
+					class:btn-primary={page === table.currentPage}
+					onclick={() => table.setPage(page)}
+				>
+					{page ?? '...'}
+				</button>
+			{/each}
+
+			<button
+				class="btn"
+				class:btn-disabled={table.currentPage == table.pageCount}
+				onclick={() => table.setPage('next')}>Weiter</button
+			>
+		</div>
+	{/await}
 </div>
