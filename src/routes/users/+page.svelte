@@ -1,18 +1,26 @@
 <script lang="ts">
-	import { DataHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
+	import { TableHandler, Datatable, ThFilter } from '@vincjo/datatables';
 	import { goto } from '$app/navigation';
+	import ThSort from '../../components/table/ThSort.svelte';
+	import LogoutButton from '../../components/blocks/LogoutButton.svelte';
+	import Navbar from '../../components/blocks/Navbar.svelte';
+	import Cog from '../../components/icons/Cog.svelte';
+	import Home from '../../components/icons/Home.svelte';
+	import Info from '../../components/icons/Info.svelte';
+	import Loader from '../../components/blocks/Loader.svelte';
+	import type { PageProps } from './$types';
+	import Plus from '../../components/icons/Plus.svelte';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
 	// keep this at 50 if we ever add referee-users
-	const handler = new DataHandler(data.users, { rowsPerPage: 50 });
-	handler.sortAsc('id');
+	const table = data.users.then((users) => new TableHandler(users, { rowsPerPage: 50 }));
 
-	const rows = handler.getRows();
 	let isCtrlDown = false,
 		isCDown = false,
 		isShiftDown = false;
 
-	function keyDown(event: any) {
+	function keyDown(event: KeyboardEvent) {
+		event.preventDefault();
 		if (event.repeat) {
 			return;
 		}
@@ -33,11 +41,11 @@
 		}
 
 		if (isCtrlDown && isCDown && isShiftDown) {
-			goto('/teams/create');
+			goto('/users/create');
 		}
 	}
 
-	function keyUp(event: any) {
+	function keyUp(event: KeyboardEvent) {
 		// `keyup` is the reverse, it fires whenever the physical key was let.
 		// go after being held down
 
@@ -62,49 +70,52 @@
 
 <svelte:window onkeydown={keyDown} onkeyup={keyUp} />
 
-<h1 class="absolute-center-x left-1/2 text-4xl font-bold pt-6">Nutzer</h1>
+<div class="w-full h-full flex flex-col">
+	<Navbar title="Nutzer">
+		{#snippet left()}
+			<a href="/settings"><Cog /></a>
+			<a href="/overview/pie"><Home /></a>
+		{/snippet}
+		{#snippet right()}
+			<a href="/users/create"> <Plus /> </a>
+			<a href="/logs"> <Info /> </a>
+			<LogoutButton></LogoutButton>
+		{/snippet}
+	</Navbar>
 
-<div style="height: calc(100% - 72px);">
-	<Datatable {handler}>
-		<table class="table table-zebra">
-			<thead class="bg-white">
-				<tr>
-					<Th {handler} orderBy="id">ID</Th>
-					<Th {handler} orderBy="name">Name</Th>
-					<Th {handler} orderBy="role">Rolle</Th>
-					<Th {handler} orderBy="game_name">Spiel</Th>
-				</tr>
-				<tr>
-					<ThFilter {handler} filterBy="id" />
-					<ThFilter {handler} filterBy="name" />
-					<ThFilter {handler} filterBy="role" />
-					<ThFilter {handler} filterBy="game_name" />
-				</tr>
-			</thead>
-
-			<tbody>
-				{#each $rows as row}
-					<tr onclick={() => goto(`/users/${row.id}`)} class="cursor-pointer">
-						<td>{row.id}</td>
-						<td>{row.name}</td>
-						<td>{row.role}</td>
-						<td>{row.game_name}</td>
+	{#await table}
+		<div class="flex grow justify-center items-center">
+			<Loader></Loader>
+		</div>
+	{:then table}
+		<Datatable {table}>
+			<table>
+				<thead class="bg-white">
+					<tr>
+						<ThSort {table} field="id">ID</ThSort>
+						<ThSort {table} field="name">Name</ThSort>
+						<ThSort {table} field="role">Rolle</ThSort>
+						<ThSort {table} field="game_name">Spiel</ThSort>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</Datatable>
-</div>
+					<tr>
+						<ThFilter {table} field="id" />
+						<ThFilter {table} field="name" />
+						<ThFilter {table} field="role" />
+						<ThFilter {table} field="game_name" />
+					</tr>
+				</thead>
 
-<style>
-	tbody td {
-		border: 1px solid #f5f5f5;
-		padding: 4px 20px;
-	}
-	tbody tr {
-		transition: all, 0.2s;
-	}
-	tbody tr:hover {
-		background: #f5f5f5;
-	}
-</style>
+				<tbody>
+					{#each table.rows as row}
+						<tr onclick={() => goto(`/users/${row.id}`)} class="cursor-pointer">
+							<td>{row.id}</td>
+							<td>{row.name}</td>
+							<td>{row.role}</td>
+							<td>{row.game_name}</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</Datatable>
+	{/await}
+</div>
