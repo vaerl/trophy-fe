@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { MessageType, TeamGender, type CreateTeam, type Game, type Team } from '$lib/model.js';
+	import { MessageType, TeamGender, type CreateTeam, type Team } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
 	import Loader from './blocks/Loader.svelte';
@@ -16,7 +16,7 @@
 	let isLoading = $state(false);
 
 	/**
-	 * Picks one of {@code update} or {@code create}, depending on whether {@code team} is present.
+	 * Updates or creates, depending on whether {@code team} is present.
 	 * Also handles loading.
 	 * @param event the SubmitEvent that triggered this call
 	 * @param team the current team, may be undefined
@@ -41,25 +41,30 @@
 			year: parseInt(year.toString())
 		};
 
-		if (team) {
-			await update(team.id, updatedGame);
-		} else {
-			await create(updatedGame);
-		}
-		isLoading = false;
-	}
-
-	async function update(id: number, team: CreateTeam) {
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let res = await fetch(`${baseUrl}/teams/${id}`, {
-			method: 'PUT',
-			headers: {
-				// requests won't work without this
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(team),
-			credentials: 'include'
-		});
+		let res;
+
+		if (team) {
+			res = await fetch(`${baseUrl}/teams/${team.id}`, {
+				method: 'PUT',
+				headers: {
+					// requests won't work without this
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(team),
+				credentials: 'include'
+			});
+		} else {
+			res = await fetch(`${baseUrl}/teams`, {
+				method: 'POST',
+				headers: {
+					// requests won't work without this
+					'Content-Type': 'application/json'
+				},
+				credentials: 'include',
+				body: JSON.stringify(team)
+			});
+		}
 
 		if (res.status != 200) {
 			messageStore.set({
@@ -70,40 +75,21 @@
 		}
 
 		let teamRes: Team = await res.json();
-		messageStore.set({
-			type: MessageType.Success,
-			message: `Änderungen an Team ${teamRes.name} wurde erfolgreich gespeichert.`
-		});
-		await goto(`/teams/${id}`);
-	}
-
-	async function create(team: CreateTeam) {
-		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let res = await fetch(`${baseUrl}/teams`, {
-			method: 'POST',
-			headers: {
-				// requests won't work without this
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include',
-			body: JSON.stringify(team)
-		});
-
-		if (res.status != 200) {
+		if (team) {
 			messageStore.set({
-				type: MessageType.Error,
-				message: `Etwas ist schiefgelaufen: ${await res.text()}`
+				type: MessageType.Success,
+				message: `Änderungen an Team ${teamRes.name} wurde erfolgreich gespeichert.`
 			});
-			return;
+			await goto(`/teams/${teamRes.id}`);
+		} else {
+			messageStore.set({
+				type: MessageType.Success,
+				message: `Team ${teamRes.name} wurde erfolgreich angelegt.`
+			});
+			await goto(`/teams/${teamRes.id}`);
 		}
 
-		// go back to overview after successful creation
-		let teamRes = (await res.json()) as Game;
-		messageStore.set({
-			type: MessageType.Success,
-			message: `Team ${teamRes.name} wurde erfolgreich angelegt.`
-		});
-		await goto(`/teams/${teamRes.id}`);
+		isLoading = false;
 	}
 </script>
 
