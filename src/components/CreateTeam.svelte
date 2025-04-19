@@ -1,14 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import {
-		GameKind,
-		MessageType,
-		TeamGender,
-		type CreateGame,
-		type CreateTeam,
-		type Game,
-		type Team
-	} from '$lib/model.js';
+	import { MessageType, TeamGender, type CreateTeam, type Game, type Team } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
 	import Loader from './blocks/Loader.svelte';
@@ -22,9 +14,6 @@
 
 	let { team }: { team?: Promise<Team> } = $props();
 	let isLoading = $state(false);
-
-	// TODO this is more similar than I thought, maybe we do want to unify
-	// TODO if I invalidate cleverly and also use stores, I can stop reloading in overview - at least if there's only one person using it?
 
 	/**
 	 * Picks one of {@code update} or {@code create}, depending on whether {@code team} is present.
