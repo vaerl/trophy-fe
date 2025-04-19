@@ -16,7 +16,7 @@
 	let isLoading = $state(false);
 
 	/**
-	 * Picks one of {@code update} or {@code create}, depending on whether {@code game} is present.
+	 * Updates or creates, depending on whether {@code game} is present.
 	 * Also handles loading.
 	 * @param event the SubmitEvent that triggered this call
 	 * @param game the current game, may be undefined
@@ -51,7 +51,7 @@
 					// requests won't work without this
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(game),
+				body: JSON.stringify(updatedGame),
 				credentials: 'include'
 			});
 		} else {
@@ -62,7 +62,7 @@
 					'Content-Type': 'application/json'
 				},
 				credentials: 'include',
-				body: JSON.stringify(game)
+				body: JSON.stringify(updatedGame)
 			});
 		}
 

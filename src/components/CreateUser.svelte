@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { MessageType, UserRole, type Game, type UpdateUser, type User } from '$lib/model.js';
+	import { MessageType, UserRole, type CreateUser, type Game, type User } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
-	import { getYear } from '$lib/util';
 	import Loader from './blocks/Loader.svelte';
 	import LogoutButton from './blocks/LogoutButton.svelte';
 	import Navbar from './blocks/Navbar.svelte';
@@ -19,11 +18,11 @@
 	 * Updates or creates, depending on whether {@code team} is present.
 	 * Also handles loading.
 	 * @param event the SubmitEvent that triggered this call
-	 * @param team the current team, may be undefined
+	 * @param user the current team, may be undefined
 	 */
 	async function save(
 		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement },
-		team?: User
+		user?: User
 	) {
 		isLoading = true;
 		event.preventDefault();
@@ -33,8 +32,9 @@
 		let game_id = form.get('game_id');
 		let name = form.get('name');
 		let role = form.get('role');
+		console.log('game_id', game_id);
 
-		let user: UpdateUser = {
+		let createUser: CreateUser = {
 			password: password?.toString(),
 			name: name!.toString(),
 			role: role as UserRole,
@@ -43,14 +43,14 @@
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 		let res;
 
-		if (team) {
-			res = await fetch(`${baseUrl}/users/${team.id}`, {
+		if (user) {
+			res = await fetch(`${baseUrl}/users/${user.id}`, {
 				method: 'PUT',
 				headers: {
 					// requests won't work without this
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(team),
+				body: JSON.stringify(createUser),
 				credentials: 'include'
 			});
 		} else {
@@ -60,7 +60,7 @@
 					// requests won't work without this
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(user),
+				body: JSON.stringify(createUser),
 				credentials: 'include'
 			});
 		}
@@ -74,7 +74,7 @@
 		}
 
 		let userRes: User = await res.json();
-		if (team) {
+		if (user) {
 			messageStore.set({
 				type: MessageType.Success,
 				message: `Änderungen an Nutzer ${userRes.name} wurde erfolgreich gespeichert.`
@@ -166,7 +166,7 @@
 						<select
 							name="game_id"
 							class="select select-bordered w-full max-w-xs"
-							value={user?.role}
+							value={user?.game_id}
 						>
 							{#each games as game (game.id)}
 								<option value={game.id}> {game.name} </option>

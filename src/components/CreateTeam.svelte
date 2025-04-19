@@ -34,7 +34,7 @@
 		let gender = form.get('gender');
 		let year = getYear();
 
-		let updatedGame: CreateTeam = {
+		let updatedTeam: CreateTeam = {
 			trophy_id: parseInt(trophy_id!.toString().trim()),
 			name: name!.toString().trim(),
 			gender: gender as TeamGender,
@@ -51,7 +51,7 @@
 					// requests won't work without this
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(team),
+				body: JSON.stringify(updatedTeam),
 				credentials: 'include'
 			});
 		} else {
@@ -62,7 +62,7 @@
 					'Content-Type': 'application/json'
 				},
 				credentials: 'include',
-				body: JSON.stringify(team)
+				body: JSON.stringify(updatedTeam)
 			});
 		}
 
