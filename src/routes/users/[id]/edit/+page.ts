@@ -1,4 +1,5 @@
 import type { Game, User } from '$lib/model';
+import { getYear } from '$lib/util.js';
 import type { PageLoad } from './$types.js';
 
 export const load: PageLoad = ({ fetch, params, url }) => {
@@ -8,7 +9,9 @@ export const load: PageLoad = ({ fetch, params, url }) => {
 		credentials: 'include'
 	}).then((res) => res.json());
 
-	const games: Promise<Game[]> = fetch(`${baseUrl}/games${url.search}`, {
+	let year = getYear();
+	let yearParam = `?year=${year}`;
+	const games: Promise<Game[]> = fetch(`${baseUrl}/games${yearParam}`, {
 		credentials: 'include'
 	}).then((res) => res.json());
 
