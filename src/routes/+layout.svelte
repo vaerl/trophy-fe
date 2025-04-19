@@ -15,13 +15,6 @@
 	import { goto } from '$app/navigation';
 	import hotkeys from 'hotkeys-js';
 
-	// TODO show the done-status in game- and team-table -> this would require a lot of requests for each table though
-	// TODO maybe block creation and updates once we've evaluated
-	// TODO create and download PDFs directly, also be able to request singular PDFs
-	// TODO maybe version outcomes -> list of outcomes and their creator, each outcome would know the next outcome
-	// -> we could switch through outcomes in a modal
-	// TODO maybe shortcuts can be handled globally?
-
 	type Props = {
 		data: any;
 		children?: Snippet;
