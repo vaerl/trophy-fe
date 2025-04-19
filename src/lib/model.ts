@@ -10,18 +10,6 @@ export interface Team extends CreateTeam {
 	points: number;
 }
 
-export function isTeam(item: Team | Game): item is Team {
-	return (item as Team).gender !== undefined;
-}
-
-export function areTeams(items: Team[] | Game[]): items is Team[] {
-	if (items.length == 0) {
-		throw new Error(`Can't determine type if array is empty: ${items}`);
-	}
-
-	return (items as Team[])[0].gender !== undefined;
-}
-
 export enum TeamGender {
 	Male = 'male',
 	Female = 'female'
@@ -131,3 +119,19 @@ export interface StatusResponse {
 
 export type DisplayName = 'Spiel' | 'Team' | 'Nutzer';
 export type Link = '/games' | '/teams' | '/users';
+
+export function isTeam(item: Team | Game | User): item is Team {
+	return (item as Team).gender !== undefined;
+}
+
+export function isGame(item: Team | Game | User): item is Game {
+	return (item as Game).kind !== undefined;
+}
+
+export function areTeams(items: Team[] | Game[]): items is Team[] {
+	if (items.length == 0) {
+		throw new Error(`Can't determine type if array is empty: ${items}`);
+	}
+
+	return (items as Team[])[0].gender !== undefined;
+}

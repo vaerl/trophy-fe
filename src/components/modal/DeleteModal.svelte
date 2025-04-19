@@ -1,20 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { isTeam, MessageType, type Game, type Team } from '$lib/model';
+	import { MessageType, type Game, type Team, type User } from '$lib/model';
 	import { messageStore } from '$lib/stores';
+	import { linkPrefix, typeName } from '$lib/util';
 	import Loader from '../blocks/Loader.svelte';
 
-	let { item }: { item: Promise<Game | Team> } = $props();
+	let { item }: { item: Promise<Game | Team | User> } = $props();
 
 	let nameInput: string = $state('');
 
-	async function deleteItem(event: Event, item: Game | Team) {
+	async function deleteItem(event: Event, item: Game | Team | User) {
 		event.preventDefault();
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-		let itemIsTeam = isTeam(item);
-		let linkPrefix = itemIsTeam ? 'teams' : 'games';
 
-		let res = await fetch(`${baseUrl}/${linkPrefix}/${item.id}`, {
+		let res = await fetch(`${baseUrl}/${linkPrefix(item)}/${item.id}`, {
 			method: 'DELETE',
 			headers: {
 				// requests won't work without this
@@ -32,12 +31,12 @@
 		}
 
 		// go back to overview after successful creation
-		let gameRes: Game = await res.json();
+		let json: User | Game | Team = await res.json();
 		messageStore.set({
 			type: MessageType.Success,
-			message: `Spiel ${gameRes.name} wurde erfolgreich gelöscht.`
+			message: `${typeName(item)} ${json.name} wurde erfolgreich gelöscht.`
 		});
-		await goto(`/${linkPrefix}`);
+		await goto(`/${linkPrefix(item)}`);
 	}
 </script>
 
@@ -50,8 +49,10 @@
 			<div class="flex justify-center"><Loader></Loader></div>
 		{:then item}
 			<form>
-				<h1 class="font-bold text-xl text-center pb-2">Spiel "{item.name}" wirklich löschen?</h1>
-				<p class="text-center pb-6">Bitte gib den Namen des Spiels ein, um es zu löschen.</p>
+				<h1 class="font-bold text-xl text-center pb-2">
+					{typeName(item)} "{item.name}" wirklich löschen?
+				</h1>
+				<p class="text-center pb-6">Bitte gib den Namen ein, um das Löschen zu bestätigen.</p>
 				<input
 					class="input input-bordered w-full"
 					name="input"

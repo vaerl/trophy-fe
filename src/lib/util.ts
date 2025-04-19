@@ -1,4 +1,4 @@
-import { isTeam, type Game, type Outcome, type Team } from './model';
+import { isGame, isTeam, type Game, type Outcome, type Team, type User } from './model';
 import { yearStore } from './stores';
 
 export function isEnterKeyEvent(event: KeyboardEvent) {
@@ -30,10 +30,26 @@ export function sleep(ms: number) {
 export const doneOutcomeFilter = (o: Outcome) => o.data;
 export const openOutcomeFilter = (o: Outcome) => !o.data;
 
-export function linkPrefix(item: Team | Game) {
-	return isTeam(item) ? 'teams' : 'games';
+export function linkPrefix(item: Team | Game | User) {
+	if (isTeam(item)) {
+		return 'teams';
+	}
+
+	if (isGame(item)) {
+		return 'games';
+	}
+
+	return 'users';
 }
 
-export function typeName(item: Team | Game) {
-	return isTeam(item) ? 'Team' : 'Spiel';
+export function typeName(item: Team | Game | User) {
+	if (isTeam(item)) {
+		return 'Team';
+	}
+
+	if (isGame(item)) {
+		return 'Spiel';
+	}
+
+	return 'Nutzer';
 }
