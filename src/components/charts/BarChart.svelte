@@ -18,10 +18,8 @@
 
 	Chart.register(BarController, BarElement, Tooltip, Legend, LinearScale);
 
-	let barChart: Chart;
-
 	function createBar() {
-		barChart = new Chart(document.getElementById(chartId)! as HTMLCanvasElement, {
+		new Chart(document.getElementById(chartId)! as HTMLCanvasElement, {
 			type: 'bar',
 			data: {
 				labels: games.map((g) => g.name),
