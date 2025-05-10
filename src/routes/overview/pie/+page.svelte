@@ -3,8 +3,9 @@
 	import PieChart from '../../../components/charts/PieChart.svelte';
 	import LeftArrow from '../../../components/icons/LeftArrow.svelte';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
+	import type { PageProps } from './$types';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
 </script>
 
 <div class="flex flex-row h-full justify-around">

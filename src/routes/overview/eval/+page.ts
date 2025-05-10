@@ -1,7 +1,8 @@
 import type { Game, StatusResponse } from '$lib/model';
 import { getYear } from '$lib/util.js';
+import type { PageLoad } from './$types';
 
-export async function load({ fetch }) {
+export const load: PageLoad = ({ fetch }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	let year = getYear();
@@ -31,4 +32,4 @@ export async function load({ fetch }) {
 		trophyDone,
 		evalDone
 	};
-}
+};

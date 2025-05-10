@@ -1,18 +1,10 @@
-import type { Game, GameWithPending, Team } from '$lib/model';
-import { getYear } from '$lib/util';
+import type { GameWithPending, Team } from '$lib/model';
+import type { PageLoad } from './$types';
 
-export async function load({ fetch }) {
-	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-	let year = getYear();
-	let params = `?year=${year}`;
+export const load: PageLoad = async ({ fetch, parent }) => {
+	const { games } = await parent();
 
-	const teamsAmount: Promise<number> = fetch(`${baseUrl}/teams/amount${params}`, {
-		credentials: 'include'
-	}).then((res) => res.json());
-	const games: Promise<Game[]> = fetch(`${baseUrl}/games${params}`, {
-		credentials: 'include'
-	}).then((res) => res.json());
-
+	// TODO this can surely be optimized
 	const gamesWithPending: Promise<GameWithPending[]> = games.then((games) =>
 		Promise.all(
 			games.map((g) =>
@@ -27,7 +19,6 @@ export async function load({ fetch }) {
 	);
 
 	return {
-		teamsAmount,
 		gamesWithPending
 	};
-}
+};

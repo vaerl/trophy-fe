@@ -3,8 +3,9 @@
 	import { MessageType } from '$lib/model';
 	import { messageStore, paramStore } from '$lib/stores';
 	import RightArrow from '../../../components/icons/RightArrow.svelte';
+	import type { PageProps } from './$types';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	async function evaluate() {
