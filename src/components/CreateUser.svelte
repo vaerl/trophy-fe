@@ -133,6 +133,7 @@
 						<label class="label" for="name">
 							<span class="label-text">Name</span>
 						</label>
+						<!-- svelte-ignore a11y_autofocus -->
 						<input
 							class="input input-bordered w-full"
 							name="name"
@@ -140,6 +141,7 @@
 							required
 							minlength="1"
 							value={user?.name}
+							autofocus
 						/>
 					</div>
 

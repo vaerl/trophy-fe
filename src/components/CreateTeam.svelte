@@ -136,6 +136,7 @@
 						<label class="label" for="trophy_id">
 							<span class="label-text">Trophy-ID</span>
 						</label>
+						<!-- svelte-ignore a11y_autofocus -->
 						<input
 							class="input input-bordered w-full"
 							name="trophy_id"
@@ -143,6 +144,7 @@
 							required
 							min="1"
 							value={team?.trophy_id}
+							autofocus
 						/>
 					</div>
 
