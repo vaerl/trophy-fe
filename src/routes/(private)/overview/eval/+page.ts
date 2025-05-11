@@ -20,11 +20,9 @@ export const load: PageLoad = ({ fetch }) => {
 		.then((res) => res.json())
 		.then((res: StatusResponse) => res.status);
 
-	const pendingGames: Promise<number> = fetch(`${baseUrl}/games/pending${params}`, {
+	const pendingGames: Promise<number> = fetch(`${baseUrl}/games/pending/amount${params}`, {
 		credentials: 'include'
-	})
-		.then((res) => res.json())
-		.then((games: Game[]) => games.length);
+	}).then((res) => res.json());
 
 	// load as few things as possible - especially the pending- and finished-calls are expensive
 	return {

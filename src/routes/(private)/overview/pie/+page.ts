@@ -8,17 +8,13 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 
 	const { teams, games } = await parent();
 
-	const pendingTeams: Promise<number> = fetch(`${baseUrl}/teams/pending${params}`, {
+	const pendingTeams: Promise<number> = fetch(`${baseUrl}/teams/pending/amount${params}`, {
 		credentials: 'include'
-	})
-		.then((res) => res.json())
-		.then((teams) => teams.length);
+	}).then((res) => res.json());
 
-	const pendingGames: Promise<number> = fetch(`${baseUrl}/games/pending${params}`, {
+	const pendingGames: Promise<number> = fetch(`${baseUrl}/games/pending/amount${params}`, {
 		credentials: 'include'
-	})
-		.then((res) => res.json())
-		.then((games) => games.length);
+	}).then((res) => res.json());
 
 	// load as few things as possible - especially the pending- and finished-calls are expensive
 	return {
