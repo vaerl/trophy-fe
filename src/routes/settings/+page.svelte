@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { MessageType, type CreateGame, type CreateTeam } from '$lib/model';
+	import { MessageType, type CreateGame, type CreateTeam, type Game, type Team } from '$lib/model';
 	import { messageStore, yearStore } from '$lib/stores';
 	import LogoutButton from '../../components/blocks/LogoutButton.svelte';
 	import Navbar from '../../components/blocks/Navbar.svelte';
 	import Home from '../../components/icons/Home.svelte';
 	import Info from '../../components/icons/Info.svelte';
 	import UserIcon from '../../components/icons/UserIcon.svelte';
+	import type { PageProps } from './$types';
 
-	let { data } = $props();
-	let showYearModal = $state(false);
-	let showImportModal = $state(false);
-	let modalContent: HTMLFormElement | undefined = $state();
+	let { data }: PageProps = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	// explicitly add the current year as an option if it's somehow not included
@@ -24,31 +22,21 @@
 		localStorage.setItem('year', $yearStore);
 	});
 
-	/**
-	 * Close the modal if we click out of it.
-	 * @param e
-	 */
-	function onClickOutside(event: MouseEvent & { currentTarget: EventTarget & HTMLDialogElement }) {
-		if (modalContent && !modalContent.contains(event.currentTarget)) {
-			closeModals(event);
-		}
+	function showYearModal() {
+		(document.getElementById('year-modal') as HTMLDialogElement).showModal();
 	}
 
-	/**
-	 * Hide the modal and reset the value of the input.
-	 */
-	function closeModals(event: Event) {
-		event.preventDefault();
-		showYearModal = false;
-		showImportModal = false;
+	function showImportModal() {
+		(document.getElementById('import-modal') as HTMLDialogElement).showModal();
 	}
 
 	async function createNewYear(
-		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }
+		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement },
+		teams: Team[],
+		games: Game[]
 	) {
 		event.preventDefault();
 		const form = new FormData(event.currentTarget);
-		closeModals(event);
 
 		let newYear = parseInt(form.get('newYear')!.toString());
 		let copyTeams = Boolean(form.get('copyTeams')?.toString());
@@ -57,8 +45,8 @@
 		if (
 			(!copyTeams && !copyGames) ||
 			// make sure that items are present if we only copy teams or games
-			(copyGames && !copyTeams && data.games.length == 0) ||
-			(copyTeams && !copyGames && data.teams.length == 0)
+			(copyGames && !copyTeams && games.length == 0) ||
+			(copyTeams && !copyGames && teams.length == 0)
 		) {
 			messageStore.set({
 				type: MessageType.Warn,
@@ -68,8 +56,8 @@
 		}
 
 		if (copyTeams) {
-			for (let index = 0; index < data.teams.length; index++) {
-				const team = data.teams[index];
+			for (let index = 0; index < teams.length; index++) {
+				const team = teams[index];
 				let newTeam: CreateTeam = {
 					trophy_id: team.trophy_id,
 					name: team.name,
@@ -101,8 +89,8 @@
 		}
 
 		if (copyGames) {
-			for (let index = 0; index < data.games.length; index++) {
-				const game = data.games[index];
+			for (let index = 0; index < games.length; index++) {
+				const game = games[index];
 				let newGame: CreateGame = {
 					trophy_id: game.trophy_id,
 					name: game.name,
@@ -135,6 +123,7 @@
 
 		// switch to the new year after we're done
 		yearStore.set(`${newYear}`);
+		(document.getElementById('year-modal') as HTMLDialogElement).close();
 		goto(`/overview/pie`);
 	}
 
@@ -142,7 +131,6 @@
 		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }
 	) {
 		const form = new FormData(event.currentTarget);
-		closeModals(event);
 
 		let sheet_name = form.get('sheet_name')!.toString();
 		let trophy_id_header = form.get('trophy_id_header')!.toString();
@@ -190,6 +178,7 @@
 			message: `Teams wurden erfolgreich angelegt.`
 		});
 
+		(document.getElementById('import-modal') as HTMLDialogElement).close();
 		goto(`/overview/pie`);
 	}
 </script>
@@ -225,30 +214,20 @@
 
 	<!-- we can only create a new year if we copy something - so something must exist -->
 	<button
-		class="w-1/3 btn btn-accent"
+		class="w-1/3 btn"
 		class:btn-disabled={data.years.length == 0 && data.games.length == 0}
-		onclick={() => (showYearModal = true)}>Bestehende Daten zu neuem Jahr kopieren</button
+		onclick={showYearModal}>Bestehende Daten zu neuem Jahr kopieren</button
 	>
 
-	<button class="w-1/3 btn btn-accent" onclick={() => (showImportModal = true)}
-		>Teams importieren</button
-	>
+	<button class="w-1/3 btn" onclick={showImportModal}>Teams importieren</button>
 </div>
 
-{#if showYearModal}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<dialog class="modal modal-open" onclick={onClickOutside}>
-		<form
-			id="confirmation-form"
-			class="modal-box"
-			bind:this={modalContent}
-			onsubmit={createNewYear}
-		>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={closeModals}
-				>✕</button
-			>
-
+<dialog id="year-modal" class="modal">
+	<div class="modal-box">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<form onsubmit={(e) => createNewYear(e, data.teams, data.games)}>
 			<h1 class="font-bold text-xl text-center pb-2">Neues Jahr anlegen</h1>
 
 			<div class="flex flex-row w-full justify-between">
@@ -275,22 +254,23 @@
 				max="2999"
 			/>
 
-			<div class="modal-action flex flex-row justify-between">
-				<button class="btn btn-secondary" onclick={closeModals}> Abbrechen </button>
+			<div class="modal-action flex flex-row justify-end">
 				<button class="btn btn-primary">Speichern</button>
 			</div>
 		</form>
-	</dialog>
-{/if}
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>
 
-{#if showImportModal}
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<dialog class="modal modal-open" onclick={onClickOutside}>
-		<form id="confirmation-form" class="modal-box" bind:this={modalContent} onsubmit={importTeams}>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={closeModals}
-				>✕</button
-			>
+<dialog class="modal" id="import-modal">
+	<div class="modal-box">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<form onsubmit={importTeams}>
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 
 			<h1 class="font-bold text-xl text-center pb-2">Teams importieren</h1>
 
@@ -385,10 +365,12 @@
 				</label>
 			</div>
 
-			<div class="modal-action flex flex-row justify-between">
-				<button class="btn btn-secondary" onclick={closeModals}> Abbrechen </button>
+			<div class="modal-action flex flex-row justify-end">
 				<button class="btn btn-primary">Importieren</button>
 			</div>
 		</form>
-	</dialog>
-{/if}
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>
