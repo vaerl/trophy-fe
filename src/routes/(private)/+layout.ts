@@ -1,12 +1,19 @@
-import type { Game, Team, User } from '$lib/model';
+import type { Game, StatusResponse, Team, User } from '$lib/model';
 import { getYear } from '$lib/util';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
 
-export const ssr = false;
-
-// TODO check user
-export const load: LayoutLoad = ({ fetch }) => {
+export const load: LayoutLoad = async ({ fetch }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
+	let isAuthenticated: StatusResponse = await fetch(`${baseUrl}/user/status`, {
+		credentials: 'include'
+	}).then((res) => res.json());
+
+	// redirect to login if we're not logged in
+	if (!isAuthenticated.status) {
+		redirect(307, '/login');
+	}
+
 	let year = getYear();
 	let params = `?year=${year}`;
 
