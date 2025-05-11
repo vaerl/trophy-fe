@@ -69,11 +69,12 @@
 	});
 
 	hotkeys.filter = (_event) => true;
-	hotkeys('ctrl+p,command+p,esc,enter,up,down', (event, handler) => {
+	hotkeys('ctrl+p,command+p,ctrl+space,esc,enter,up,down', (event, handler) => {
 		event.preventDefault();
 
 		switch (handler.key) {
 			case 'ctrl+p':
+			case 'ctrl+space':
 			case 'command+p':
 				// just default to the first item when opening, as users may have set a different index when the switcher was closed
 				selectedIndex = 0;
