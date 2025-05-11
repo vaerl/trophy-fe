@@ -111,7 +111,7 @@
 							<td>{row.id}</td>
 							<td>{row.name}</td>
 							<td>{row.role}</td>
-							<td>{row.game_name}</td>
+							<td>{row.game_name ?? 'Kein Spiel'}</td>
 						</tr>
 					{/each}
 				</tbody>

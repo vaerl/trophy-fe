@@ -1,7 +1,7 @@
 import type { User } from '$lib/model';
-import type { PageLoad } from './$types.js';
+import type { LayoutLoad } from './$types';
 
-export const load: PageLoad = ({ fetch, params, url }) => {
+export const load: LayoutLoad = ({ fetch, params, url }) => {
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	const user: Promise<User> = fetch(`${baseUrl}/users/${params.id}`, {
