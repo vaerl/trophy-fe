@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { Datatable, TableHandler, ThFilter, type Field } from '@vincjo/datatables';
-	import { areTeams, isTeam, type Game, type Team } from '$lib/model';
+	import { isTeam, type Game, type Team } from '$lib/model';
 	import Cog from '../icons/Cog.svelte';
 	import Home from '../icons/Home.svelte';
 	import Info from '../icons/Info.svelte';
@@ -15,9 +16,9 @@
 	let { items }: { items: Promise<Team[]> | Promise<Game[]> } = $props();
 
 	// since the type-guard returns a type predicate, we have to explicitly use a variable
-	let itemsAreTeams = items.then((i) => areTeams(i));
-	let linkPrefix = itemsAreTeams.then((v) => (v ? 'teams' : 'games'));
-	let typeName = itemsAreTeams.then((v) => (v ? 'Team' : 'Spiel'));
+	let routeIncludesTeams = page.route.id?.includes('teams') ?? true;
+	let linkPrefix = routeIncludesTeams ? 'teams' : 'games';
+	let typeName = routeIncludesTeams ? 'Team' : 'Spiel';
 
 	const table = $derived.by(
 		async () => new TableHandler<Team | Game>(await items, { rowsPerPage: 100 })
@@ -87,7 +88,7 @@
 			<LogoutButton></LogoutButton>
 		{/snippet}
 	</Navbar>
-	{#await Promise.all([table, itemsAreTeams, linkPrefix])}
+	{#await Promise.all([table, routeIncludesTeams, linkPrefix])}
 		<div class="flex justify-center flex-grow">
 			<Loader></Loader>
 		</div>
