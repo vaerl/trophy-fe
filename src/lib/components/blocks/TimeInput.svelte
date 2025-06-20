@@ -1,10 +1,7 @@
 <script lang="ts">
-	interface Props {
-		// default to a valid "time" if nothing was passed
-		time: string | null;
-	}
-
-	let { time = $bindable() }: Props = $props();
+	// NOTE this produces https://svelte.dev/docs/svelte/runtime-warnings#Client-warnings-ownership_invalid_mutation,
+	// even though we use $bindable.
+	let { time = $bindable() }: { time: string | null } = $props();
 	let defaultTime = '00:00';
 
 	if (time == null) {
