@@ -47,7 +47,7 @@
 			message: `Ergebnis für ${outcomeRes.team_name} wurde erfolgreich gespeichert.`
 		});
 
-		invalidate('outcome:update');
+		invalidate(`${baseUrl}/outcomes/games/${outcome.game_id}`);
 		(document.getElementById(modalId) as HTMLDialogElement).close();
 	}
 </script>

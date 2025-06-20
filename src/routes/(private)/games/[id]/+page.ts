@@ -2,7 +2,6 @@ import type { Outcome, Game } from '$lib/model.js';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = ({ fetch, params, depends }) => {
-	depends('outcome:update');
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	const item: Promise<Game> = fetch(`${baseUrl}/games/${params.id}`, {
