@@ -1,10 +1,7 @@
 <script lang="ts">
 	let { time = $bindable() }: { time: string | null } = $props();
-	let defaultTime = '00:00';
-
-	if (time == null) {
-		time = defaultTime;
-	}
+	// since we derive from time, we also react to all changes to time - meaning we can bind to correctedTime while still mostly operating on time
+	let correctedTime = $derived(time ?? '00:00');
 
 	function handleInput(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 		let input = event.currentTarget.value.replace(/\D/g, '');
@@ -24,7 +21,7 @@
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.key >= '0' && event.key <= '9') {
 			// ignore the colon
-			let newTime = time!.replace(/:/g, '');
+			let newTime = correctedTime.replace(/:/g, '');
 			newTime = (newTime + event.key).slice(-4);
 			let minutes = newTime.slice(0, 2);
 			let seconds = newTime.slice(2, 4);
@@ -46,7 +43,7 @@
 	<input
 		name="data"
 		type="text"
-		bind:value={time}
+		bind:value={correctedTime}
 		oninput={handleInput}
 		onkeydown={handleKeydown}
 		placeholder="mm:ss"
