@@ -48,6 +48,7 @@
 		});
 
 		invalidate(`${baseUrl}/outcomes/games/${outcomeToUpdate.game_id}`);
+		invalidate(`${baseUrl}/outcomes/teams/${outcomeToUpdate.team_id}`);
 		(document.getElementById(modalId) as HTMLDialogElement).close();
 		// reset the outcome so we don't accidentally display data when opening again
 		outcome = null;

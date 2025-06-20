@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { MessageType, type Game, type Team, type User } from '$lib/model';
 	import { messageStore } from '$lib/stores';
-	import { linkPrefix, typeName } from '$lib/util';
+	import { getYear, linkPrefix, typeName } from '$lib/util';
 	import Loader from '../blocks/Loader.svelte';
 
 	let { item }: { item: Promise<Game | Team | User> } = $props();
@@ -37,6 +37,16 @@
 			message: `${typeName(item)} ${json.name} wurde erfolgreich gelöscht.`
 		});
 		await goto(`/${linkPrefix(item)}`);
+		let invalidateUrl = `${baseUrl}/${linkPrefix(item)}`;
+
+		// only add the year-param if we're not deleting a user
+		if (linkPrefix(item) != 'users') {
+			let year = getYear();
+			let params = `?year=${year}`;
+			invalidateUrl += params;
+		}
+
+		invalidate(invalidateUrl);
 	}
 </script>
 

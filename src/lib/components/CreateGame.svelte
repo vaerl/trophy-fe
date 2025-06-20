@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { GameKind, MessageType, type CreateGame, type Game } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
@@ -87,6 +87,8 @@
 			});
 		}
 		await goto(`/games/${gameRes.id}`);
+		let params = `?year=${year}`;
+		invalidate(`${baseUrl}/games${params}`);
 		isLoading = false;
 	}
 </script>

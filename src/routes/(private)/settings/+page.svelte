@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { MessageType, type CreateGame, type CreateTeam, type Game, type Team } from '$lib/model';
 	import { messageStore, yearStore } from '$lib/stores';
 	import LogoutButton from '$lib/components/blocks/LogoutButton.svelte';
@@ -124,7 +124,9 @@
 		// switch to the new year after we're done
 		yearStore.set(`${newYear}`);
 		(document.getElementById('year-modal') as HTMLDialogElement).close();
-		goto(`/overview/pie`);
+		// just invalidate everything -we need to reload most things for a new year
+		await invalidateAll();
+		await goto(`/overview/pie`);
 	}
 
 	async function importTeams(
@@ -179,7 +181,9 @@
 		});
 
 		(document.getElementById('import-modal') as HTMLDialogElement).close();
-		goto(`/overview/pie`);
+		// invalidating /teams would suffice, but since we're loading these at the top-level, this is functionally the same
+		await invalidateAll();
+		await goto(`/overview/pie`);
 	}
 </script>
 

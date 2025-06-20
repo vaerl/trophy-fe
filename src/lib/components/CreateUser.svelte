@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { MessageType, UserRole, type CreateUser, type Game, type User } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import Loader from './blocks/Loader.svelte';
@@ -87,6 +87,8 @@
 		}
 
 		await goto(`/users/${userRes.id}`);
+		invalidate(`${baseUrl}/users`);
+		invalidate(`${baseUrl}/users/${userRes.id}`);
 		isLoading = false;
 	}
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { MessageType, TeamGender, type CreateTeam, type Team } from '$lib/model.js';
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
@@ -88,6 +88,8 @@
 		}
 
 		await goto(`/teams/${teamRes.id}`);
+		let params = `?year=${year}`;
+		invalidate(`${baseUrl}/teams${params}`);
 		isLoading = false;
 	}
 </script>
