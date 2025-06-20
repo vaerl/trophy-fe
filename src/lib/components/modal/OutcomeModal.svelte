@@ -8,7 +8,6 @@
 	let { outcome }: { outcome: Outcome | null } = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 	const modalId = 'outcome-modal';
-	console.log('outcome', outcome);
 
 	async function save(
 		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement },
@@ -22,7 +21,7 @@
 		await update(event, updatedOutcome);
 	}
 
-	async function update(event: Event, outcome: Outcome) {
+	async function update(event: Event, outcomeToUpdate: Outcome) {
 		event.preventDefault();
 		let res = await fetch(`${baseUrl}/outcomes`, {
 			method: 'PUT',
@@ -30,7 +29,7 @@
 				// requests won't work without this
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(outcome),
+			body: JSON.stringify(outcomeToUpdate),
 			credentials: 'include'
 		});
 
@@ -48,8 +47,10 @@
 			message: `Ergebnis für ${outcomeRes.team_name} wurde erfolgreich gespeichert.`
 		});
 
-		invalidate(`${baseUrl}/outcomes/games/${outcome.game_id}`);
+		invalidate(`${baseUrl}/outcomes/games/${outcomeToUpdate.game_id}`);
 		(document.getElementById(modalId) as HTMLDialogElement).close();
+		// reset the outcome so we don't accidentally display data when opening again
+		outcome = null;
 	}
 </script>
 
@@ -60,7 +61,7 @@
 			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
 		{#if outcome}
-			<form onsubmit={(event) => save(event, outcome)}>
+			<form onsubmit={(event) => save(event, outcome!)}>
 				<h3 class="font-bold text-xl text-center pb-6">
 					{#if outcome.data}
 						Ergebnis für
@@ -92,7 +93,7 @@
 
 				<div class="modal-action flex flex-row" class:justify-between={outcome.data != null}>
 					{#if outcome.data != null}
-						<button class="btn" onclick={(event) => update(event, { ...outcome, data: null })}
+						<button class="btn" onclick={(event) => update(event, { ...outcome!, data: null })}
 							>Löschen</button
 						>
 					{/if}
