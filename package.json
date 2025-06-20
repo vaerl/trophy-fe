@@ -18,7 +18,6 @@
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.22.0",
 		"@tailwindcss/postcss": "^4.1.10",
-		"@types/chart.js": "^4.0.1",
 		"@vincjo/datatables": "^2.5.0",
 		"chart.js": "^4.5.0",
 		"daisyui": "^5.0.43",
