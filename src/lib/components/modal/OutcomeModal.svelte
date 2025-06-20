@@ -5,7 +5,7 @@
 	import Loader from '../blocks/Loader.svelte';
 	import TimeInput from '../blocks/TimeInput.svelte';
 
-	let { outcome }: { outcome: Outcome | null } = $props();
+	let { outcome = $bindable() }: { outcome: Outcome | null } = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 	const modalId = 'outcome-modal';
 

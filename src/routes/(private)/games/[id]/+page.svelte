@@ -78,6 +78,6 @@
 		</div>
 	</div>
 
-	<OutcomeModal outcome={selectedOutcome}></OutcomeModal>
+	<OutcomeModal bind:outcome={selectedOutcome}></OutcomeModal>
 	<DeleteModal {item}></DeleteModal>
 </div>
