@@ -8,6 +8,7 @@
 	let { outcome }: { outcome: Outcome | null } = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 	const modalId = 'outcome-modal';
+	console.log('outcome', outcome);
 
 	async function save(
 		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement },
