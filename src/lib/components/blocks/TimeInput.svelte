@@ -1,6 +1,4 @@
 <script lang="ts">
-	// NOTE this produces https://svelte.dev/docs/svelte/runtime-warnings#Client-warnings-ownership_invalid_mutation,
-	// even though we use $bindable.
 	let { time = $bindable() }: { time: string | null } = $props();
 	let defaultTime = '00:00';
 
@@ -46,7 +44,7 @@
 		<span class="label-text">Gib eine Zeit an (mm:ss):</span>
 	</label>
 	<input
-		id="time"
+		name="data"
 		type="text"
 		bind:value={time}
 		oninput={handleInput}
