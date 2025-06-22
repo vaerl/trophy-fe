@@ -30,8 +30,7 @@
 
 	// TODO can this be generalized?
 	async function keyDown(event: KeyboardEvent): Promise<void> {
-		event.preventDefault();
-
+		// don't preventDefault here, so the switcher receive key-events
 		if (event.repeat) {
 			return;
 		}
