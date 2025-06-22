@@ -38,8 +38,7 @@
 {:then table}
 	<Datatable {table}>
 		<table>
-			<!-- make sure to not scroll over title and header -->
-			<thead class="bg-white!">
+			<thead>
 				<tr>
 					{#each fields as field}
 						<ThSort

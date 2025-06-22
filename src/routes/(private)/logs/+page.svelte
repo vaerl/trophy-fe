@@ -33,8 +33,8 @@
 		</div>
 	{:then table}
 		<Datatable {table}>
-			<table class="table table-zebra">
-				<thead class="bg-white">
+			<table>
+				<thead>
 					<tr>
 						<ThSort {table} field="id" isActive={true}>ID</ThSort>
 						<ThSort {table} field="level">Level</ThSort>

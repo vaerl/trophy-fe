@@ -90,7 +90,7 @@
 	{:then table}
 		<Datatable {table}>
 			<table>
-				<thead class="bg-white">
+				<thead>
 					<tr>
 						<ThSort {table} field="id">ID</ThSort>
 						<ThSort {table} field="name">Name</ThSort>

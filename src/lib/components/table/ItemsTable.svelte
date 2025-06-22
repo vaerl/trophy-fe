@@ -96,7 +96,7 @@
 		<div class="overflow-scroll">
 			<Datatable {table}>
 				<table>
-					<thead class="bg-white!">
+					<thead>
 						<tr id="items-table-header">
 							<ThSort {table} field="trophy_id" isActive={true}>Trophy-ID</ThSort>
 							<ThSort {table} field="name">Name</ThSort>
