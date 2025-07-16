@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Datatable, TableHandler, ThFilter } from '@vincjo/datatables';
-	import ThSort from './ThSort.svelte';
+	import { Datatable, TableHandler, ThFilter, ThSort } from '@vincjo/datatables';
 	import type { Outcome } from '$lib/model';
 	import Loader from '../blocks/Loader.svelte';
 	import { doneOutcomeFilter, openOutcomeFilter } from '$lib/util';
@@ -44,7 +43,7 @@
 						<ThSort
 							{table}
 							{field}
-							isActive={field == 'game_trophy_id' || field == 'team_trophy_id'}
+							direction={field == 'game_trophy_id' || field == 'team_trophy_id' ? 'asc' : undefined}
 							>{columnNames[field]}</ThSort
 						>
 					{/each}

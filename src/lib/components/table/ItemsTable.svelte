@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import { Datatable, TableHandler, ThFilter, type Field } from '@vincjo/datatables';
+	import { Datatable, TableHandler, ThFilter, ThSort, type Field } from '@vincjo/datatables';
 	import { isTeam, type Game, type Team } from '$lib/model';
 	import Cog from '../icons/Cog.svelte';
 	import Home from '../icons/Home.svelte';
 	import Info from '../icons/Info.svelte';
 	import Plus from '../icons/Plus.svelte';
-	import ThSort from './ThSort.svelte';
 	import Loader from '../blocks/Loader.svelte';
 	import LogoutButton from '../blocks/LogoutButton.svelte';
 	import Navbar from '../blocks/Navbar.svelte';
@@ -15,7 +14,6 @@
 
 	let { items }: { items: Promise<Team[]> | Promise<Game[]> } = $props();
 
-	// since the type-guard returns a type predicate, we have to explicitly use a variable
 	let routeIncludesTeams = page.route.id?.includes('teams') ?? true;
 	let linkPrefix = routeIncludesTeams ? 'teams' : 'games';
 	let typeName = routeIncludesTeams ? 'Team' : 'Spiel';
@@ -28,9 +26,7 @@
 		isCDown = false,
 		isShiftDown = false;
 
-	// TODO can this be generalized?
 	async function keyDown(event: KeyboardEvent): Promise<void> {
-		// don't preventDefault here, so the switcher receive key-events
 		if (event.repeat) {
 			return;
 		}
@@ -48,7 +44,7 @@
 		}
 
 		if (isCtrlDown && isCDown && isShiftDown) {
-			goto(`/${await linkPrefix}/create`);
+			goto(`/${linkPrefix}/create`);
 		}
 	}
 
@@ -70,7 +66,7 @@
 
 <svelte:window onkeydown={keyDown} onkeyup={keyUp} />
 
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-screen">
 	<Navbar title={typeName}>
 		{#snippet left()}
 			<a href="/settings"><Cog /></a>
@@ -87,19 +83,19 @@
 			<LogoutButton></LogoutButton>
 		{/snippet}
 	</Navbar>
-	{#await Promise.all([table, routeIncludesTeams, linkPrefix])}
+	{#await table}
 		<div class="flex justify-center flex-grow">
 			<Loader></Loader>
 		</div>
-	{:then [table, itemsAreTeams, linkPrefix]}
-		<div class="overflow-scroll">
-			<Datatable {table}>
+	{:then table}
+		<div class="overflow-hidden">
+			<Datatable basic {table}>
 				<table>
 					<thead>
-						<tr id="items-table-header">
-							<ThSort {table} field="trophy_id" isActive={true}>Trophy-ID</ThSort>
+						<tr>
+							<ThSort {table} field="trophy_id" direction="asc">Trophy-ID</ThSort>
 							<ThSort {table} field="name">Name</ThSort>
-							{#if itemsAreTeams}
+							{#if routeIncludesTeams}
 								<ThSort {table} field={'gender' as Field<Team>}>Typ</ThSort>
 								<ThSort {table} field={'points' as Field<Team>}>Punkte</ThSort>
 							{:else}
@@ -109,7 +105,7 @@
 						<tr>
 							<ThFilter {table} field="trophy_id" />
 							<ThFilter {table} field="name" />
-							{#if itemsAreTeams}
+							{#if routeIncludesTeams}
 								<ThFilter {table} field={'gender' as Field<Team>} />
 								<ThFilter {table} field={'points' as Field<Team>} />
 							{:else}
@@ -126,6 +122,7 @@
 									{row.trophy_id}
 								</td>
 								<td>{row.name}</td>
+								<!-- using isTeam gives us the type-assertion -->
 								{#if isTeam(row)}
 									<td>{row.gender}</td>
 									<td>{row.points}</td>

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { TableHandler, Datatable, ThFilter } from '@vincjo/datatables';
+	import { TableHandler, Datatable, ThFilter, ThSort } from '@vincjo/datatables';
 	import { goto } from '$app/navigation';
-	import ThSort from '$lib/components/table/ThSort.svelte';
 	import LogoutButton from '$lib/components/blocks/LogoutButton.svelte';
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import Cog from '$lib/components/icons/Cog.svelte';
@@ -92,7 +91,7 @@
 			<table>
 				<thead>
 					<tr>
-						<ThSort {table} field="id">ID</ThSort>
+						<ThSort {table} field="id" direction="asc">ID</ThSort>
 						<ThSort {table} field="name">Name</ThSort>
 						<ThSort {table} field="role">Rolle</ThSort>
 						<ThSort {table} field="game_name">Spiel</ThSort>

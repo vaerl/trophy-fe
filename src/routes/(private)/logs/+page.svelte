@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { SubjectType } from '$lib/model.js';
-	import { TableHandler, Datatable, Th, ThFilter } from '@vincjo/datatables';
+	import { TableHandler, Datatable, Th, ThFilter, ThSort } from '@vincjo/datatables';
 	import type { PageProps } from './$types';
 	import Loader from '$lib/components/blocks/Loader.svelte';
-	import ThSort from '$lib/components/table/ThSort.svelte';
 	import LogoutButton from '$lib/components/blocks/LogoutButton.svelte';
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import Cog from '$lib/components/icons/Cog.svelte';
@@ -36,7 +35,7 @@
 			<table>
 				<thead>
 					<tr>
-						<ThSort {table} field="id" isActive={true}>ID</ThSort>
+						<ThSort {table} field="id" direction="asc">ID</ThSort>
 						<ThSort {table} field="level">Level</ThSort>
 						<ThSort {table} field="timestamp">Timestamp</ThSort>
 						<ThSort {table} field="user_name">Nutzer</ThSort>
