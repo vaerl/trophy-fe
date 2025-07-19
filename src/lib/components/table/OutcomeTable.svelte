@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { Datatable, TableHandler, ThFilter, ThSort } from '@vincjo/datatables';
+	import { Datatable, TableHandler, Th, ThFilter, ThSort } from '@vincjo/datatables';
 	import type { Outcome } from '$lib/model';
 	import Loader from '../blocks/Loader.svelte';
 	import { doneOutcomeFilter, openOutcomeFilter } from '$lib/util';
+	import Open from '../icons/Open.svelte';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 
 	type Props = {
 		fields: (keyof Outcome)[];
@@ -13,6 +16,7 @@
 
 	let { fields, target, outcomes, showOutcomeModal: showModal }: Props = $props();
 
+	const routeIncludesTeams = page.route.id?.includes('teams') ?? true;
 	const targetFilter = target == 'done' ? doneOutcomeFilter : openOutcomeFilter;
 	const columnNames: { [Property in keyof Outcome]: string } = {
 		data: 'Wert',
@@ -48,6 +52,7 @@
 							>{columnNames[field]}</ThSort
 						>
 					{/each}
+					<Th></Th>
 				</tr>
 				<tr>
 					{#each fields as field}
@@ -64,6 +69,13 @@
 								{row[field]}
 							</td>
 						{/each}
+						<td
+							class="cursor-pointer"
+							onclick={() =>
+								goto(routeIncludesTeams ? `/games/${row.game_id}` : `/teams/${row.team_id}`)}
+						>
+							<Open></Open>
+						</td>
 					</tr>
 				{/each}
 			</tbody>
