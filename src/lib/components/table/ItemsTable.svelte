@@ -3,14 +3,9 @@
 	import { goto } from '$app/navigation';
 	import { Datatable, TableHandler, ThFilter, ThSort, type Field } from '@vincjo/datatables';
 	import { isTeam, type Game, type Team } from '$lib/model';
-	import Cog from '../icons/Cog.svelte';
-	import Home from '../icons/Home.svelte';
-	import Info from '../icons/Info.svelte';
 	import Plus from '../icons/Plus.svelte';
 	import Loader from '../blocks/Loader.svelte';
-	import LogoutButton from '../blocks/LogoutButton.svelte';
 	import Navbar from '../blocks/Navbar.svelte';
-	import UserIcon from '../icons/UserIcon.svelte';
 
 	let { items }: { items: Promise<Team[]> | Promise<Game[]> } = $props();
 
@@ -68,19 +63,12 @@
 
 <div class="flex flex-col h-screen">
 	<Navbar title={typeName}>
-		{#snippet left()}
-			<a href="/settings"><Cog /></a>
-			<a href="/overview/pie"><Home /></a>
-		{/snippet}
 		{#snippet right()}
 			{#await linkPrefix}
 				<Loader></Loader>
 			{:then linkPrefix}
 				<a href={`/${linkPrefix}/create`}> <Plus /> </a>
 			{/await}
-			<a href="/users"> <UserIcon /> </a>
-			<a href="/logs"> <Info /> </a>
-			<LogoutButton></LogoutButton>
 		{/snippet}
 	</Navbar>
 	{#await table}

@@ -2,11 +2,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { MessageType, type CreateGame, type CreateTeam, type Game, type Team } from '$lib/model';
 	import { messageStore, yearStore } from '$lib/stores';
-	import LogoutButton from '$lib/components/blocks/LogoutButton.svelte';
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
-	import Home from '$lib/components/icons/Home.svelte';
-	import Info from '$lib/components/icons/Info.svelte';
-	import UserIcon from '$lib/components/icons/UserIcon.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -187,16 +183,7 @@
 	}
 </script>
 
-<Navbar title="Einstellungen">
-	{#snippet left()}
-		<a href="/overview/pie"><Home /></a>
-	{/snippet}
-	{#snippet right()}
-		<a href="/users"> <UserIcon /> </a>
-		<a href="/logs"> <Info /> </a>
-		<LogoutButton></LogoutButton>
-	{/snippet}
-</Navbar>
+<Navbar title="Einstellungen" />
 
 <div class="w-full flex flex-col items-center pt-20 gap-8">
 	<div class="flex flex-row w-1/3 justify-between min-w-96">

@@ -4,13 +4,8 @@
 	import { messageStore } from '$lib/stores';
 	import { getYear } from '$lib/util.js';
 	import Loader from './blocks/Loader.svelte';
-	import LogoutButton from './blocks/LogoutButton.svelte';
 	import Navbar from './blocks/Navbar.svelte';
-	import Cog from './icons/Cog.svelte';
-	import Home from './icons/Home.svelte';
-	import Info from './icons/Info.svelte';
 	import LeftArrow from './icons/LeftArrow.svelte';
-	import UserIcon from './icons/UserIcon.svelte';
 
 	let { game }: { game?: Promise<Game> } = $props();
 	let isLoading = $state(false);
@@ -95,36 +90,15 @@
 
 <div class="flex flex-col h-full">
 	{#await game}
-		<Navbar>
-			{#snippet left()}
-				<a href="/settings"><Cog /></a>
-				<a href="/overview/pie"><Home /></a>
-				<a href="/games"><LeftArrow /></a>
-			{/snippet}
-			{#snippet right()}
-				<a href="/users"> <UserIcon /> </a>
-				<a href="/logs"> <Info /> </a>
-				<LogoutButton></LogoutButton>
-			{/snippet}
-		</Navbar>
 		<div class="w-full h-full flex justify-center items-center">
 			<Loader></Loader>
 		</div>
 	{:then game}
 		<Navbar title={game ? `${game.name} bearbeiten` : 'Neues Spiel anlegen'}>
 			{#snippet left()}
-				<a href="/settings"><Cog /></a>
-				<a href="/overview/pie"><Home /></a>
 				{#if game}
 					<a href={`/games/${game.id}`}><LeftArrow /></a>
-				{:else}
-					<a href="/games"><LeftArrow /></a>
 				{/if}
-			{/snippet}
-			{#snippet right()}
-				<a href="/users"> <UserIcon /> </a>
-				<a href="/logs"> <Info /> </a>
-				<LogoutButton></LogoutButton>
 			{/snippet}
 		</Navbar>
 

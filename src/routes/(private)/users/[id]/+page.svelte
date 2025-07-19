@@ -1,11 +1,7 @@
 <script lang="ts">
 	import Delete from '$lib/components/icons/Delete.svelte';
 	import LeftArrow from '$lib/components/icons/LeftArrow.svelte';
-	import LogoutButton from '$lib/components/blocks/LogoutButton.svelte';
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
-	import Cog from '$lib/components/icons/Cog.svelte';
-	import Home from '$lib/components/icons/Home.svelte';
-	import Info from '$lib/components/icons/Info.svelte';
 	import DeleteModal from '$lib/components/modal/DeleteModal.svelte';
 	import type { PageProps } from './$types';
 	import Loader from '$lib/components/blocks/Loader.svelte';
@@ -20,14 +16,10 @@
 <div class="flex flex-col h-full">
 	<Navbar title={data.user.then((u) => u.name)}>
 		{#snippet left()}
-			<a href="/settings"><Cog /></a>
-			<a href="/overview/pie"><Home /></a>
 			<a href="/users"><LeftArrow /></a>
 		{/snippet}
 		{#snippet right()}
 			<button class="h-min cursor-pointer" onclick={showDeletionModal}><Delete /></button>
-			<a href="/logs"> <Info /> </a>
-			<LogoutButton></LogoutButton>
 		{/snippet}
 	</Navbar>
 

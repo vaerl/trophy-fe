@@ -4,7 +4,7 @@
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import Cog from '$lib/components/icons/Cog.svelte';
 	import Info from '$lib/components/icons/Info.svelte';
-	import UserIcon from '$lib/components/icons/UserIcon.svelte';
+	import UserIcon from '$lib/components/icons/User.svelte';
 
 	// NOTE this mainly handles requests for non-existent pages.
 	// TO catch these, it has to sit at the top-level.

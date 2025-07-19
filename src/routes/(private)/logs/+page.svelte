@@ -1,13 +1,9 @@
 <script lang="ts">
 	import { SubjectType } from '$lib/model.js';
-	import { TableHandler, Datatable, Th, ThFilter, ThSort } from '@vincjo/datatables';
+	import { TableHandler, Datatable, ThFilter, ThSort } from '@vincjo/datatables';
 	import type { PageProps } from './$types';
 	import Loader from '$lib/components/blocks/Loader.svelte';
-	import LogoutButton from '$lib/components/blocks/LogoutButton.svelte';
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
-	import Cog from '$lib/components/icons/Cog.svelte';
-	import Home from '$lib/components/icons/Home.svelte';
-	import UserIcon from '$lib/components/icons/UserIcon.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -15,16 +11,7 @@
 </script>
 
 <div class="w-full h-full flex flex-col">
-	<Navbar title="Logs">
-		{#snippet left()}
-			<a href="/settings"><Cog /></a>
-			<a href="/overview/pie"><Home /></a>
-		{/snippet}
-		{#snippet right()}
-			<a href="/users"> <UserIcon /> </a>
-			<LogoutButton></LogoutButton>
-		{/snippet}
-	</Navbar>
+	<Navbar title="Logs" />
 
 	{#await table}
 		<div class="flex grow justify-center items-center">
