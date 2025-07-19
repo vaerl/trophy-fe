@@ -14,9 +14,9 @@
 
 	let { items }: { items: Promise<Team[]> | Promise<Game[]> } = $props();
 
-	let routeIncludesTeams = page.route.id?.includes('teams') ?? true;
-	let linkPrefix = routeIncludesTeams ? 'teams' : 'games';
-	let typeName = routeIncludesTeams ? 'Team' : 'Spiel';
+	const routeIncludesTeams = page.route.id?.includes('teams') ?? true;
+	const linkPrefix = routeIncludesTeams ? 'teams' : 'games';
+	const typeName = routeIncludesTeams ? 'Team' : 'Spiel';
 
 	const table = $derived.by(
 		async () => new TableHandler<Team | Game>(await items, { rowsPerPage: 100 })
