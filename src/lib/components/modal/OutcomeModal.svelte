@@ -66,13 +66,23 @@
 				<h3 class="font-bold text-xl text-center pb-6">
 					{#if outcome.data}
 						Ergebnis für
-						<a class="link" href={`/games/${outcome.game_id}`}>{outcome.game_name}</a> -
-						<a class="link" href={`/teams/${outcome.team_id}`}>{outcome.team_name}</a>
+						<a class="link text-nowrap" href={`/games/${outcome.game_id}`}
+							>{outcome.game_trophy_id}. {outcome.game_name}</a
+						>
+						-
+						<a class="link text-nowrap" href={`/teams/${outcome.team_id}`}
+							>{outcome.team_trophy_id}. {outcome.team_name}</a
+						>
 						bearbeiten
 					{:else}
 						Neues Ergebnis für
-						<a class="link" href={`/games/${outcome.game_id}`}>{outcome.game_name}</a>
-						- <a class="link" href={`/teams/${outcome.team_id}`}>{outcome.team_name}</a> anlegen
+						<a class="link text-nowrap" href={`/games/${outcome.game_id}`}
+							>{outcome.game_trophy_id}. {outcome.game_name}</a
+						>
+						-
+						<a class="link text-nowrap" href={`/teams/${outcome.team_id}`}
+							>{outcome.team_trophy_id}. {outcome.team_name}</a
+						> anlegen
 					{/if}
 				</h3>
 
