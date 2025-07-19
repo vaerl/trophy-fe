@@ -56,7 +56,7 @@
 
 			<div class="overflow-scroll">
 				<OutcomeTable
-					fields={['team_trophy_id', 'team_name']}
+					fields={['team_trophy_id', 'team_name', 'team_gender']}
 					{outcomes}
 					target="open"
 					{showOutcomeModal}
@@ -69,7 +69,7 @@
 			<h1 class="text-2xl font-bold underline text-center">Fertige Teams</h1>
 			<div class="overflow-scroll">
 				<OutcomeTable
-					fields={['team_trophy_id', 'team_name', 'data']}
+					fields={['team_trophy_id', 'team_name', 'team_gender', 'data']}
 					{outcomes}
 					target="done"
 					{showOutcomeModal}

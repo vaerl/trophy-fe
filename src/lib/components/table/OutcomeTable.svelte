@@ -23,6 +23,7 @@
 		point_value: 'Punkte-Wert',
 		team_id: 'Team-ID',
 		team_name: 'Team',
+		team_gender: 'Typ',
 		team_trophy_id: 'Trophy-ID'
 	};
 

@@ -23,6 +23,7 @@ export interface Outcome {
 	team_id: number;
 	team_trophy_id: number;
 	team_name: string;
+	team_gender: TeamGender;
 	data: string | null;
 	point_value: number;
 }
