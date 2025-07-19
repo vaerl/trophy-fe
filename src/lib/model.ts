@@ -121,3 +121,10 @@ export function isTeam(item: Team | Game | User): item is Team {
 export function isGame(item: Team | Game | User): item is Game {
 	return (item as Game).kind !== undefined;
 }
+
+export type CustomError = {
+	status: number;
+	body: {
+		message: string;
+	};
+};
