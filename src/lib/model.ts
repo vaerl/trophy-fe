@@ -83,7 +83,7 @@ export interface CreateUser {
 export enum LogLevel {
 	Debug = 'debug',
 	Info = 'info',
-	Important = 'important'
+	Warn = 'warn'
 }
 
 export enum SubjectType {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SubjectType } from '$lib/model.js';
+	import { LogLevel, SubjectType } from '$lib/model.js';
 	import { TableHandler, Datatable, ThFilter, ThSort } from '@vincjo/datatables';
 	import type { PageProps } from './$types';
 	import Loader from '$lib/components/blocks/Loader.svelte';
@@ -8,21 +8,47 @@
 	let { data }: PageProps = $props();
 
 	const table = data.logs.then((logs) => new TableHandler(logs, { rowsPerPage: 30 }));
+	const filter = table.then((t) => {
+		const f = t.createAdvancedFilter('level');
+		// initialize the filter with Info and Warn
+		f.set(LogLevel.Info);
+		f.set(LogLevel.Warn);
+		return f;
+	});
 </script>
 
 <div class="w-full h-full flex flex-col">
 	<Navbar title="Logs" />
 
-	{#await table}
+	{#await Promise.all([table, filter])}
 		<div class="flex grow justify-center items-center">
 			<Loader></Loader>
 		</div>
-	{:then table}
+	{:then [table, filter]}
+		<div class="w-full flex flex-row justify-end">
+			<div class="flex flex-row gap-2">
+				<button
+					onclick={() => filter.set(LogLevel.Warn)}
+					class="badge cursor-pointer badge-warning"
+					class:badge-soft={!filter.criteria.includes(LogLevel.Warn)}>Warn</button
+				>
+				<button
+					onclick={() => filter.set(LogLevel.Info)}
+					class="badge badge-info cursor-pointer"
+					class:badge-soft={!filter.criteria.includes(LogLevel.Info)}>Info</button
+				>
+				<button
+					onclick={() => filter.set(LogLevel.Debug)}
+					class="badge badge-secondary cursor-pointer"
+					class:badge-soft={!filter.criteria.includes(LogLevel.Debug)}>Debug</button
+				>
+			</div>
+		</div>
 		<Datatable {table}>
 			<table>
 				<thead>
 					<tr>
-						<ThSort {table} field="id" direction="asc">ID</ThSort>
+						<ThSort {table} field="id" direction="desc">ID</ThSort>
 						<ThSort {table} field="level">Level</ThSort>
 						<ThSort {table} field="timestamp">Timestamp</ThSort>
 						<ThSort {table} field="user_name">Nutzer</ThSort>
