@@ -3,7 +3,11 @@
 	import type { CustomError } from '$lib/model';
 
 	let { error }: { error: CustomError } = $props();
-	console.log(error);
+
+	// log the error, use $effect to react to possible changes
+	$effect(() => {
+		console.error(error);
+	});
 </script>
 
 <div class="w-full h-full flex flex-col">

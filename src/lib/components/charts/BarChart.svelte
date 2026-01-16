@@ -12,7 +12,9 @@
 		id: string;
 	}
 
-	let { games, teams, id }: Props = $props();
+	let props: Props = $props();
+	let { games, teams, id } = $state(props);
+
 	const chartPrefix = 'bar-';
 	const chartId = chartPrefix + id;
 

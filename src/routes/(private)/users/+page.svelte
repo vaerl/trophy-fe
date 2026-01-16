@@ -5,7 +5,8 @@
 	import Loader from '$lib/components/blocks/Loader.svelte';
 	import type { PageProps } from './$types';
 
-	let { data }: PageProps = $props();
+	let props: PageProps = $props();
+	let { data } = $state(props);
 	// keep this at 50 if we ever add referee-users
 	const table = data.users.then((users) => new TableHandler(users, { rowsPerPage: 50 }));
 

@@ -14,7 +14,8 @@
 		showOutcomeModal: (outcome: Outcome) => void;
 	};
 
-	let { fields, target, outcomes, showOutcomeModal: showModal }: Props = $props();
+	let props: Props = $props();
+	let { fields, target, outcomes, showOutcomeModal: showModal } = $state(props);
 
 	const routeIncludesTeams = page.route.id?.includes('teams') ?? true;
 	const targetFilter = target == 'done' ? doneOutcomeFilter : openOutcomeFilter;

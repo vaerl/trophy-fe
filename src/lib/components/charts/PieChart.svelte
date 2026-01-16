@@ -16,14 +16,14 @@
 		open: number;
 	}
 
-	let { name, link, done, open }: Props = $props();
+	let props: Props = $props();
+	let { name, link, done, open } = $state(props);
 	let total = open + done;
-	let chart;
 
 	Chart.register(DoughnutController, ArcElement, Tooltip, Legend, CategoryScale);
 
 	function createDoughnut() {
-		chart = new Chart(document.getElementById('doughnut-chart' + name)! as HTMLCanvasElement, {
+		new Chart(document.getElementById('doughnut-chart' + name)! as HTMLCanvasElement, {
 			type: 'doughnut',
 			data: {
 				labels: ['Fertig', 'Offen'],

@@ -5,7 +5,8 @@
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import type { PageProps } from './$types';
 
-	let { data }: PageProps = $props();
+	let props: PageProps = $props();
+	let { data } = $state(props);
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	// explicitly add the current year as an option if it's somehow not included

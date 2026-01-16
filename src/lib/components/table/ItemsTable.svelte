@@ -72,7 +72,7 @@
 		{/snippet}
 	</Navbar>
 	{#await table}
-		<div class="flex justify-center flex-grow">
+		<div class="flex justify-center grow">
 			<Loader></Loader>
 		</div>
 	{:then table}

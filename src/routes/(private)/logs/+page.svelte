@@ -7,13 +7,13 @@
 
 	let { data }: PageProps = $props();
 
-	const table = data.logs.then((logs) => new TableHandler(logs, { rowsPerPage: 30 }));
-	const filter = table.then((t) => {
-		const f = t.createAdvancedFilter('level');
+	let table = $derived.by(async () => new TableHandler(await data.logs, { rowsPerPage: 30 }));
+	const filter = $derived.by(async () => {
+		const filter = (await table).createAdvancedFilter('level');
 		// initialize the filter with Info and Warn
-		f.set(LogLevel.Info);
-		f.set(LogLevel.Warn);
-		return f;
+		filter.set(LogLevel.Info);
+		filter.set(LogLevel.Warn);
+		return filter;
 	});
 </script>
 

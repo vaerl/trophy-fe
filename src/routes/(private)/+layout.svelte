@@ -30,14 +30,14 @@
 	let searchValue = $state('');
 	let selectedIndex = $state(0);
 
-	// TODO this will be much nicer once https://github.com/sveltejs/svelte/pull/15844 is merged
 	let mixedObjects = $derived.by(() =>
+		// stick to Promise.all so the we resolve only when all three are done
 		Promise.all([games, users, teams]).then(
 			([games, users, teams]) =>
 				[
-					...teams.map((t: Team) => ({ ...t, displayName: 'Team', link: '/teams' })),
-					...games.map((t: Game) => ({ ...t, displayName: 'Spiel', link: '/games' })),
-					...users.map((t: User) => ({ ...t, displayName: 'Nutzer', link: '/users' }))
+					...teams.map((t) => ({ ...t, displayName: 'Team', link: '/teams' })),
+					...games.map((g) => ({ ...g, displayName: 'Spiel', link: '/games' })),
+					...users.map((u) => ({ ...u, displayName: 'Nutzer', link: '/users' }))
 				] as SwitcherItem[]
 		)
 	);
@@ -136,7 +136,7 @@
 	</div>
 {/if}
 
-<!-- NOTE focusing is extremely hacky - neither autofocus not ontransitioned work on their own.
+<!-- NOTE focusing is extremely hacky - neither autofocus nor ontransitioned work on their own.
 We focus the input initially using ontransitioned and keep focus with autofocus.
 -->
 <dialog
