@@ -5,36 +5,35 @@
 /* safelist properties, more here: https://github.com/tailwindlabs/tailwindcss/pull/17147 */
 @source inline('h-20');
 
-
 @utility absolute-center-y {
-  /* utility for centering vertically*/
-  @apply absolute;
-  @apply top-1/2;
-  @apply transform;
-  @apply -translate-y-1/2;
+	/* utility for centering vertically*/
+	@apply absolute;
+	@apply top-1/2;
+	@apply transform;
+	@apply -translate-y-1/2;
 }
 
 @utility absolute-center-x {
-  @apply absolute;
-  @apply left-1/2;
-  @apply transform;
-  @apply -translate-x-1/2;
+	@apply absolute;
+	@apply left-1/2;
+	@apply transform;
+	@apply -translate-x-1/2;
 }
 
 @layer utilities {
-  body,
-  html {
-    width: 100%;
-    height: 100%;
-  }
+	body,
+	html {
+		width: 100%;
+		height: 100%;
+	}
 
-  input[type='number']::-webkit-outer-spin-button,
-  input[type='number']::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+	input[type='number']::-webkit-outer-spin-button,
+	input[type='number']::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 
-  input[type='number'] {
-    -moz-appearance: textfield;
-  }
+	input[type='number'] {
+		-moz-appearance: textfield;
+	}
 }
