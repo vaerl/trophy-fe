@@ -6,7 +6,7 @@ export interface CreateTeam {
 }
 
 export interface Team extends CreateTeam {
-	id: number;
+	id: string;
 	points: number;
 }
 
@@ -16,11 +16,11 @@ export enum TeamGender {
 }
 
 export interface Outcome {
-	game_id: number;
+	game_id: string;
 	game_trophy_id: number;
 	game_name: string;
 	game_kind: GameKind;
-	team_id: number;
+	team_id: string;
 	team_trophy_id: number;
 	team_name: string;
 	team_gender: TeamGender;
@@ -36,7 +36,7 @@ export interface CreateGame {
 }
 
 export interface Game extends CreateGame {
-	id: number;
+	id: string;
 	locked: boolean;
 }
 
@@ -69,7 +69,7 @@ export enum UserRole {
 }
 
 export interface User extends CreateUser {
-	id: number;
+	id: string;
 	game_name?: string;
 }
 
@@ -77,7 +77,7 @@ export interface CreateUser {
 	name: string;
 	password?: string;
 	role: UserRole;
-	game_id?: number;
+	game_id?: string;
 }
 
 export enum LogLevel {
@@ -97,13 +97,13 @@ export enum SubjectType {
 }
 
 export interface History {
-	id: number;
-	user_id?: number;
+	id: string;
+	user_id?: string;
 	user_name?: string;
 	timestamp: Date;
 	level: LogLevel;
 	operation: string;
-	subject_id?: number;
+	subject_id?: string;
 	subject_type: SubjectType;
 }
 
