@@ -22,7 +22,7 @@
 	type SwitcherItem = {
 		displayName: DisplayName;
 		link: Link;
-		id: number;
+		id: string;
 		trophy_id: number;
 		name: string;
 	};

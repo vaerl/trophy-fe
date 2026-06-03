@@ -4,8 +4,6 @@
 	import { messageStore } from '$lib/stores';
 	import Loader from './blocks/Loader.svelte';
 	import Navbar from './blocks/Navbar.svelte';
-	import Cog from './icons/Cog.svelte';
-	import Home from './icons/Home.svelte';
 	import LeftArrow from './icons/LeftArrow.svelte';
 
 	type Props = { games: Promise<Game[]>; user?: Promise<User> };
@@ -36,7 +34,7 @@
 			password: password?.toString(),
 			name: name!.toString(),
 			role: role as UserRole,
-			game_id: game_id ? parseInt(game_id!.toString()) : undefined
+			game_id: game_id?.toString()
 		};
 		const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 		let res;

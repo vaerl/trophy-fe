@@ -5,10 +5,12 @@
 	import Loader from '$lib/components/blocks/Loader.svelte';
 	import type { PageProps } from './$types';
 
-	let props: PageProps = $props();
-	let { data } = $state(props);
+	let { data }: PageProps = $props();
 	// keep this at 50 if we ever add referee-users
-	const table = data.users.then((users) => new TableHandler(users, { rowsPerPage: 50 }));
+	const table = $derived.by(async () => {
+		const users = await data.users;
+		return new TableHandler(users, { rowsPerPage: 50 });
+	});
 
 	let isCtrlDown = false,
 		isCDown = false,

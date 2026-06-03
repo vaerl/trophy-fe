@@ -14,11 +14,10 @@
 		showOutcomeModal: (outcome: Outcome) => void;
 	};
 
-	let props: Props = $props();
-	let { fields, target, outcomes, showOutcomeModal: showModal } = $state(props);
+	let { fields, target, outcomes, showOutcomeModal: showModal }: Props = $props();
 
 	const routeIncludesTeams = page.route.id?.includes('teams') ?? true;
-	const targetFilter = target == 'done' ? doneOutcomeFilter : openOutcomeFilter;
+	const targetFilter = $derived(target == 'done' ? doneOutcomeFilter : openOutcomeFilter);
 	const columnNames: { [Property in keyof Outcome]: string } = {
 		data: 'Wert',
 		game_id: 'Spiel-ID',

@@ -16,9 +16,9 @@
 		open: number;
 	}
 
-	let props: Props = $props();
-	let { name, link, done, open } = $state(props);
-	let total = open + done;
+	// NOTE directly destructuring seems like the way to go: https://svelte.dev/docs/svelte/$props
+	let { name, link, done, open }: Props = $props();
+	let total = $derived(open + done);
 
 	Chart.register(DoughnutController, ArcElement, Tooltip, Legend, CategoryScale);
 
@@ -41,9 +41,12 @@
 		});
 	}
 
-	if (total > 0) {
-		onMount(createDoughnut);
-	}
+	// create the doughnut if necessary
+	$effect(() => {
+		if (total > 0) {
+			onMount(createDoughnut);
+		}
+	});
 </script>
 
 <!-- this width controls the size of charts; 1/3 seems a bit large -->

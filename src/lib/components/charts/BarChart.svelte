@@ -12,11 +12,10 @@
 		id: string;
 	}
 
-	let props: Props = $props();
-	let { games, teams, id } = $state(props);
+	let { games, teams, id }: Props = $props();
 
 	const chartPrefix = 'bar-';
-	const chartId = chartPrefix + id;
+	const chartId = $derived(chartPrefix + id);
 
 	Chart.register(BarController, BarElement, Tooltip, Legend, LinearScale);
 
@@ -85,9 +84,11 @@
 		});
 	}
 
-	if (games.length > 0 && teams > 0) {
-		onMount(createBar);
-	}
+	$effect(() => {
+		if (games.length > 0 && teams > 0) {
+			onMount(createBar);
+		}
+	});
 </script>
 
 {#if games.length == 0 || teams == 0}

@@ -5,14 +5,15 @@
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import type { PageProps } from './$types';
 
-	let props: PageProps = $props();
-	let { data } = $state(props);
+	let { data }: PageProps = $props();
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 	// explicitly add the current year as an option if it's somehow not included
-	if (!data.years.includes($yearStore)) {
-		data.years.push($yearStore);
-	}
+	$effect(() => {
+		if (!data.years.includes($yearStore)) {
+			data.years.push($yearStore);
+		}
+	});
 
 	// sync year to localStorage, because this depends on a store, it'll be set accordingly
 	$effect(() => {
