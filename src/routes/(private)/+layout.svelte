@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { messageStore } from '$lib/stores';
-	import { onDestroy } from 'svelte';
-	import { MessageType, type DisplayName, type Link, type Message } from '$lib/model';
+	import { type DisplayName, type Link } from '$lib/model';
 	import Fuse from 'fuse.js';
 	import { goto } from '$app/navigation';
 	import hotkeys from 'hotkeys-js';
@@ -45,18 +43,6 @@
 			return f.search(searchValue).slice(0, 10);
 		}
 		return Promise.resolve([]);
-	});
-
-	let toast: Message | undefined = $state(undefined);
-	const unsub = messageStore.subscribe((message) => {
-		// Ignore the initial state of 'undefined' - I mainly still have this subscription
-		// because of the setTimeout-function. Otherwise, we could simply use messageStore directly.
-		if (message) {
-			toast = message;
-			setTimeout(() => (toast = undefined), 30000);
-		}
-
-		hotkeys.unbind();
 	});
 
 	hotkeys.filter = (_event) => true;
@@ -103,30 +89,11 @@
 		}
 	});
 
-	onDestroy(unsub);
+	// NOTE previously, we unbound hotkeys (using hotkeys.unbind()) on destroy.
+	// This was flawed since it happened in messageStore.subscribe.
 </script>
 
 {@render children()}
-
-{#if toast}
-	<div class="absolute bottom-4 right-4 flex justify-end">
-		<div
-			class="alert"
-			class:alert-info={toast.type == MessageType.Info}
-			class:alert-success={toast.type == MessageType.Success}
-			class:alert-warning={toast.type == MessageType.Warn}
-			class:alert-error={toast.type == MessageType.Error}
-			role="alert"
-		>
-			<div class="flex-1">
-				<label class="mx-3" for="toast">{toast.message}</label>
-			</div>
-			<div class="flex-none">
-				<button class="btn btn-sm btn-ghost mr-2" onclick={() => (toast = undefined)}>Ok</button>
-			</div>
-		</div>
-	</div>
-{/if}
 
 <!-- NOTE focusing is extremely hacky - neither autofocus nor ontransitioned work on their own.
 We focus the input initially using ontransitioned and keep focus with autofocus.
