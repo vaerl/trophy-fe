@@ -1,4 +1,4 @@
-import type { Game, StatusResponse } from '$lib/model';
+import type { StatusResponse } from '$lib/model';
 import { getYear } from '$lib/util.js';
 import type { PageLoad } from './$types';
 

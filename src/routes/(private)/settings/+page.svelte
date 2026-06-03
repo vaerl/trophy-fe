@@ -4,16 +4,11 @@
 	import { messageStore, yearStore } from '$lib/stores';
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import type { PageProps } from './$types';
+	import Loader from '$lib/components/blocks/Loader.svelte';
 
 	let { data }: PageProps = $props();
+	let { years, teams, games } = $derived(data);
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
-
-	// explicitly add the current year as an option if it's somehow not included
-	$effect(() => {
-		if (!data.years.includes($yearStore)) {
-			data.years.push($yearStore);
-		}
-	});
 
 	// sync year to localStorage, because this depends on a store, it'll be set accordingly
 	$effect(() => {
@@ -185,77 +180,85 @@
 	}
 </script>
 
-<Navbar title="Einstellungen" />
+<div class="flex flex-col h-screen">
+	<Navbar title="Einstellungen" />
 
-<div class="w-full flex flex-col items-center pt-20 gap-8">
-	<div class="flex flex-row w-1/3 justify-between min-w-96">
-		<div class="flex items-center w-full">
-			<h2 class="font-bold">Jahr der Trophy:</h2>
+	{#await Promise.all([years, games, teams])}
+		<div class="flex justify-center grow">
+			<Loader></Loader>
+		</div>
+	{:then [years, games, teams]}
+		<div class="w-full flex flex-col items-center pt-20 gap-8">
+			<div class="flex flex-row w-1/3 justify-between min-w-96">
+				<div class="flex items-center w-full">
+					<h2 class="font-bold">Jahr der Trophy:</h2>
+				</div>
+
+				<select
+					name="kind"
+					class="select select-bordered w-full max-w-xs"
+					required
+					bind:value={$yearStore}
+				>
+					{#each years as value}
+						<option {value}> {value} </option>
+					{/each}
+				</select>
+			</div>
+
+			<!-- we can only create a new year if we copy something - so something must exist -->
+			<button
+				class="w-1/3 btn"
+				class:btn-disabled={years.length == 0 && games.length == 0}
+				onclick={showYearModal}>Bestehende Daten zu neuem Jahr kopieren</button
+			>
+
+			<button class="w-1/3 btn" onclick={showImportModal}>Teams importieren</button>
 		</div>
 
-		<select
-			name="kind"
-			class="select select-bordered w-full max-w-xs"
-			required
-			bind:value={$yearStore}
-		>
-			{#each data.years as value}
-				<option {value}> {value} </option>
-			{/each}
-		</select>
-	</div>
+		<dialog id="year-modal" class="modal">
+			<div class="modal-box">
+				<form method="dialog">
+					<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+				</form>
+				<form onsubmit={(e) => createNewYear(e, teams, games)}>
+					<h1 class="font-bold text-xl text-center pb-2">Neues Jahr anlegen</h1>
 
-	<!-- we can only create a new year if we copy something - so something must exist -->
-	<button
-		class="w-1/3 btn"
-		class:btn-disabled={data.years.length == 0 && data.games.length == 0}
-		onclick={showYearModal}>Bestehende Daten zu neuem Jahr kopieren</button
-	>
+					<div class="flex flex-row w-full justify-between">
+						<label class="label cursor-pointer">
+							<span class="label-text pr-4">Teams kopieren?</span>
+							<input type="checkbox" class="checkbox" name="copyTeams" />
+						</label>
 
-	<button class="w-1/3 btn" onclick={showImportModal}>Teams importieren</button>
+						<label class="label cursor-pointer">
+							<span class="label-text pr-4">Spiele kopieren?</span>
+							<input type="checkbox" class="checkbox" name="copyGames" />
+						</label>
+					</div>
+
+					<label class="label" for="year">
+						<span class="label-text">Jahr</span>
+					</label>
+					<input
+						class="input input-bordered w-full"
+						name="newYear"
+						type="number"
+						required
+						min="2024"
+						max="2999"
+					/>
+
+					<div class="modal-action flex flex-row justify-end">
+						<button class="btn btn-primary">Speichern</button>
+					</div>
+				</form>
+			</div>
+			<form method="dialog" class="modal-backdrop">
+				<button>close</button>
+			</form>
+		</dialog>
+	{/await}
 </div>
-
-<dialog id="year-modal" class="modal">
-	<div class="modal-box">
-		<form method="dialog">
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-		</form>
-		<form onsubmit={(e) => createNewYear(e, data.teams, data.games)}>
-			<h1 class="font-bold text-xl text-center pb-2">Neues Jahr anlegen</h1>
-
-			<div class="flex flex-row w-full justify-between">
-				<label class="label cursor-pointer">
-					<span class="label-text pr-4">Teams kopieren?</span>
-					<input type="checkbox" class="checkbox" name="copyTeams" />
-				</label>
-
-				<label class="label cursor-pointer">
-					<span class="label-text pr-4">Spiele kopieren?</span>
-					<input type="checkbox" class="checkbox" name="copyGames" />
-				</label>
-			</div>
-
-			<label class="label" for="year">
-				<span class="label-text">Jahr</span>
-			</label>
-			<input
-				class="input input-bordered w-full"
-				name="newYear"
-				type="number"
-				required
-				min="2024"
-				max="2999"
-			/>
-
-			<div class="modal-action flex flex-row justify-end">
-				<button class="btn btn-primary">Speichern</button>
-			</div>
-		</form>
-	</div>
-	<form method="dialog" class="modal-backdrop">
-		<button>close</button>
-	</form>
-</dialog>
 
 <dialog class="modal" id="import-modal">
 	<div class="modal-box">

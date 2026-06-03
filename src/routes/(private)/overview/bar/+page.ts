@@ -1,4 +1,4 @@
-import type { GameWithPending, Team } from '$lib/model';
+import type { GameWithPending } from '$lib/model';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, parent }) => {

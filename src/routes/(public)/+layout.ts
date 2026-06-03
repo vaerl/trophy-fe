@@ -1,5 +1,4 @@
-import type { Game, StatusResponse, Team, User } from '$lib/model';
-import { getYear } from '$lib/util';
+import type { StatusResponse } from '$lib/model';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
 

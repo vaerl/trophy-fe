@@ -1,15 +1,7 @@
 <script lang="ts">
 	import { messageStore } from '$lib/stores';
 	import { onDestroy } from 'svelte';
-	import {
-		MessageType,
-		type DisplayName,
-		type Game,
-		type Link,
-		type Message,
-		type Team,
-		type User
-	} from '$lib/model';
+	import { MessageType, type DisplayName, type Link, type Message } from '$lib/model';
 	import Fuse from 'fuse.js';
 	import { goto } from '$app/navigation';
 	import hotkeys from 'hotkeys-js';
