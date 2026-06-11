@@ -37,21 +37,33 @@
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
-<div class="flex flex-row h-full items-center">
-	<div class="flex flex-col w-1/3 m-auto gap-2">
-		<h1 class="text-4xl text-center">Anmelden</h1>
+
+<div class="grid h-full place-items-center p-4">
+	<form
+		class="flex flex-col w-full max-w-sm gap-3"
+		onsubmit={(e) => {
+			e.preventDefault();
+			authenticate(username, password);
+		}}
+	>
+		<h1 class="text-4xl text-center mb-2">Anmelden</h1>
+
 		<input
 			class="input input-bordered w-full"
 			placeholder="Benutzername"
 			bind:value={username}
 			type="text"
+			required
 		/>
+
 		<input
 			class="input input-bordered w-full"
 			placeholder="Passwort"
 			bind:value={password}
 			type="password"
+			required
 		/>
-		<button class="btn" onclick={() => authenticate(username, password)}>Anmelden</button>
-	</div>
+
+		<button class="btn btn-primary" type="submit">Anmelden</button>
+	</form>
 </div>

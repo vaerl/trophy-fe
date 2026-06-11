@@ -4,6 +4,7 @@
 	import Navbar from '$lib/components/blocks/Navbar.svelte';
 	import Loader from '$lib/components/blocks/Loader.svelte';
 	import type { PageProps } from './$types';
+	import Plus from '$lib/components/icons/Plus.svelte';
 
 	let { data }: PageProps = $props();
 	// keep this at 50 if we ever add referee-users
@@ -68,10 +69,14 @@
 <svelte:window onkeydown={keyDown} onkeyup={keyUp} />
 
 <div class="w-full h-full flex flex-col">
-	<Navbar title="Nutzer" />
+	<Navbar title="Nutzer">
+		{#snippet right()}
+			<a href={'/users/create'}> <Plus /> </a>
+		{/snippet}
+	</Navbar>
 
 	{#await table}
-		<div class="flex grow justify-center items-center">
+		<div class="flex w-full h-full justify-center">
 			<Loader></Loader>
 		</div>
 	{:then table}

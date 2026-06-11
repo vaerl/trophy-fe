@@ -26,21 +26,15 @@
 {@render children()}
 
 {#if toast}
-	<div class="absolute bottom-4 right-4 flex justify-end">
-		<div
-			class="alert"
-			class:alert-info={toast.type == MessageType.Info}
-			class:alert-success={toast.type == MessageType.Success}
-			class:alert-warning={toast.type == MessageType.Warn}
-			class:alert-error={toast.type == MessageType.Error}
-			role="alert"
-		>
-			<div class="flex-1">
-				<label class="mx-3" for="toast">{toast.message}</label>
-			</div>
-			<div class="flex-none">
-				<button class="btn btn-sm btn-ghost mr-2" onclick={() => (toast = undefined)}>Ok</button>
-			</div>
-		</div>
+	<div
+		class="alert absolute bottom-4 right-4 w-auto shadow-lg"
+		class:alert-info={toast.type === MessageType.Info}
+		class:alert-success={toast.type === MessageType.Success}
+		class:alert-warning={toast.type === MessageType.Warn}
+		class:alert-error={toast.type === MessageType.Error}
+		role="alert"
+	>
+		<span>{toast.message}</span>
+		<button class="btn btn-sm btn-ghost" onclick={() => (toast = undefined)}>Ok</button>
 	</div>
 {/if}
