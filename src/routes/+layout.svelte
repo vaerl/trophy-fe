@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { messageStore } from '$lib/stores';
-	import type { Message } from 'postcss';
 	import '../app.css';
 	import type { LayoutProps } from './$types';
-	import { MessageType } from '$lib/model';
+	import { MessageType, type Message } from '$lib/model';
 	import { onDestroy } from 'svelte';
 
 	let { children }: LayoutProps = $props();
