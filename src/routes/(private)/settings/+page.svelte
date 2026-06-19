@@ -180,7 +180,7 @@
 	}
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-full">
 	<Navbar title="Einstellungen" />
 
 	{#await Promise.all([years, games, teams])}
@@ -266,8 +266,6 @@
 			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
 		<form onsubmit={importTeams}>
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-
 			<h1 class="font-bold text-xl text-center pb-2">Teams importieren</h1>
 
 			<div class="flex flex-col gap-2">
