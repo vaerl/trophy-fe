@@ -48,9 +48,9 @@
 			<table>
 				<thead>
 					<tr>
-						<ThSort {table} field="id" direction="desc">ID</ThSort>
+						<ThSort {table} field="id">ID</ThSort>
 						<ThSort {table} field="level">Level</ThSort>
-						<ThSort {table} field="timestamp">Timestamp</ThSort>
+						<ThSort {table} field="timestamp" direction="desc">Timestamp</ThSort>
 						<ThSort {table} field="user_name">Nutzer</ThSort>
 						<ThSort {table} field="operation">Operation</ThSort>
 						<ThSort {table} field="subject_id">Subjekt</ThSort>
