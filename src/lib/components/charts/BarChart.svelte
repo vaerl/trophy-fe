@@ -12,10 +12,10 @@
 		id: string;
 	}
 
-	let { games, teams, id }: Props = $props();
+	let { games, teams, name }: Props = $props();
 
 	const chartPrefix = 'bar-';
-	const chartId = $derived(chartPrefix + id);
+	const chartId = $derived(chartPrefix + name);
 
 	Chart.register(BarController, BarElement, Tooltip, Legend, LinearScale);
 

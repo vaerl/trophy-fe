@@ -15,7 +15,7 @@
 			<a class="cursor-pointer" href="/overview/pie">
 				<LeftArrow size={20} />
 			</a>
-			<BarChart games={gamesWithPending} id="finished-teams" teams={teams.length} />
+			<BarChart games={gamesWithPending} name="finished-teams" teams={teams.length} />
 			<!-- empty div so justify-between works-->
 			<div></div>
 		</div>
