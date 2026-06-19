@@ -91,7 +91,7 @@
 
 <div class="flex flex-col h-full">
 	{#await team}
-		<div class="w-full h-full flex justify-center items-center">
+		<div class="w-full h-full flex justify-center">
 			<Loader></Loader>
 		</div>
 	{:then team}

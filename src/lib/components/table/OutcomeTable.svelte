@@ -40,45 +40,50 @@
 {#await table}
 	<Loader></Loader>
 {:then table}
-	<Datatable {table}>
-		<table>
-			<thead>
-				<tr>
-					{#each fields as field}
-						<ThSort
-							{table}
-							{field}
-							direction={field == 'game_trophy_id' || field == 'team_trophy_id' ? 'asc' : undefined}
-							>{columnNames[field]}</ThSort
-						>
-					{/each}
-					<Th></Th>
-				</tr>
-				<tr>
-					{#each fields as field}
-						<ThFilter {table} {field} />
-					{/each}
-				</tr>
-			</thead>
-
-			<tbody>
-				{#each table.rows as row}
+	<!-- this is necessary for the table to take up all available horizontal space -->
+	<div class="w-full">
+		<Datatable {table}>
+			<table>
+				<thead>
 					<tr>
 						{#each fields as field}
-							<td onclick={() => showModal(row)} class="cursor-pointer">
-								{row[field]}
-							</td>
+							<ThSort
+								{table}
+								{field}
+								direction={field == 'game_trophy_id' || field == 'team_trophy_id'
+									? 'asc'
+									: undefined}>{columnNames[field]}</ThSort
+							>
 						{/each}
-						<td
-							class="cursor-pointer"
-							onclick={() =>
-								goto(routeIncludesTeams ? `/games/${row.game_id}` : `/teams/${row.team_id}`)}
-						>
-							<Open></Open>
-						</td>
+						<Th>Link</Th>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</Datatable>
+					<tr>
+						{#each fields as field}
+							<ThFilter {table} {field} />
+						{/each}
+						<Th></Th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{#each table.rows as row}
+						<tr>
+							{#each fields as field}
+								<td onclick={() => showModal(row)} class="cursor-pointer">
+									{row[field]}
+								</td>
+							{/each}
+							<td
+								class="cursor-pointer"
+								onclick={() =>
+									goto(routeIncludesTeams ? `/games/${row.game_id}` : `/teams/${row.team_id}`)}
+							>
+								<Open></Open>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</Datatable>
+	</div>
 {/await}

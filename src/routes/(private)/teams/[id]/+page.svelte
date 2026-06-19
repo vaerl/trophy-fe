@@ -36,11 +36,11 @@
 		{/snippet}
 	</Navbar>
 
-	<div class="flex flex-row overflow-hidden">
+	<div class="flex flex-row grow overflow-hidden">
 		<div class="w-1/2 h-full flex flex-col">
 			<h1 class="text-2xl font-bold underline text-center">Offene Spiele</h1>
 
-			<div class="overflow-scroll">
+			<div class="flex overflow-scroll grow">
 				<OutcomeTable
 					fields={['game_trophy_id', 'game_name']}
 					{outcomes}
@@ -53,7 +53,7 @@
 
 		<div class="w-1/2 h-full flex flex-col">
 			<h1 class="text-2xl font-bold underline text-center">Fertige Spiele</h1>
-			<div class="overflow-scroll">
+			<div class="flex overflow-scroll grow">
 				<OutcomeTable
 					fields={['game_trophy_id', 'game_name', 'data']}
 					{outcomes}
