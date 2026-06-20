@@ -8,6 +8,7 @@
 	import OutcomeModal from '$lib/components/modal/OutcomeModal.svelte';
 	import OutcomeTable from '$lib/components/table/OutcomeTable.svelte';
 	import type { PageProps } from './$types';
+	import OutcomeTableHeader from '$lib/components/blocks/OutcomeTableHeader.svelte';
 
 	let { data }: PageProps = $props();
 	let item = $derived(data.item);
@@ -38,7 +39,7 @@
 
 	<div class="flex flex-row grow overflow-hidden">
 		<div class="w-1/2 h-full flex flex-col">
-			<h1 class="text-2xl font-bold underline text-center">Offene Spiele</h1>
+			<OutcomeTableHeader items={outcomes}></OutcomeTableHeader>
 
 			<div class="flex overflow-scroll grow">
 				<OutcomeTable
@@ -52,7 +53,7 @@
 		<div class="divider divider-horizontal"></div>
 
 		<div class="w-1/2 h-full flex flex-col">
-			<h1 class="text-2xl font-bold underline text-center">Fertige Spiele</h1>
+			<OutcomeTableHeader isDone={true} items={outcomes}></OutcomeTableHeader>
 			<div class="flex overflow-scroll grow">
 				<OutcomeTable
 					fields={['game_trophy_id', 'game_name', 'data']}
