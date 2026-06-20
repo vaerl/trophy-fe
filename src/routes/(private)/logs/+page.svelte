@@ -44,7 +44,7 @@
 				>
 			</div>
 		</div>
-		<Datatable {table}>
+		<Datatable basic {table}>
 			<table>
 				<thead>
 					<tr>
@@ -96,28 +96,5 @@
 				</tbody>
 			</table>
 		</Datatable>
-		<div class="w-full flex flex-row gap-2 justify-end p-4">
-			<button
-				class="btn"
-				class:btn-disabled={table.currentPage == 1}
-				onclick={() => table.setPage('previous')}>Zurück</button
-			>
-			{#each table.pagesWithEllipsis as page}
-				<button
-					type="button"
-					class="btn"
-					class:btn-primary={page === table.currentPage}
-					onclick={() => table.setPage(page)}
-				>
-					{page ?? '...'}
-				</button>
-			{/each}
-
-			<button
-				class="btn"
-				class:btn-disabled={table.currentPage == table.pageCount}
-				onclick={() => table.setPage('next')}>Weiter</button
-			>
-		</div>
 	{/await}
 </div>
