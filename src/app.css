@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
-@plugin "daisyui";
+@plugin "daisyui" {
+	themes: emerald --default;
+}
 
 /* safelist properties, more here: https://github.com/tailwindlabs/tailwindcss/pull/17147 */
 @source inline('h-20');
