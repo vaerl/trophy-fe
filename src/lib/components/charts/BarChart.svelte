@@ -84,6 +84,7 @@
 		});
 	}
 
+	// TODO this might be a bad idea?
 	$effect(() => {
 		if (games.length > 0 && teams > 0) {
 			onMount(createBar);
