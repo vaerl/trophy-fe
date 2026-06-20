@@ -64,6 +64,6 @@
 		</div>
 	</div>
 
-	<OutcomeModal bind:outcome={selectedOutcome}></OutcomeModal>
+	<OutcomeModal bind:outcome={selectedOutcome} isTeam={false}></OutcomeModal>
 	<DeleteModal {item}></DeleteModal>
 </div>
