@@ -99,28 +99,29 @@
 We focus the input initially using ontransitioned and keep focus with autofocus.
 -->
 <dialog
-	class="modal"
+	class="modal items-start"
 	id={switcherModalId}
 	ontransitionend={() => (document.getElementById('switcher-input') as HTMLInputElement).focus()}
 >
-	<div class="modal-box">
+	<div class="modal-box mt-60">
 		<form method="dialog">
 			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
 		<form>
 			<h1 class="font-bold text-xl text-center pb-2">Switcher</h1>
 
+			<!-- svelte-ignore a11y_autofocus -->
+			<input
+				class="input input-bordered w-full mb-4"
+				id="switcher-input"
+				type="text"
+				bind:value={searchValue}
+				autofocus
+			/>
+
 			{#await searchResults}
 				<Loader></Loader>
 			{:then results}
-				<!-- svelte-ignore a11y_autofocus -->
-				<input
-					class="input input-bordered w-full mb-4"
-					id="switcher-input"
-					type="text"
-					bind:value={searchValue}
-					autofocus
-				/>
 				{#if searchValue != '' && results && results.length == 0}
 					<p>
 						Keine Treffer für '{searchValue}'.
