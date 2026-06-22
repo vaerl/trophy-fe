@@ -24,11 +24,14 @@
 		event.preventDefault();
 		const form = new FormData(event.currentTarget);
 
-		let password = form.get('password');
-		let game_id = form.get('game_id');
 		let name = form.get('name');
 		let role = form.get('role');
-		console.log('game_id', game_id);
+
+		const rawGameId = form.get('game_id')?.toString();
+		const game_id = rawGameId === '' || rawGameId === 'null' ? null : rawGameId;
+
+		const rawPassword = form.get('password')?.toString();
+		const password = rawPassword === '' ? null : rawPassword;
 
 		let createUser: CreateUser = {
 			password: password?.toString(),
