@@ -7,7 +7,7 @@
 
 	let { data }: PageProps = $props();
 
-	let table = $derived.by(async () => new TableHandler(await data.logs, { rowsPerPage: 30 }));
+	let table = $derived.by(async () => new TableHandler(await data.logs, { rowsPerPage: 50 }));
 	const filter = $derived.by(async () => {
 		const filter = (await table).createAdvancedFilter('level');
 		// initialize the filter with Info and Warn
