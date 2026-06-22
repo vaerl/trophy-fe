@@ -80,7 +80,7 @@
 			<Loader></Loader>
 		</div>
 	{:then table}
-		<Datatable {table}>
+		<Datatable basic {table}>
 			<table>
 				<thead>
 					<tr>
