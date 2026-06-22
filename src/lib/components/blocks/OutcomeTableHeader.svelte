@@ -21,7 +21,6 @@
 			statusString = isDone ? 'fertige' : 'offene';
 			nameString = isTeam ? 'Spiele' : 'Teams';
 		} else {
-			console.log(isTeam);
 			statusString = isDone ? 'fertiges' : 'offenes';
 			nameString = isTeam ? 'Spiel' : 'Team';
 		}
