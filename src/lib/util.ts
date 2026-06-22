@@ -53,3 +53,8 @@ export function typeName(item: Team | Game | User) {
 
 	return 'Nutzer';
 }
+
+// reusable function to set focus
+export function autofocus(node: HTMLElement) {
+	node.focus();
+}

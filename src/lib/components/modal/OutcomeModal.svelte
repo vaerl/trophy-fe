@@ -4,6 +4,7 @@
 	import { messageStore } from '$lib/stores';
 	import Loader from '../blocks/Loader.svelte';
 	import TimeInput from '../blocks/TimeInput.svelte';
+	import { autofocus } from '$lib/util';
 
 	let { outcome = $bindable(), isTeam = true }: { outcome: Outcome | null; isTeam?: boolean } =
 		$props();
@@ -108,6 +109,7 @@
 							required
 							value={outcome.data}
 							autofocus
+							use:autofocus
 						/>
 					{:else}
 						<TimeInput bind:time={outcome.data} />

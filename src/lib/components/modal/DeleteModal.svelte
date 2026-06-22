@@ -4,6 +4,7 @@
 	import { messageStore } from '$lib/stores';
 	import { getYear, linkPrefix, typeName } from '$lib/util';
 	import Loader from '../blocks/Loader.svelte';
+	import { autofocus } from '$lib/util';
 
 	let { item }: { item: Promise<Game | Team | User> } = $props();
 
@@ -63,12 +64,15 @@
 					{typeName(item)} "{item.name}" wirklich löschen?
 				</h1>
 				<p class="text-center pb-6">Bitte gib den Namen ein, um das Löschen zu bestätigen.</p>
+				<!-- svelte-ignore a11y_autofocus -->
 				<input
 					class="input input-bordered w-full"
 					name="input"
 					type="text"
 					required
 					bind:value={nameInput}
+					autofocus
+					use:autofocus
 				/>
 
 				<div class="modal-action flex flex-row justify-end">
