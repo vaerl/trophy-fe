@@ -19,10 +19,11 @@
 		// special handling for 1, since 0 should also use plural
 		if (amount != 1) {
 			statusString = isDone ? 'fertige' : 'offene';
-			nameString = isTeam ? 'Teams' : 'Spiele';
+			nameString = isTeam ? 'Spiele' : 'Teams';
 		} else {
+			console.log(isTeam);
 			statusString = isDone ? 'fertiges' : 'offenes';
-			nameString = isTeam ? 'Team' : 'Spiel';
+			nameString = isTeam ? 'Spiel' : 'Team';
 		}
 
 		return `${amount} ${statusString} ${nameString}`;
