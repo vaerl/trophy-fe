@@ -119,21 +119,3 @@
 		</Datatable>
 	{/await}
 </div>
-
-<style>
-	/* Improve height of footer. */
-	:global(footer) {
-		height: auto !important;
-		min-height: 2rem !important;
-		padding-top: 0.5rem !important;
-		padding-bottom: 0rem !important;
-		margin-bottom: 0.5rem;
-		display: flex !important;
-	}
-
-	/* remove the divider-classes - DaisyUI causes an issue here. */
-	:global(footer.divider::before),
-	:global(footer.divider::after) {
-		display: none !important;
-	}
-</style>
