@@ -59,7 +59,8 @@
 		{#await item}
 			<div class="flex justify-center"><Loader></Loader></div>
 		{:then item}
-			<form>
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<form onkeydown={(event) => event.stopPropagation()}>
 				<h1 class="font-bold text-xl text-center pb-2">
 					{typeName(item)} "{item.name}" wirklich löschen?
 				</h1>
@@ -79,7 +80,8 @@
 					<button
 						class="btn btn-primary w-full"
 						class:btn-disabled={item.name !== nameInput}
-						onclick={(e) => deleteItem(e, item)}>Löschen</button
+						onclick={(e) => deleteItem(e, item)}
+						type="submit">Löschen</button
 					>
 				</div>
 			</form>

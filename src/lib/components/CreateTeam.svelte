@@ -107,7 +107,12 @@
 			{#if isLoading}
 				<Loader></Loader>
 			{:else}
-				<form class="flex flex-col w-80 gap-8" onsubmit={(event) => save(event, team)}>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<form
+					class="flex flex-col w-80 gap-8"
+					onsubmit={(event) => save(event, team)}
+					onkeydown={(event) => event.stopPropagation()}
+				>
 					<div class="w-full">
 						<label class="label" for="trophy_id">
 							<span class="label-text">Trophy-ID</span>
@@ -153,7 +158,7 @@
 							{/each}
 						</select>
 					</div>
-					<button class="btn btn-primary w-full">Speichern</button>
+					<button class="btn btn-primary w-full" type="submit">Speichern</button>
 				</form>
 			{/if}
 		</div>

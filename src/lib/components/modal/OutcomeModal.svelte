@@ -11,16 +11,9 @@
 	const baseUrl: string = import.meta.env.VITE_BACKEND_URL;
 	const modalId = 'outcome-modal';
 
-	async function save(
-		event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement },
-		outcome: Outcome
-	) {
-		const form = new FormData(event.currentTarget);
-		let data = form.get('data');
-
-		// because data is required, it has to be present here
-		let updatedOutcome = { ...outcome, data: data!.toString() };
-		await update(event, updatedOutcome);
+	async function save(event: SubmitEvent, currentOutcome: Outcome) {
+		event.preventDefault();
+		await update(event, currentOutcome);
 	}
 
 	async function update(event: Event, outcomeToUpdate: Outcome) {
@@ -64,7 +57,11 @@
 			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
 		{#if outcome}
-			<form onsubmit={(event) => save(event, outcome!)}>
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<form
+				onsubmit={(event) => save(event, outcome!)}
+				onkeydown={(event) => event.stopPropagation()}
+			>
 				<h3 class="font-bold text-xl text-center pb-6">
 					{#if outcome.data}
 						Ergebnis für
@@ -107,7 +104,7 @@
 							type="number"
 							placeholder="Punkte"
 							required
-							value={outcome.data}
+							bind:value={outcome.data}
 							autofocus
 							use:autofocus
 						/>
@@ -118,11 +115,13 @@
 
 				<div class="modal-action flex flex-row" class:justify-between={outcome.data != null}>
 					{#if outcome.data != null}
-						<button class="btn" onclick={(event) => update(event, { ...outcome!, data: null })}
-							>Löschen</button
+						<button
+							class="btn"
+							onclick={(event) => update(event, { ...outcome!, data: null })}
+							type="button">Löschen</button
 						>
 					{/if}
-					<button class="btn btn-primary">Speichern</button>
+					<button class="btn btn-primary" type="submit">Speichern</button>
 				</div>
 			</form>
 		{:else}
