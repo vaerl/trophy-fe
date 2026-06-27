@@ -18,6 +18,10 @@
 
 	async function update(event: Event, outcomeToUpdate: Outcome) {
 		event.preventDefault();
+
+		// make sure data is passed as a string
+		// #TODO verify
+		outcomeToUpdate = { ...outcomeToUpdate, data: outcomeToUpdate.data.toString() };
 		let res = await fetch(`${baseUrl}/outcomes`, {
 			method: 'PUT',
 			headers: {
